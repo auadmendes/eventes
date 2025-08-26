@@ -1,0 +1,118 @@
+'use client';
+import { useEffect, useState } from "react";
+import { getEvents } from "@/actions/events";
+import EventCard, { Event } from "./EventCard";
+
+interface EventsPageProps {
+  filterCategory?: string;
+  filterSite?: string;
+  searchQuery?: string;
+  filterStartDate?: string; // ISO string
+  onCountChange?: (count: number) => void;
+}
+
+export default function EventsPage({
+  filterCategory = "Todos",
+  filterSite = "Todos",
+  searchQuery = "",
+  filterStartDate,
+  onCountChange,
+}: EventsPageProps) {
+  const [events, setEvents] = useState<Event[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchEvents() {
+      try {
+        const fetchedEvents = await getEvents();
+
+        const mappedEvents = fetchedEvents.map((e) => ({
+          ...e,
+          highlighted: e.highlighted === true,
+          site: e.font || "Todos",
+        }));
+
+        let filtered = mappedEvents;
+
+        // filter by category
+        if (filterCategory !== "Todos") {
+          filtered = filtered.filter((e) => e.category === filterCategory);
+        }
+
+        // filter by site
+        if (filterSite !== "Todos") {
+          filtered = filtered.filter((e) => e.font === filterSite);
+        }
+
+        // filter by search
+        if (searchQuery.trim() !== "") {
+          const lower = searchQuery.toLowerCase();
+          filtered = filtered.filter((e) => {
+            const titleMatch = e.title.toLowerCase().includes(lower);
+            const locationMatch = e.location?.toLowerCase().includes(lower) ?? false;
+
+            const dateString = new Date(e.date).toLocaleDateString("pt-BR", {
+              day: "2-digit",
+              month: "long",
+              year: "numeric",
+            });
+
+            const dateMatch = dateString.toLowerCase().includes(lower);
+
+            return titleMatch || locationMatch || dateMatch;
+          });
+        }
+
+        // ✅ filter by date range
+if (filterStartDate) {
+  console.log("Filtering from date:", filterStartDate);
+  const startTime = new Date(filterStartDate).getTime();
+  filtered = filtered.filter((e) => {
+    const eventTime = new Date(e.date).getTime();
+    return eventTime >= startTime; // only events on or after the selected date
+  });
+}
+
+
+        // ✅ sort highlighted first, then by date (earliest first)
+        filtered = filtered.sort((a, b) => {
+          if (a.highlighted && !b.highlighted) return -1;
+          if (!a.highlighted && b.highlighted) return 1;
+
+          const dateA = new Date(a.date).getTime();
+          const dateB = new Date(b.date).getTime();
+          return dateA - dateB;
+        });
+
+        setEvents(filtered);
+        onCountChange?.(filtered.length);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchEvents();
+  }, [filterCategory, filterSite, searchQuery, filterStartDate]);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="w-12 h-12 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  if (events.length === 0) {
+    return <p className="text-center text-gray-500">No events found.</p>;
+  }
+
+  return (
+    <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-1">
+      {events.map((event) => (
+        <EventCard key={event.id} event={event} />
+      ))}
+    </main>
+  );
+}
