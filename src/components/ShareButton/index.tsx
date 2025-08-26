@@ -26,7 +26,7 @@ export default function ShareButton({ title, url }: ShareButtonProps) {
   }, []);
 
   const encodedUrl = encodeURIComponent(url);
-  const encodedTitle = encodeURIComponent(title);
+  
 
 
 
