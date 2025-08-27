@@ -22,10 +22,10 @@ export default function EditEventPopup({ event, isOpen, onClose, onSave }: EditE
 
   if (!isOpen || !formData) return null;
 
-  const handleChange = (key: keyof Event, value: any) => {
+  const handleChange = <K extends keyof Event>(key: K, value: Event[K]) => {
     setFormData({ ...formData, [key]: value });
   };
-
+  
   const handleSubmit = async () => {
     if (!formData) return;
     setIsSaving(true);

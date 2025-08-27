@@ -99,31 +99,32 @@ export default function EventsPage({
     }
 
     fetchEvents();
-  }, [filterCategory, filterSite, searchQuery, filterStartDate]);
+  }, [filterCategory, filterSite, searchQuery, filterStartDate,onCountChange]);
 
   const handleEdit = (event: Event) => {
       setSelectedEvent(event);
       setIsPopupOpen(true);
     };
-const handleSave = async (updatedEvent: Event) => {
-  try {
-    const savedEvent = await updateEvent(updatedEvent);
 
-    // Normalize nullable fields
-    const normalizedEvent: Event = {
-      ...savedEvent,
-      highlighted: savedEvent.highlighted ?? false, // convert null -> false
-      distances: savedEvent.distances ?? undefined, // optional
-      //location: savedEvent.location ?? undefined,   // optional
-    };
+  const handleSave = async (updatedEvent: Event) => {
+    try {
+      const savedEvent = await updateEvent(updatedEvent);
 
-    setEvents((prev) =>
-      prev.map((e) => (e.id === normalizedEvent.id ? normalizedEvent : e))
-    );
-  } catch (error) {
-    console.error("Error updating event:", error);
-  }
-};
+      // Normalize nullable fields
+      const normalizedEvent: Event = {
+        ...savedEvent,
+        highlighted: savedEvent.highlighted ?? false, // convert null -> false
+        distances: savedEvent.distances ?? undefined, // optional
+        //location: savedEvent.location ?? undefined,   // optional
+      };
+
+      setEvents((prev) =>
+        prev.map((e) => (e.id === normalizedEvent.id ? normalizedEvent : e))
+      );
+    } catch (error) {
+      console.error("Error updating event:", error);
+    }
+  };
 
 
 
