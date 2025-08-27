@@ -1,7 +1,7 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
-import Logo from "../../assets/eventsLogo.png"; 
+import Logo from "../../../public/logo.png"; 
 import { LoggedUser } from "../User";
 import Image from "next/image";
 export function Header() {
