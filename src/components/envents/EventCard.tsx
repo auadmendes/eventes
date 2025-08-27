@@ -112,7 +112,7 @@ export default function EventCard({ event, onEdit }: EventCardProps) {
         <span className="inline-block mt-2 px-3 py-1 bg-light-secondary text-white text-xs rounded-full">
           {category}
         </span>
-       <span className="flex items-center gap-1 text-xs text-primary font-medium mt-4">
+       <span className="flex items-center gap-1 text-xs text-primary font-light mt-4">
           {font}
         </span>
 
