@@ -26,6 +26,8 @@ model Event {
   highlighted Boolean?
   image       String
   location    String?
+  distances   String?
+  extra       String[]
 
   likes Like[] @relation("EventLikes")
 

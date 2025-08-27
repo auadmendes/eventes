@@ -28,6 +28,8 @@ export interface Event {
   image: string;
   location: string | null;
   highlighted?: boolean;
+  distances?: string;
+  extra?: string[];
   likes?: Like[];
 }
 
@@ -89,14 +91,34 @@ export default function EventCard({ event }: EventCardProps) {
         <p className="text-sm text-text-muted">
           {format(new Date(date), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
         </p>
+
         <h3 className="text-lg font-semibold text-text-dark">{title}</h3>
+
         {location && <p className="text-sm text-text-dark">{location}</p>}
+
+        {/* Distances (for corridas) */}
+        {event.distances && (
+          <p className="text-sm text-light-secondary mt-1">
+            Distâncias: {event.distances}
+          </p>
+        )}
+
+        {/* Extra info (array) */}
+        {event.extra && event.extra.length > 0 && (
+          <ul className="mt-1 list-disc list-inside text-sm text-text-muted">
+            {event.extra.map((item, idx) => (
+              <li key={idx}>{item}</li>
+            ))}
+          </ul>
+        )}
+
         {highlighted && (
           <span className="flex items-center gap-1 text-xs text-primary font-thin mt-4">
             Patrocinado <Star size={12} className="text-yellow-500" fill="currentColor" />
           </span>
         )}
       </div>
+
 
       {/* Action Buttons */}
       <div className="flex justify-between items-center border-t px-4 py-2">

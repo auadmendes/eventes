@@ -25,11 +25,12 @@ export default function EventsPage({
     async function fetchEvents() {
       try {
         const fetchedEvents = await getEvents();
-
+        
         const mappedEvents = fetchedEvents.map((e) => ({
           ...e,
           highlighted: e.highlighted === true,
           site: e.font || "Todos",
+          distances: e.distances === null ? undefined : e.distances,
         }));
 
         let filtered = mappedEvents;
@@ -64,14 +65,14 @@ export default function EventsPage({
         }
 
         // ✅ filter by date range
-if (filterStartDate) {
-  console.log("Filtering from date:", filterStartDate);
-  const startTime = new Date(filterStartDate).getTime();
-  filtered = filtered.filter((e) => {
-    const eventTime = new Date(e.date).getTime();
-    return eventTime >= startTime; // only events on or after the selected date
-  });
-}
+        if (filterStartDate) {
+          //console.log("Filtering from date:", filterStartDate);
+          const startTime = new Date(filterStartDate).getTime();
+          filtered = filtered.filter((e) => {
+            const eventTime = new Date(e.date).getTime();
+            return eventTime >= startTime; // only events on or after the selected date
+          });
+        }
 
 
         // ✅ sort highlighted first, then by date (earliest first)
@@ -85,6 +86,7 @@ if (filterStartDate) {
         });
 
         setEvents(filtered);
+        console.log(filtered, '-------------------------------------------------------------')
         onCountChange?.(filtered.length);
       } catch (error) {
         console.error("Error fetching events:", error);

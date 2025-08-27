@@ -30,7 +30,8 @@ export function Menu() {
         </Link>
 
         {/* Notifications */}
-        <Link href="/notifications" className={linkClasses("/notifications")}>
+        {/* href="/notifications" */}
+        <Link href="/" className={linkClasses("/notifications")}>
           <Bell className={iconClasses("/notifications")} />
           <span className="hidden lg:block font-medium">Notifications</span>
         </Link>
@@ -42,7 +43,8 @@ export function Menu() {
         </Link>
 
         {/* Create */}
-        <Link href="/create" className={linkClasses("/create")}>
+        {/* href="/create" */}
+        <Link href="/" className={linkClasses("/create")}>
           <PlusSquare className={iconClasses("/create")} />
           <span className="hidden lg:block font-medium">Create</span>
         </Link>
