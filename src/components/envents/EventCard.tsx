@@ -4,10 +4,11 @@ import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Edit, Star } from "lucide-react";
+import { Edit, Star, Bookmark } from "lucide-react";
 import LikeButton from "../LikeButton";
 import HighlightButton from "../Highlight";
 import ShareButton from "../ShareButton";
+import { useState, useEffect } from "react";
 
 export interface Like {
   id: string;
@@ -38,6 +39,29 @@ export default function EventCard({ event }: EventCardProps) {
   const { id, title, date, location, image, link, highlighted } = event;
   const { user } = useUser();
 
+  const [saved, setSaved] = useState(false);
+
+  // Load saved state
+  useEffect(() => {
+    const savedEvents = JSON.parse(localStorage.getItem("savedEvents") || "[]");
+    setSaved(savedEvents.some((e: Event) => e.id === id));
+  }, [id]);
+
+  // Save or remove event
+  const toggleSave = () => {
+    const savedEvents = JSON.parse(localStorage.getItem("savedEvents") || "[]");
+    let updated;
+
+    if (saved) {
+      updated = savedEvents.filter((e: Event) => e.id !== id);
+    } else {
+      updated = [...savedEvents, event];
+    }
+
+    localStorage.setItem("savedEvents", JSON.stringify(updated));
+    setSaved(!saved);
+  };
+
   return (
     <div
       className={`rounded-2xl shadow-md bg-background-paper 
@@ -46,7 +70,7 @@ export default function EventCard({ event }: EventCardProps) {
     >
       {/* Image */}
       <a href={link} target="_blank" rel="noopener noreferrer">
-        <div className="relative w-full h-48">
+        <div className="relative w-full h-48 rounded-tl-2xl rounded-tr-2xl overflow-hidden">
           <Image
             src={
               image && image.trim() !== ""
@@ -78,10 +102,14 @@ export default function EventCard({ event }: EventCardProps) {
       <div className="flex justify-between items-center border-t px-4 py-2">
         <ShareButton title={title} url={link} />
 
-        <button className="flex items-center gap-1 text-gray-600 hover:text-green-600 transition">
-          <Edit size={18} />
-          <span className="text-xs">Edit</span>
-        </button>
+        {user?.emailAddresses?.some(
+          (emailObj) => emailObj.emailAddress === "luciano.auad@gmail.com"
+        ) && (
+          <button className="flex items-center gap-1 text-gray-600 hover:text-green-600 transition">
+            <Edit size={18} />
+            <span className="text-xs">Edit</span>
+          </button>
+        )}
 
         <LikeButton
           eventId={id}
@@ -89,6 +117,17 @@ export default function EventCard({ event }: EventCardProps) {
           liked={event.likes?.some((like) => like.user_id === user?.id) ?? false}
           count={event.likes?.length ?? 0}
         />
+
+        {/* Save Button */}
+        <button
+          onClick={toggleSave}
+          className={`flex items-center gap-1 transition ${
+            saved ? "text-blue-600" : "text-gray-600 hover:text-blue-600"
+          }`}
+        >
+          <Bookmark size={18} fill={saved ? "currentColor" : "none"} />
+          <span className="text-xs">{saved ? "Saved" : "Save"}</span>
+        </button>
 
         {user?.emailAddresses?.some(
           (emailObj) => emailObj.emailAddress === "luciano.auad@gmail.com"
