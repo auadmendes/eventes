@@ -41,7 +41,6 @@ export async function likeEvent(userId: string, eventId: string) {
   }
 }
 
-
 export async function toggleHighlight(eventId: string) {
   // Get current event
   const event = await prisma.event.findUnique({
@@ -59,4 +58,35 @@ export async function toggleHighlight(eventId: string) {
   });
 
   return updatedEvent;
+}
+
+import { Event } from "@/components/envents/EventCard";
+
+export async function updateEvent(updatedEvent: Event) {
+  // Make sure the event exists
+  const existing = await prisma.event.findUnique({
+    where: { id: updatedEvent.id },
+  });
+
+  if (!existing) {
+    throw new Error("Event not found");
+  }
+
+  // Update only the fields you want
+  const savedEvent = await prisma.event.update({
+    where: { id: updatedEvent.id },
+    data: {
+      title: updatedEvent.title,
+      date: new Date(updatedEvent.date).toISOString(),
+      end_date: updatedEvent.end_date ? new Date(updatedEvent.end_date).toISOString() : null,
+      location: updatedEvent.location,
+      distances: updatedEvent.distances,
+      category: updatedEvent.category,
+      font: updatedEvent.font,
+      image: updatedEvent.image,
+      highlighted: updatedEvent.highlighted,
+    },
+  });
+
+  return savedEvent;
 }

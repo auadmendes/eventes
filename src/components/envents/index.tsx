@@ -1,7 +1,8 @@
 'use client';
 import { useEffect, useState } from "react";
-import { getEvents } from "@/actions/events";
+import { getEvents, updateEvent } from "@/actions/events";
 import EventCard, { Event } from "./EventCard";
+import EditEventPopup from "../EditEventPopup";
 
 interface EventsPageProps {
   filterCategory?: string;
@@ -20,6 +21,8 @@ export default function EventsPage({
 }: EventsPageProps) {
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   useEffect(() => {
     async function fetchEvents() {
@@ -98,6 +101,32 @@ export default function EventsPage({
     fetchEvents();
   }, [filterCategory, filterSite, searchQuery, filterStartDate]);
 
+  const handleEdit = (event: Event) => {
+      setSelectedEvent(event);
+      setIsPopupOpen(true);
+    };
+const handleSave = async (updatedEvent: Event) => {
+  try {
+    const savedEvent = await updateEvent(updatedEvent);
+
+    // Normalize nullable fields
+    const normalizedEvent: Event = {
+      ...savedEvent,
+      highlighted: savedEvent.highlighted ?? false, // convert null -> false
+      distances: savedEvent.distances ?? undefined, // optional
+      //location: savedEvent.location ?? undefined,   // optional
+    };
+
+    setEvents((prev) =>
+      prev.map((e) => (e.id === normalizedEvent.id ? normalizedEvent : e))
+    );
+  } catch (error) {
+    console.error("Error updating event:", error);
+  }
+};
+
+
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -111,10 +140,23 @@ export default function EventsPage({
   }
 
   return (
-    <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-1">
-      {events.map((event) => (
-        <EventCard key={event.id} event={event} />
-      ))}
-    </main>
+    <>
+      <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-1">
+        {events.map((event) => (
+          <EventCard
+            key={event.id}
+            event={event}
+            onEdit={handleEdit} // <-- pass the edit handler
+          />
+        ))}
+      </main>
+      <EditEventPopup
+        event={selectedEvent}
+        isOpen={isPopupOpen}
+        onClose={() => setIsPopupOpen(false)}
+        onSave={handleSave}
+        
+      />
+    </>
   );
 }

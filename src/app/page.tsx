@@ -59,7 +59,8 @@ export default function Home() {
         {/* Main Content */}
         <main className="flex-1 p-6 mb-16 md:mb-0 w-full">
 
-          <div className="max-w-full md:w-full sticky top-0 z-50 bg-white shadow-sm rounded-full gap-2 p-2 mb-4">
+          <div className="flex flex-col max-w-full md:w-full sticky top-0 z-50 bg-white shadow-sm rounded-full px-2 p-2 mb-4">
+            <span className="text-xs text-light-primary ml-3">Categoria</span>
             <select
               className="w-full md:w-auto px-4 py-2 rounded-full border border-gray-300 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={selectedCategory || "Todos"}
@@ -74,33 +75,43 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col md:flex-row bg-white shadow-sm rounded-full gap-2 p-2 mb-4">
-            <select
-              className="w-full md:w-auto px-4 py-2 rounded-full border border-gray-300 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={selectedSite}
-              onChange={(e) => setSelectedSite(e.target.value)}
-            >
-              <option value="Todos">Todos</option>
-              {sites.map((site) => (
-                <option key={site} value={site}>
-                  {site}
-                </option>
-              ))}
-            </select>
-            <input
-              type="text"
-              className="w-full px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Search events..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <DatePicker
-              selected={selectedDate}
-              onChange={(date) => setSelectedDate(date)}
-              dateFormat="dd/MM/yyyy"
-              locale="pt-BR"
-              className="w-full md:w-auto px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholderText="Selecione a data"
-            />
+            <div className="flex flex-col">
+              <span className="text-xs text-light-primary ml-3">Criadores</span>
+              <select
+                className="w-full md:w-auto px-4 py-2 rounded-full border border-gray-300 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={selectedSite}
+                onChange={(e) => setSelectedSite(e.target.value)}
+              >
+                <option value="Todos">Todos</option>
+                {sites.map((site) => (
+                  <option key={site} value={site}>
+                    {site}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex flex-col w-full">
+              <span className="text-xs text-light-primary ml-3">Evento | Local | Nome</span>
+              <input
+                type="text"
+                className="w-full px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Buscar eventos..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+            <div className="flex flex-col w-full">
+              <span className="text-xs text-light-primary ml-3">Data</span>
+              <DatePicker
+                selected={selectedDate}
+                onChange={(date) => setSelectedDate(date)}
+                dateFormat="dd/MM/yyyy"
+                locale="pt-BR"
+                className="w-full md:w-auto px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholderText="Selecione a data"
+              />
+            </div>
+            
           </div>
 
           <div className="text-gray-600 text-sm font-thin mb-4">

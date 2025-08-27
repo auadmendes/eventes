@@ -48,8 +48,34 @@ export default function SavedEventsPage() {
 
   if (events.length === 0) {
     return (
-      <div className="p-6 text-center text-gray-600">
-        Nenhum evento salvo ainda.
+      <div className="min-h-screen bg-background-default text-text-dark flex flex-col">
+        <Header/>
+          {/* Main Content + Sidebar */}
+          <div className="flex flex-1 flex-col md:flex-row">
+            {/* Sidebar (Desktop) */}
+            <aside className="hidden md:block w-64 p-6">
+              <Menu />
+            </aside>
+    
+            {/* Main Content */}
+            <main className="flex-1 p-6 mb-16 md:mb-0 w-full">
+                <span>Nenhum Evento Salvo</span>
+            </main>
+    
+          </div>
+        {/* Mobile Menu (Bottom Bar) */}
+          <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-background-paper p-4">
+            <Menu />
+          </nav>
+          {showScrollTop && (
+            <button
+              onClick={scrollToTop}
+              className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-blue-500 text-white shadow-lg hover:bg-blue-600 transition"
+              aria-label="Scroll to top"
+            >
+              <ArrowUp size={24} />
+            </button>
+          )}
       </div>
     );
   }

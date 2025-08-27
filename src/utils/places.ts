@@ -8,5 +8,6 @@ export const sites = [
   "Senac ES",
   "LeBillet",
   "Eventim",
+  "Brasil Que Corre",
   "Outros"
 ];

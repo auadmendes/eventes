@@ -12,7 +12,7 @@ export function LoggedUser() {
       </SignedIn>
       <SignedOut>
         <span className="hidden sm:block text-light-text dark:text-dark-text font-medium">
-          Not signed in
+          😊
         </span>
         <Link href="/sign-in" className="text-blue-500">Sign In</Link>
       </SignedOut>

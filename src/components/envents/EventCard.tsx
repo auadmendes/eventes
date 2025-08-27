@@ -10,6 +10,8 @@ import HighlightButton from "../Highlight";
 import ShareButton from "../ShareButton";
 import { useState, useEffect } from "react";
 
+import { allowedemailList} from '../../utils/emailList';
+
 export interface Like {
   id: string;
   user_id: string;
@@ -35,21 +37,20 @@ export interface Event {
 
 interface EventCardProps {
   event: Event;
+  onEdit?: (event: Event) => void;
 }
 
-export default function EventCard({ event }: EventCardProps) {
+export default function EventCard({ event, onEdit }: EventCardProps) {
   const { id, title, date, location, image, link, highlighted } = event;
   const { user } = useUser();
 
   const [saved, setSaved] = useState(false);
 
-  // Load saved state
   useEffect(() => {
     const savedEvents = JSON.parse(localStorage.getItem("savedEvents") || "[]");
     setSaved(savedEvents.some((e: Event) => e.id === id));
   }, [id]);
 
-  // Save or remove event
   const toggleSave = () => {
     const savedEvents = JSON.parse(localStorage.getItem("savedEvents") || "[]");
     let updated;
@@ -70,7 +71,6 @@ export default function EventCard({ event }: EventCardProps) {
         overflow-visible hover:shadow-lg transition flex flex-col
         ${highlighted ? "border-2 border-light-secondary" : "border border-transparent"}`}
     >
-      {/* Image */}
       <a href={link} target="_blank" rel="noopener noreferrer">
         <div className="relative w-full h-48 rounded-tl-2xl rounded-tr-2xl overflow-hidden">
           <Image
@@ -86,7 +86,6 @@ export default function EventCard({ event }: EventCardProps) {
         </div>
       </a>
 
-      {/* Content */}
       <div className="flex-1 p-4">
         <p className="text-sm text-text-muted">
           {format(new Date(date), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
@@ -96,14 +95,12 @@ export default function EventCard({ event }: EventCardProps) {
 
         {location && <p className="text-sm text-text-dark">{location}</p>}
 
-        {/* Distances (for corridas) */}
         {event.distances && (
           <p className="text-sm text-light-secondary mt-1">
             Distâncias: {event.distances}
           </p>
         )}
 
-        {/* Extra info (array) */}
         {event.extra && event.extra.length > 0 && (
           <ul className="mt-1 list-disc list-inside text-sm text-text-muted">
             {event.extra.map((item, idx) => (
@@ -119,15 +116,16 @@ export default function EventCard({ event }: EventCardProps) {
         )}
       </div>
 
-
-      {/* Action Buttons */}
       <div className="flex justify-between items-center border-t px-4 py-2">
         <ShareButton title={title} url={link} />
 
         {user?.emailAddresses?.some(
-          (emailObj) => emailObj.emailAddress === "luciano.auad@gmail.com"
+          (emailObj) => allowedemailList.includes(emailObj.emailAddress)
         ) && (
-          <button className="flex items-center gap-1 text-gray-600 hover:text-green-600 transition">
+          <button
+            onClick={() => onEdit?.(event)}
+            className="flex items-center gap-1 text-gray-600 hover:text-green-600 transition"
+          >
             <Edit size={18} />
             <span className="text-xs">Edit</span>
           </button>
@@ -140,7 +138,6 @@ export default function EventCard({ event }: EventCardProps) {
           count={event.likes?.length ?? 0}
         />
 
-        {/* Save Button */}
         <button
           onClick={toggleSave}
           className={`flex items-center gap-1 transition ${
@@ -152,8 +149,8 @@ export default function EventCard({ event }: EventCardProps) {
         </button>
 
         {user?.emailAddresses?.some(
-          (emailObj) => emailObj.emailAddress === "luciano.auad@gmail.com"
-        ) && <HighlightButton eventId={id} highlighted={event.highlighted ?? false} />}
+          (emailObj) => allowedemailList.includes(emailObj.emailAddress)
+        )  && <HighlightButton eventId={id} highlighted={event.highlighted ?? false} />}
       </div>
     </div>
   );
