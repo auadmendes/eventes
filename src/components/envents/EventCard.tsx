@@ -41,7 +41,7 @@ interface EventCardProps {
 }
 
 export default function EventCard({ event, onEdit }: EventCardProps) {
-  const { id, title, date, location, image, link, highlighted } = event;
+  const { id, title, date, location, image, link, highlighted, category, font } = event;
   const { user } = useUser();
 
   const [saved, setSaved] = useState(false);
@@ -109,11 +109,19 @@ export default function EventCard({ event, onEdit }: EventCardProps) {
           </ul>
         )}
 
+        <span className="inline-block mt-2 px-3 py-1 bg-light-secondary text-white text-xs rounded-full">
+          {category}
+        </span>
+       <span className="flex items-center gap-1 text-xs text-primary font-medium mt-4">
+          {font}
+        </span>
+
         {highlighted && (
           <span className="flex items-center gap-1 text-xs text-primary font-thin mt-4">
             Patrocinado <Star size={12} className="text-yellow-500" fill="currentColor" />
           </span>
         )}
+        
       </div>
 
       <div className="flex justify-between items-center border-t px-4 py-2">
@@ -151,6 +159,8 @@ export default function EventCard({ event, onEdit }: EventCardProps) {
         {user?.emailAddresses?.some(
           (emailObj) => allowedemailList.includes(emailObj.emailAddress)
         )  && <HighlightButton eventId={id} highlighted={event.highlighted ?? false} />}
+
+        
       </div>
     </div>
   );
