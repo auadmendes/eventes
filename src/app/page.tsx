@@ -53,9 +53,10 @@ export default function Home() {
 
         {/* Main Content */}
         <main className="flex-1 p-6 mb-16 md:mb-0 w-full">
+          
           {/* Category filter */}
           <div className="flex flex-col max-w-full md:w-full sticky top-0 z-50 bg-white shadow-sm rounded-sm px-2 p-2 mb-4">
-            <span className="text-xs text-light-primary ml-3">Categoria</span>
+            <span className="text-xs text-light-primary">Categoria</span>
 
 
           <Select
@@ -77,8 +78,8 @@ export default function Home() {
             {/* Criadores + Data */}
             <div className="flex flex-row flex-wrap gap-2 w-full md:w-auto justify-center">
               {/* Criadores */}
-              <div className="flex flex-col min-w-[200px] flex-1">
-                <span className="text-xs text-light-primary ml-3">Criadores</span>
+              <div className="flex flex-col min-w-[200px] flex-1 px-2 p-1">
+                <span className="text-xs text-light-primary ">Criadores</span>
                 <Select
                   isMulti
                   options={sites.map((site) => ({ value: site, label: site }))}
@@ -88,19 +89,19 @@ export default function Home() {
                   onChange={(selected) =>
                     setSelectedSites(selected.map((s) => s.value))
                   }
-                  className="w-full"
+                  
                 />
               </div>
 
               {/* Data */}
               <div className="flex flex-col min-w-[100px] flex-1">
-                <span className="text-xs text-light-primary ml-3">Data</span>
+                <span className="text-xs text-light-primary">Data</span>
                 <DatePicker
                   selected={selectedDate}
                   onChange={(date) => setSelectedDate(date)}
                   dateFormat="dd/MM/yyyy"
                   locale="pt-BR"
-                  className="w-full px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 rounded-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholderText="Selecione a data"
                 />
               </div>
@@ -108,12 +109,12 @@ export default function Home() {
 
             {/* Search box */}
             <div className="flex flex-col w-full lg:max-w-[500px]">
-              <span className="text-xs text-light-primary ml-3">
+              <span className="text-xs text-light-primary">
                 Evento | Local | Nome
               </span>
               <input
                 type="text"
-                className="w-full px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 rounded-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Buscar eventos..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
