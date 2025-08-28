@@ -78,7 +78,7 @@ export default function Home() {
             {/* Criadores + Data */}
             <div className="flex flex-row flex-wrap gap-2 w-full md:w-auto justify-center">
               {/* Criadores */}
-              <div className="flex flex-col min-w-[200px] flex-1 px-2 p-1">
+              <div className="flex flex-col min-w-[200px] flex-1">
                 <span className="text-xs text-light-primary ">Criadores</span>
                 <Select
                   isMulti
@@ -89,7 +89,16 @@ export default function Home() {
                   onChange={(selected) =>
                     setSelectedSites(selected.map((s) => s.value))
                   }
-                  
+                  styles={{
+                    control: (base) => ({
+                      ...base,
+                      minHeight: "2.5rem", // ~ h-24
+                    }),
+                    valueContainer: (base) => ({
+                      ...base,
+                      minHeight: "2.5rem",
+                    }),
+                  }}
                 />
               </div>
 
