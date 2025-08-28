@@ -5,16 +5,16 @@ import EventCard, { Event } from "./EventCard";
 import EditEventPopup from "../EditEventPopup";
 
 interface EventsPageProps {
-  filterCategory?: string;
-  filterSite?: string;
+  filterCategories?: string[];   // instead of filterCategory?: string
+  filterSites?: string[];        // instead of filterSite?: string
   searchQuery?: string;
-  filterStartDate?: string; // ISO string
+  filterStartDate?: string;
   onCountChange?: (count: number) => void;
 }
 
 export default function EventsPage({
-  filterCategory = "Todos",
-  filterSite = "Todos",
+  filterCategories = [],
+  filterSites = [],
   searchQuery = "",
   filterStartDate,
   onCountChange,
@@ -39,13 +39,13 @@ export default function EventsPage({
         let filtered = mappedEvents;
 
         // filter by category
-        if (filterCategory !== "Todos") {
-          filtered = filtered.filter((e) => e.category === filterCategory);
+        if (filterCategories.length > 0) {
+          filtered = filtered.filter((e) => filterCategories.includes(e.category));
         }
 
         // filter by site
-        if (filterSite !== "Todos") {
-          filtered = filtered.filter((e) => e.font === filterSite);
+        if (filterSites.length > 0) {
+          filtered = filtered.filter((e) => filterSites.includes(e.font));
         }
 
         // filter by search
@@ -99,7 +99,7 @@ export default function EventsPage({
     }
 
     fetchEvents();
-  }, [filterCategory, filterSite, searchQuery, filterStartDate,onCountChange]);
+  }, [filterCategories, filterSites, searchQuery, filterStartDate, onCountChange]);
 
   const handleEdit = (event: Event) => {
       setSelectedEvent(event);
