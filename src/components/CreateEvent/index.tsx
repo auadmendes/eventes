@@ -45,9 +45,6 @@ export default function CreateEvent() {
     setForm((prev) => ({ ...prev, [field]: value }));
   }
 
-  // const formattedDate = form.date
-  // ? format(new Date(form.date), "dd/MM/yyyy", { locale: ptBR })
-  // : "";
  
   const selectedDate = form.date ? new Date(form.date + 'T00:00') : null;
   const selectedEndDate = form.end_date ? new Date(form.end_date + 'T00:00') : null;
@@ -67,7 +64,7 @@ export default function CreateEvent() {
         <DatePicker
           value={selectedDate}
           onChange={(value) => {
-            let date: Date | null = Array.isArray(value) ? value[0] ?? null : value;
+            const date: Date | null = Array.isArray(value) ? value[0] ?? null : value;
             if (date) updateField("date", formatLocalDate(date));
             else updateField("date", "");
           }}
@@ -79,7 +76,7 @@ export default function CreateEvent() {
         <DatePicker
           value={selectedEndDate}
           onChange={(value) => {
-            let date: Date | null = Array.isArray(value) ? value[0] ?? null : value;
+            const date: Date | null = Array.isArray(value) ? value[0] ?? null : value;
             if (date) {
               const yyyy = date.getFullYear();
               const mm = String(date.getMonth() + 1).padStart(2, "0");
