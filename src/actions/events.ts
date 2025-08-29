@@ -1,5 +1,9 @@
 "use server";
 
+import { Event } from "@/types/event";
+
+import { NewEvent } from "@/types/event";
+
 import { prisma } from "@/lib/prisma";
 
 export async function getEvents() {
@@ -8,10 +12,13 @@ export async function getEvents() {
 
   const events = await prisma.event.findMany({
     where: {
-      date: { gte: today.toISOString() },
+      OR: [
+        { date: { gte: today.toISOString() } }, // upcoming events
+        { end_date: { gte: today.toISOString() } }, // ongoing events
+      ],
     },
     include: {
-      likes: true, // brings all likes linked to each event
+      likes: true,
     },
     orderBy: { date: "asc" },
   });
@@ -60,10 +67,8 @@ export async function toggleHighlight(eventId: string) {
   return updatedEvent;
 }
 
-import { Event } from "@/components/envents/EventCard";
 
 export async function updateEvent(updatedEvent: Event) {
-  // Make sure the event exists
   const existing = await prisma.event.findUnique({
     where: { id: updatedEvent.id },
   });
@@ -72,13 +77,12 @@ export async function updateEvent(updatedEvent: Event) {
     throw new Error("Event not found");
   }
 
-  // Update only the fields you want
   const savedEvent = await prisma.event.update({
     where: { id: updatedEvent.id },
     data: {
       title: updatedEvent.title,
-      date: new Date(updatedEvent.date).toISOString(),
-      end_date: updatedEvent.end_date ? new Date(updatedEvent.end_date).toISOString() : null,
+      date: updatedEvent.date, // no extra conversion
+      end_date: updatedEvent.end_date || null,
       location: updatedEvent.location,
       distances: updatedEvent.distances,
       category: updatedEvent.category,
@@ -89,4 +93,23 @@ export async function updateEvent(updatedEvent: Event) {
   });
 
   return savedEvent;
+}
+
+
+export async function createEvent(eventData: NewEvent) {
+  return await prisma.event.create({
+    data: {
+      title: eventData.title,
+      link: eventData.link,
+      date: new Date(eventData.date).toISOString(),
+      end_date: eventData.end_date ? new Date(eventData.end_date).toISOString() : null,
+      UF: eventData.UF,
+      category: eventData.category,
+      font: eventData.font,
+      image: eventData.image,
+      location: eventData.location,
+      distances: eventData.distances ?? null,
+      extra: eventData.extra ?? [],
+    },
+  });
 }

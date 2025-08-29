@@ -44,7 +44,7 @@ export function Menu() {
 
         {/* Create */}
         {/* href="/create" */}
-        <Link href="/" className={linkClasses("/create")}>
+        <Link href="/create" className={linkClasses("/create")}>
           <PlusSquare className={iconClasses("/create")} />
           <span className="hidden lg:block font-medium">Create</span>
         </Link>

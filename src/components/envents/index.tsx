@@ -1,8 +1,9 @@
 'use client';
 import { useEffect, useState } from "react";
 import { getEvents, updateEvent } from "@/actions/events";
-import EventCard, { Event } from "./EventCard";
+import EventCard from "./EventCard";
 import EditEventPopup from "../EditEventPopup";
+import { Event } from "@/types/event";
 
 interface EventsPageProps {
   filterCategories?: string[];   // instead of filterCategory?: string

@@ -55,6 +55,14 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "yata-apix-b6a73c78-1100-48ad-9374-0a41af79d029.s3-object.locaweb.com.br", 
       },
+      {
+        protocol: "https",
+        hostname: "via.placeholder.com", 
+      },
+      {
+        protocol: "https",
+        hostname: "www.steffencentrodeeventos.com.br", 
+      },
     ],
   },
 };

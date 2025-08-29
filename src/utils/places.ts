@@ -9,5 +9,6 @@ export const sites = [
   "LeBillet",
   "Eventim",
   "Brasil Que Corre",
+  "Steffen Centro de Eventos",
   "Outros"
 ];

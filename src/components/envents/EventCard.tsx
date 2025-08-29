@@ -11,29 +11,9 @@ import ShareButton from "../ShareButton";
 import { useState, useEffect } from "react";
 
 import { allowedemailList} from '../../utils/emailList';
+import { Event } from "@/types/event";
 
-export interface Like {
-  id: string;
-  user_id: string;
-  event_id: string;
-}
-
-export interface Event {
-  id: string;
-  link: string;
-  title: string;
-  date: string;
-  end_date: string | null;
-  UF: string;
-  category: string;
-  font: string;
-  image: string;
-  location: string | null;
-  highlighted?: boolean;
-  distances?: string;
-  extra?: string[];
-  likes?: Like[];
-}
+import { formatInTimeZone } from "date-fns-tz";
 
 interface EventCardProps {
   event: Event;
@@ -41,7 +21,7 @@ interface EventCardProps {
 }
 
 export default function EventCard({ event, onEdit }: EventCardProps) {
-  const { id, title, date, location, image, link, highlighted, category, font } = event;
+  const { id, title, date, location, image, link, highlighted, category, font, end_date } = event;
   const { user } = useUser();
 
   const [saved, setSaved] = useState(false);
@@ -87,9 +67,14 @@ export default function EventCard({ event, onEdit }: EventCardProps) {
       </a>
 
       <div className="flex-1 p-4">
-        <p className="text-sm text-text-muted">
-          {format(new Date(date), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
+        <p className="text-xs text-text-muted mb-1">
+          {formatInTimeZone(date, "UTC", "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
         </p>
+        {end_date && (
+          <p className="text-xs text-text-muted mb-1">
+            Até {formatInTimeZone(end_date, "UTC", "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
+          </p>
+        )}
 
         <h3 className="text-lg font-semibold text-text-dark">{title}</h3>
 

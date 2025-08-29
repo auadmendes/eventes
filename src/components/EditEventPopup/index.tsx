@@ -1,9 +1,9 @@
 "use client";
 
-import { Event } from "../envents/EventCard";
 import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import { categories } from "@/utils/categories";
+import { Event } from "@/types/event";
 
 interface EditEventPopupProps {
   event: Event | null;
@@ -26,18 +26,26 @@ export default function EditEventPopup({ event, isOpen, onClose, onSave }: EditE
     setFormData({ ...formData, [key]: value });
   };
   
-  const handleSubmit = async () => {
-    if (!formData) return;
-    setIsSaving(true);
-    try {
-      await onSave(formData); // wait for server action
-      onClose();
-    } catch (error) {
-      console.error("Error saving event:", error);
-    } finally {
-      setIsSaving(false);
-    }
-  };
+const handleSubmit = async () => {
+  if (!formData) return;
+  setIsSaving(true);
+  try {
+    const payload = {
+      ...formData,
+      date: formData.date.includes("T")
+        ? formData.date
+        : `${formData.date}T00:00:00Z`, // normalize
+    };
+    console.log("Submitting payload:", payload);
+    await onSave(payload);
+    onClose();
+  } catch (error) {
+    console.error("Error saving event:", error);
+  } finally {
+    setIsSaving(false);
+  }
+};
+
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
