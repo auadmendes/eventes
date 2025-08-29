@@ -8,9 +8,6 @@ import Image from "next/image";
 import { categories } from "@/utils/categories";
 import { sites } from "@/utils/places";
 
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
-
 import 'react-date-picker/dist/DatePicker.css';
 import 'react-calendar/dist/Calendar.css';
 import DatePicker from "react-date-picker";
@@ -48,12 +45,12 @@ export default function CreateEvent() {
     setForm((prev) => ({ ...prev, [field]: value }));
   }
 
-  const formattedDate = form.date
-  ? format(new Date(form.date), "dd/MM/yyyy", { locale: ptBR })
-  : "";
+  // const formattedDate = form.date
+  // ? format(new Date(form.date), "dd/MM/yyyy", { locale: ptBR })
+  // : "";
  
-const selectedDate = form.date ? new Date(form.date + 'T00:00') : null;
-const selectedEndDate = form.end_date ? new Date(form.end_date + 'T00:00') : null;
+  const selectedDate = form.date ? new Date(form.date + 'T00:00') : null;
+  const selectedEndDate = form.end_date ? new Date(form.end_date + 'T00:00') : null;
 
 
   return (
