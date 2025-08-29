@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import { categories } from "@/utils/categories";
 import { Event } from "@/types/event";
+import { sites } from "@/utils/places";
 
 interface EditEventPopupProps {
   event: Event | null;
@@ -124,18 +125,23 @@ const handleSubmit = async () => {
             ))}
           </select>
         </label>
-
-        {/* Font/Site */}
         <label className="block mb-2">
           Font/Site:
-          <input
-            type="text"
+          <select
             className="w-full border rounded p-2"
             value={formData.font}
             onChange={(e) => handleChange("font", e.target.value)}
             disabled={isSaving}
-          />
+          >
+            {sites.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
         </label>
+
+
 
         {/* Image URL */}
         <label className="block mb-2">

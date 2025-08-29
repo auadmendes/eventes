@@ -63,6 +63,22 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "www.steffencentrodeeventos.com.br", 
       },
+      {
+        protocol: "https",
+        hostname: "placehold.co", 
+      },
+      {
+        protocol: "https",
+        hostname: "images.pexels.com", 
+      },
+      {
+        protocol: "https",
+        hostname: "scontent-gig4-2.xx.fbcdn.net", 
+      },
+      {
+        protocol: "https",
+        hostname: "scontent-gig4-2.xx.fbcdn.net", 
+      },
     ],
   },
 };

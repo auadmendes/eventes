@@ -8,8 +8,16 @@ import Image from "next/image";
 import { categories } from "@/utils/categories";
 import { sites } from "@/utils/places";
 
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+
+import 'react-date-picker/dist/DatePicker.css';
+import 'react-calendar/dist/Calendar.css';
+import DatePicker from "react-date-picker";
+
 export default function CreateEvent() {
   const [isSaving, setIsSaving] = useState(false);
+  
   const [form, setForm] = useState<NewEvent>({
     link: "",
     title: "",
@@ -24,6 +32,12 @@ export default function CreateEvent() {
     extra: [],
   });
 
+  function formatLocalDate(date: Date): string {
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = String(date.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
+}
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     await createEvent(form);
@@ -33,6 +47,14 @@ export default function CreateEvent() {
   function updateField(field: keyof NewEvent, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }));
   }
+
+  const formattedDate = form.date
+  ? format(new Date(form.date), "dd/MM/yyyy", { locale: ptBR })
+  : "";
+ 
+const selectedDate = form.date ? new Date(form.date + 'T00:00') : null;
+const selectedEndDate = form.end_date ? new Date(form.end_date + 'T00:00') : null;
+
 
   return (
     <div className="p-6">
@@ -45,18 +67,36 @@ export default function CreateEvent() {
           onChange={(e) => updateField("title", e.target.value)}
           className="border p-2 rounded"
         />
-        <input
-          type="date"
-          value={form.date}
-          onChange={(e) => updateField("date", e.target.value)}
-          className="border p-2 rounded"
+        <DatePicker
+          value={selectedDate}
+          onChange={(value) => {
+            let date: Date | null = Array.isArray(value) ? value[0] ?? null : value;
+            if (date) updateField("date", formatLocalDate(date));
+            else updateField("date", "");
+          }}
+          format="dd/MM/yyyy"
+          dayPlaceholder="dd/mm/yyyy"
+          className="w-full rounded-lg border border-gray-300 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-        <input
-          type="date"
-          value={form.end_date ?? ""}
-          onChange={(e) => updateField("end_date", e.target.value)}
-          className="border p-2 rounded"
+
+        <DatePicker
+          value={selectedEndDate}
+          onChange={(value) => {
+            let date: Date | null = Array.isArray(value) ? value[0] ?? null : value;
+            if (date) {
+              const yyyy = date.getFullYear();
+              const mm = String(date.getMonth() + 1).padStart(2, "0");
+              const dd = String(date.getDate()).padStart(2, "0");
+              updateField("end_date", `${yyyy}-${mm}-${dd}`);
+            } else {
+              updateField("end_date", "");
+            }
+          }}
+          format="dd/MM/yyyy"
+          dayPlaceholder="dd/mm/yyyy"
+          className="w-full rounded-lg border border-gray-300 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
+
         <input
           type="text"
           placeholder="Local"
@@ -127,7 +167,7 @@ export default function CreateEvent() {
                 />
             ) : (
                 <Image
-                src="https://via.placeholder.com/150"
+                src="https://placehold.co/600x400/png"
                 alt="Placeholder"
                 width={150}
                 height={250}

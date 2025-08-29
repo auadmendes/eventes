@@ -2,7 +2,7 @@
 
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
-import { format } from "date-fns";
+
 import { ptBR } from "date-fns/locale";
 import { Edit, Star, Bookmark } from "lucide-react";
 import LikeButton from "../LikeButton";
