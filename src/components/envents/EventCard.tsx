@@ -88,12 +88,19 @@ export default function EventCard({ event, onEdit }: EventCardProps) {
           </p>
         )}
 
-        {event.extra && event.extra.length > 0 && (
+        {event.extra &&  (
           <ul className="mt-1 list-disc list-inside text-sm text-text-muted">
             {event.extra.map((item, idx) => (
               <li key={idx}>{item}</li>
             ))}
           </ul>
+        )}
+        {event.description && event.description.length > 0 && (
+          <div className="w-full">
+            <span className="flex items-center gap-1 text-xs text-primary font-light mt-4">
+              {event.description}
+            </span>
+          </div>
         )}
 
         <span className="inline-block mt-2 px-3 py-1 bg-light-secondary text-white text-xs rounded-full">

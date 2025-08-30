@@ -20,7 +20,7 @@ export default function CreateEvent() {
     title: "",
     date: "",
     end_date: null,
-    UF: "",
+    UF: "ES",
     category: "",
     font: "",
     image: "",
@@ -52,6 +52,7 @@ async function handleSubmit(e: React.FormEvent) {
       image: "",
       location: "",
       distances: "",
+      description: "",
       extra: [],
     });
     
@@ -138,6 +139,16 @@ async function handleSubmit(e: React.FormEvent) {
           disabled={isSaving}
           className="border p-2 rounded"
         />
+
+        {/* Description */}
+        <textarea
+          className="w-full border rounded p-2"
+          value={form.description || ""}
+          onChange={(e) => updateField("description", e.target.value)}
+          disabled={isSaving}
+          rows={4}
+        />       
+
         <label className="block mb-2">
         Category:
         <select

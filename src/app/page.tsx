@@ -57,18 +57,17 @@ export default function Home() {
           {/* Category filter */}
           <div className="flex flex-col max-w-full md:w-full sticky top-0 z-50 bg-white shadow-sm rounded-sm px-2 p-2 mb-4">
             <span className="text-xs text-light-primary">Categoria</span>
-
-
-          <Select
-            isMulti
-            options={categories.map((c) => ({ value: c, label: c }))}
-            value={categories
-              .filter((c) => selectedCategories.includes(c))
-              .map((c) => ({ value: c, label: c }))}
-            onChange={(selected) =>
-              setSelectedCategories(selected.map((s) => s.value))
-            }
-          />
+            <Select
+              isMulti
+              isSearchable={false}   // 👈 disables typing, no keyboard
+              options={categories.map((c) => ({ value: c, label: c }))}
+              value={categories
+                .filter((c) => selectedCategories.includes(c))
+                .map((c) => ({ value: c, label: c }))}
+              onChange={(selected) =>
+                setSelectedCategories(selected.map((s) => s.value))
+              }
+            />
 
           </div>
 
@@ -82,6 +81,7 @@ export default function Home() {
                 <span className="text-xs text-light-primary ">Criadores</span>
                 <Select
                   isMulti
+                  isSearchable={false} 
                   options={sites.map((site) => ({ value: site, label: site }))}
                   value={sites
                     .filter((site) => selectedSites.includes(site))

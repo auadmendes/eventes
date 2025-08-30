@@ -17,6 +17,7 @@ export interface Event {
   location: string | null;
   highlighted?: boolean;
   distances?: string;
+  description?: string;
   extra?: string[];
   likes?: Like[];
 }

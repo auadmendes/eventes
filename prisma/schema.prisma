@@ -25,6 +25,7 @@ model Event {
   font        String
   highlighted Boolean?
   image       String
+  description String?
   location    String?
   distances   String?
   extra       String[]

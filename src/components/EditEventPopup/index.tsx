@@ -1,7 +1,5 @@
-"use client";
-
 import { useState, useEffect } from "react";
-import { X } from "lucide-react";
+import { X, ChevronDown, ChevronUp } from "lucide-react";
 import { categories } from "@/utils/categories";
 import { sites } from "@/utils/places";
 import { Event } from "@/types/event";
@@ -22,7 +20,11 @@ export default function EditEventPopup({
   const [formData, setFormData] = useState<Event | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
-  // Initialize form data whenever the popup opens
+  // Collapsible sections state
+  const [showImage, setShowImage] = useState(false);
+  const [showDistances, setShowDistances] = useState(false);
+  const [showLink, setShowLink] = useState(false);
+
   useEffect(() => {
     if (event) {
       setFormData({
@@ -34,6 +36,7 @@ export default function EditEventPopup({
         category: event.category || categories[0],
         font: event.font || sites[0],
         image: event.image || "",
+        description: event.description || "",
         highlighted: event.highlighted ?? false,
         end_date: event.end_date ?? null,
       });
@@ -52,7 +55,6 @@ export default function EditEventPopup({
     try {
       const payload: Event = {
         ...formData,
-        // normalize date format if needed
         date: formData.date.includes("T")
           ? formData.date
           : `${formData.date}T00:00:00Z`,
@@ -66,8 +68,32 @@ export default function EditEventPopup({
     }
   };
 
+  // Reusable collapsible section component
+  const CollapsibleSection = ({
+    title,
+    isOpen,
+    onToggle,
+    children,
+  }: {
+    title: string;
+    isOpen: boolean;
+    onToggle: () => void;
+    children: React.ReactNode;
+  }) => (
+    <div className="mb-2 border rounded">
+      <button
+        type="button"
+        className="w-full flex justify-between items-center p-2 font-medium"
+        onClick={onToggle}
+      >
+        {title} {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+      </button>
+      {isOpen && <div className="p-2 border-t">{children}</div>}
+    </div>
+  );
+
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 overflow-auto p-4">
       <div className="bg-white p-6 rounded-xl w-full max-w-md relative">
         <button
           onClick={onClose}
@@ -103,9 +129,24 @@ export default function EditEventPopup({
           />
         </label>
 
-        {/* Link */}
+        {/* Description */}
         <label className="block mb-2">
-          Link:
+          Description:
+          <textarea
+            className="w-full border rounded p-2"
+            value={formData.description || ""}
+            onChange={(e) => handleChange("description", e.target.value)}
+            disabled={isSaving}
+            rows={4}
+          />
+        </label>
+
+        {/* Collapsible Sections */}
+        <CollapsibleSection
+          title="Link"
+          isOpen={showLink}
+          onToggle={() => setShowLink(!showLink)}
+        >
           <input
             type="text"
             className="w-full border rounded p-2"
@@ -113,23 +154,13 @@ export default function EditEventPopup({
             onChange={(e) => handleChange("link", e.target.value)}
             disabled={isSaving}
           />
-        </label>
+        </CollapsibleSection>
 
-        {/* Location */}
-        <label className="block mb-2">
-          Location:
-          <input
-            type="text"
-            className="w-full border rounded p-2"
-            value={formData.location || ""}
-            onChange={(e) => handleChange("location", e.target.value)}
-            disabled={isSaving}
-          />
-        </label>
-
-        {/* Distances */}
-        <label className="block mb-2">
-          Distances:
+        <CollapsibleSection
+          title="Distances"
+          isOpen={showDistances}
+          onToggle={() => setShowDistances(!showDistances)}
+        >
           <input
             type="text"
             className="w-full border rounded p-2"
@@ -137,45 +168,13 @@ export default function EditEventPopup({
             onChange={(e) => handleChange("distances", e.target.value)}
             disabled={isSaving}
           />
-        </label>
+        </CollapsibleSection>
 
-        {/* Category */}
-        <label className="block mb-2">
-          Category:
-          <select
-            className="w-full border rounded p-2"
-            value={formData.category}
-            onChange={(e) => handleChange("category", e.target.value)}
-            disabled={isSaving}
-          >
-            {categories.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        {/* Font/Site */}
-        <label className="block mb-2">
-          Font/Site:
-          <select
-            className="w-full border rounded p-2"
-            value={formData.font}
-            onChange={(e) => handleChange("font", e.target.value)}
-            disabled={isSaving}
-          >
-            {sites.map((site) => (
-              <option key={site} value={site}>
-                {site}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        {/* Image */}
-        <label className="block mb-2">
-          Image URL:
+        <CollapsibleSection
+          title="Image"
+          isOpen={showImage}
+          onToggle={() => setShowImage(!showImage)}
+        >
           <input
             type="text"
             className="w-full border rounded p-2"
@@ -183,7 +182,42 @@ export default function EditEventPopup({
             onChange={(e) => handleChange("image", e.target.value)}
             disabled={isSaving}
           />
-        </label>
+        </CollapsibleSection>
+
+        {/* Category & Font */}
+        <div className="flex gap-4 mb-2">
+          <label className="block w-1/2">
+            Category:
+            <select
+              className="w-full border rounded p-2"
+              value={formData.category}
+              onChange={(e) => handleChange("category", e.target.value)}
+              disabled={isSaving}
+            >
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="block w-1/2">
+            Font/Site:
+            <select
+              className="w-full border rounded p-2"
+              value={formData.font}
+              onChange={(e) => handleChange("font", e.target.value)}
+              disabled={isSaving}
+            >
+              {sites.map((site) => (
+                <option key={site} value={site}>
+                  {site}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
 
         <div className="mt-4 flex justify-end gap-2">
           <button

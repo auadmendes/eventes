@@ -67,7 +67,6 @@ export async function toggleHighlight(eventId: string) {
   return updatedEvent;
 }
 
-
 export async function updateEvent(updatedEvent: Event) {
   const existing = await prisma.event.findUnique({
     where: { id: updatedEvent.id },
@@ -82,7 +81,7 @@ export async function updateEvent(updatedEvent: Event) {
     data: {
       title: updatedEvent.title,
       link: updatedEvent.link,
-      date: updatedEvent.date, // no extra conversion
+      date: updatedEvent.date,
       end_date: updatedEvent.end_date || null,
       location: updatedEvent.location,
       distances: updatedEvent.distances,
@@ -90,6 +89,7 @@ export async function updateEvent(updatedEvent: Event) {
       font: updatedEvent.font,
       image: updatedEvent.image,
       highlighted: updatedEvent.highlighted,
+      description: updatedEvent.description ?? null, // <- add this
     },
   });
 
@@ -111,6 +111,7 @@ export async function createEvent(eventData: NewEvent) {
       location: eventData.location,
       distances: eventData.distances ?? null,
       extra: eventData.extra ?? [],
+      description: eventData.description ?? null, // <- add this
     },
   });
 }

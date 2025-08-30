@@ -83,6 +83,14 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "scontent-gig4-1.xx.fbcdn.net", 
       },
+      {
+        protocol: "https",
+        hostname: "scontent-gru1-2.xx.fbcdn.net", 
+      },
+      {
+        protocol: "https",
+        hostname: "scontent-gig4-1.cdninstagram.com", 
+      },
     ],
   },
 };

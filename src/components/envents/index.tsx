@@ -35,6 +35,7 @@ export default function EventsPage({
           highlighted: e.highlighted === true,
           site: e.font || "Todos",
           distances: e.distances === null ? undefined : e.distances,
+          description: e.description === null ? undefined : e.description,
         }));
 
         let filtered = mappedEvents;
@@ -126,6 +127,7 @@ const handleDelete = async (eventId: string) => {
         ...savedEvent,
         highlighted: savedEvent.highlighted ?? false, // convert null -> false
         distances: savedEvent.distances ?? undefined, // optional
+        description: savedEvent.description ?? undefined, // convert null -> undefined
         //location: savedEvent.location ?? undefined,   // optional
       };
 
