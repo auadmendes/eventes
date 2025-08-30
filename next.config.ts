@@ -91,6 +91,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "scontent-gig4-1.cdninstagram.com", 
       },
+      {
+        protocol: "https",
+        hostname: "sesc-es.com.br", 
+      },
     ],
   },
 };

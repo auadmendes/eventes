@@ -25,6 +25,7 @@ interface EventCardProps {
 export default function EventCard({ event, onEdit }: EventCardProps) {
   const { id, title, date, location, image, link, highlighted, category, font, end_date } = event;
   const { user } = useUser();
+  const [expanded, setExpanded] = useState(false);
 
   const [saved, setSaved] = useState(false);
 
@@ -96,10 +97,21 @@ export default function EventCard({ event, onEdit }: EventCardProps) {
           </ul>
         )}
         {event.description && event.description.length > 0 && (
-          <div className="w-full">
-            <span className="flex items-center gap-1 text-xs text-primary font-light mt-4">
-              {event.description}
-            </span>
+          <div className="w-full mt-4">
+            <p className="text-sm text-text-dark whitespace-pre-line">
+              {expanded
+                ? event.description
+                : event.description.slice(0, 150) + (event.description.length > 150 ? "..." : "")}
+            </p>
+
+            {event.description.length > 150 && (
+              <button
+                onClick={() => setExpanded(!expanded)}
+                className="text-xs text-primary mt-2 hover:underline"
+              >
+                {expanded ? "Show less" : "Show more"}
+              </button>
+            )}
           </div>
         )}
 
