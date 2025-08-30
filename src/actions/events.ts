@@ -81,6 +81,7 @@ export async function updateEvent(updatedEvent: Event) {
     where: { id: updatedEvent.id },
     data: {
       title: updatedEvent.title,
+      link: updatedEvent.link,
       date: updatedEvent.date, // no extra conversion
       end_date: updatedEvent.end_date || null,
       location: updatedEvent.location,
@@ -112,4 +113,20 @@ export async function createEvent(eventData: NewEvent) {
       extra: eventData.extra ?? [],
     },
   });
+}
+
+export async function deleteEvent(eventId: string) {
+  // Optional: check if event exists first
+  const existing = await prisma.event.findUnique({ where: { id: eventId } });
+  if (!existing) {
+    throw new Error("Event not found");
+  }
+
+  // Delete likes first (if you have relations)
+  await prisma.like.deleteMany({ where: { event_id: eventId } });
+
+  // Delete the event
+  await prisma.event.delete({ where: { id: eventId } });
+
+  return { success: true };
 }

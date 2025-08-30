@@ -35,12 +35,30 @@ export default function CreateEvent() {
   const dd = String(date.getDate()).padStart(2, "0");
   return `${yyyy}-${mm}-${dd}`;
 }
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+async function handleSubmit(e: React.FormEvent) {
+  e.preventDefault();
+  setIsSaving(true);
+  try {
     await createEvent(form);
-    alert("Event created successfully");
+    // Clear all fields
+    setForm({
+      link: "",
+      title: "",
+      date: "",
+      end_date: null,
+      UF: "",
+      category: "",
+      font: "",
+      image: "",
+      location: "",
+      distances: "",
+      extra: [],
+    });
+    
+  } finally {
+    setIsSaving(false);
   }
-
+}
   function updateField(field: keyof NewEvent, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }));
   }
@@ -60,6 +78,7 @@ export default function CreateEvent() {
           value={form.title}
           onChange={(e) => updateField("title", e.target.value)}
           className="border p-2 rounded"
+          disabled={isSaving}
         />
         <DatePicker
           value={selectedDate}
@@ -68,6 +87,7 @@ export default function CreateEvent() {
             if (date) updateField("date", formatLocalDate(date));
             else updateField("date", "");
           }}
+          disabled={isSaving}
           format="dd/MM/yyyy"
           dayPlaceholder="dd/mm/yyyy"
           className="w-full rounded-lg border border-gray-300 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -86,6 +106,7 @@ export default function CreateEvent() {
               updateField("end_date", "");
             }
           }}
+          disabled={isSaving}
           format="dd/MM/yyyy"
           dayPlaceholder="dd/mm/yyyy"
           className="w-full rounded-lg border border-gray-300 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -96,13 +117,25 @@ export default function CreateEvent() {
           placeholder="Local"
           value={form.location ?? ""}
           onChange={(e) => updateField("location", e.target.value)}
+          disabled={isSaving}
           className="border p-2 rounded"
         />
+
+        <input
+          type="text"
+          placeholder="Link"
+          value={form.link}
+          onChange={(e) => updateField("link", e.target.value)}
+          disabled={isSaving}
+          className="border p-2 rounded w-full"
+        />
+
         <input
           type="text"
           placeholder="UF"
           value={form.UF}
           onChange={(e) => updateField("UF", e.target.value)}
+          disabled={isSaving}
           className="border p-2 rounded"
         />
         <label className="block mb-2">
@@ -143,6 +176,7 @@ export default function CreateEvent() {
             placeholder="Imagem (URL)"
             value={form.image}
             onChange={(e) => updateField("image", e.target.value)}
+            disabled={isSaving}
             className="border p-2 rounded"
         />
 
@@ -153,6 +187,7 @@ export default function CreateEvent() {
                 alt="Preview"
                 width={450}
                 height={250}
+                
                 className="object-cover rounded border w-full"
                 onError={(e) => {
                     // fallback if invalid URL
@@ -169,12 +204,17 @@ export default function CreateEvent() {
                 />
             )}
         </div>
+
         <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded"
-        >
-          Criar evento
-        </button>
+            type="submit"
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center justify-center gap-2"
+            disabled={isSaving}
+          >
+            {isSaving && (
+              <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+            )}
+            Criar evento
+          </button>
       </form>
     </div>
   );

@@ -11,5 +11,6 @@ export const sites = [
   "Brasil Que Corre",
   "Steffen Centro de Eventos",
   "Facebook",
+  "Parque Botânico Vale",
   "Outros"
 ];

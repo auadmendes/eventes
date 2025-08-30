@@ -3,50 +3,68 @@
 import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import { categories } from "@/utils/categories";
-import { Event } from "@/types/event";
 import { sites } from "@/utils/places";
+import { Event } from "@/types/event";
 
 interface EditEventPopupProps {
   event: Event | null;
   isOpen: boolean;
   onClose: () => void;
-  onSave: (updatedEvent: Event) => Promise<void>; // make it async
+  onSave: (updatedEvent: Event) => Promise<void>;
 }
 
-export default function EditEventPopup({ event, isOpen, onClose, onSave }: EditEventPopupProps) {
-  const [formData, setFormData] = useState<Event | null>(event);
+export default function EditEventPopup({
+  event,
+  isOpen,
+  onClose,
+  onSave,
+}: EditEventPopupProps) {
+  const [formData, setFormData] = useState<Event | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
+  // Initialize form data whenever the popup opens
   useEffect(() => {
-    setFormData(event);
+    if (event) {
+      setFormData({
+        ...event,
+        title: event.title || "",
+        link: event.link || "",
+        location: event.location || "",
+        distances: event.distances || "",
+        category: event.category || categories[0],
+        font: event.font || sites[0],
+        image: event.image || "",
+        highlighted: event.highlighted ?? false,
+        end_date: event.end_date ?? null,
+      });
+    }
   }, [event]);
 
   if (!isOpen || !formData) return null;
 
-  const handleChange = <K extends keyof Event>(key: K, value: Event[K]) => {
+  const handleChange = (key: keyof Event, value: string) => {
     setFormData({ ...formData, [key]: value });
   };
-  
-const handleSubmit = async () => {
-  if (!formData) return;
-  setIsSaving(true);
-  try {
-    const payload = {
-      ...formData,
-      date: formData.date.includes("T")
-        ? formData.date
-        : `${formData.date}T00:00:00Z`, // normalize
-    };
-    console.log("Submitting payload:", payload);
-    await onSave(payload);
-    onClose();
-  } catch (error) {
-    console.error("Error saving event:", error);
-  } finally {
-    setIsSaving(false);
-  }
-};
 
+  const handleSubmit = async () => {
+    if (!formData) return;
+    setIsSaving(true);
+    try {
+      const payload: Event = {
+        ...formData,
+        // normalize date format if needed
+        date: formData.date.includes("T")
+          ? formData.date
+          : `${formData.date}T00:00:00Z`,
+      };
+      await onSave(payload);
+      onClose();
+    } catch (error) {
+      console.error("Error saving event:", error);
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -81,6 +99,18 @@ const handleSubmit = async () => {
             className="w-full border rounded p-2"
             value={formData.date.split("T")[0]}
             onChange={(e) => handleChange("date", e.target.value)}
+            disabled={isSaving}
+          />
+        </label>
+
+        {/* Link */}
+        <label className="block mb-2">
+          Link:
+          <input
+            type="text"
+            className="w-full border rounded p-2"
+            value={formData.link}
+            onChange={(e) => handleChange("link", e.target.value)}
             disabled={isSaving}
           />
         </label>
@@ -125,6 +155,8 @@ const handleSubmit = async () => {
             ))}
           </select>
         </label>
+
+        {/* Font/Site */}
         <label className="block mb-2">
           Font/Site:
           <select
@@ -133,17 +165,15 @@ const handleSubmit = async () => {
             onChange={(e) => handleChange("font", e.target.value)}
             disabled={isSaving}
           >
-            {sites.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
+            {sites.map((site) => (
+              <option key={site} value={site}>
+                {site}
               </option>
             ))}
           </select>
         </label>
 
-
-
-        {/* Image URL */}
+        {/* Image */}
         <label className="block mb-2">
           Image URL:
           <input

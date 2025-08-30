@@ -14,10 +14,12 @@ import { allowedemailList} from '../../utils/emailList';
 import { Event } from "@/types/event";
 
 import { formatInTimeZone } from "date-fns-tz";
+import DeleteButton from "../DeleteButton";
 
 interface EventCardProps {
   event: Event;
   onEdit?: (event: Event) => void;
+  onDeleted?: () => void;
 }
 
 export default function EventCard({ event, onEdit }: EventCardProps) {
@@ -72,7 +74,7 @@ export default function EventCard({ event, onEdit }: EventCardProps) {
         </p>
         {end_date && (
           <p className="text-xs text-text-muted mb-1">
-            Até {formatInTimeZone(end_date, "UTC", "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
+            até {formatInTimeZone(end_date, "UTC", "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
           </p>
         )}
 
@@ -146,6 +148,12 @@ export default function EventCard({ event, onEdit }: EventCardProps) {
         )  && <HighlightButton eventId={id} highlighted={event.highlighted ?? false} />}
 
         
+      </div>
+      <div className="flex justify-center items-center bg-white hover:bg-red-400 rounded-bl-xl 
+      rounded-br-xl text-slate-500 hover:text-white transition-all transform">
+        {user?.emailAddresses?.some(emailObj => allowedemailList.includes(emailObj.emailAddress)) && (
+          <DeleteButton eventId={id} />
+        )}
       </div>
     </div>
   );

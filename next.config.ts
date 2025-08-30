@@ -73,11 +73,15 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "scontent-gig4-2.xx.fbcdn.net", 
+        hostname: "vale.com", 
       },
       {
         protocol: "https",
         hostname: "scontent-gig4-2.xx.fbcdn.net", 
+      },
+      {
+        protocol: "https",
+        hostname: "scontent-gig4-1.xx.fbcdn.net", 
       },
     ],
   },

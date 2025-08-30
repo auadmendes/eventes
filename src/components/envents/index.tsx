@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from "react";
-import { getEvents, updateEvent } from "@/actions/events";
+import { deleteEvent, getEvents, updateEvent } from "@/actions/events";
 import EventCard from "./EventCard";
 import EditEventPopup from "../EditEventPopup";
 import { Event } from "@/types/event";
@@ -102,6 +102,16 @@ export default function EventsPage({
     fetchEvents();
   }, [filterCategories, filterSites, searchQuery, filterStartDate, onCountChange]);
 
+
+const handleDelete = async (eventId: string) => {
+  try {
+    await deleteEvent(eventId);
+    setEvents((prev) => prev.filter((e) => e.id !== eventId));
+    onCountChange?.(events.length - 1);
+  } catch (err) {
+    console.error("Failed to delete event:", err);
+  }
+};
   const handleEdit = (event: Event) => {
       setSelectedEvent(event);
       setIsPopupOpen(true);
@@ -148,7 +158,8 @@ export default function EventsPage({
           <EventCard
             key={event.id}
             event={event}
-            onEdit={handleEdit} // <-- pass the edit handler
+            onEdit={handleEdit}
+            onDeleted={() => handleDelete(event.id)} // <-- pass deletion callback
           />
         ))}
       </main>
@@ -157,7 +168,6 @@ export default function EventsPage({
         isOpen={isPopupOpen}
         onClose={() => setIsPopupOpen(false)}
         onSave={handleSave}
-        
       />
     </>
   );
