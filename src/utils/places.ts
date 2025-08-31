@@ -13,5 +13,7 @@ export const sites = [
   "Steffen Centro de Eventos",
   "Facebook",
   "Parque Botânico Vale",
+  "Shopping Vila Velha",
+  "Boulevard Vila Velha",
   "Outros"
 ];

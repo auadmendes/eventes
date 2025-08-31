@@ -95,6 +95,14 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "sesc-es.com.br", 
       },
+      {
+        protocol: "https",
+        hostname: "shoppingvilavelha.com.br", 
+      },
+      {
+        protocol: "https",
+        hostname: "www.boulevardvilavelha.com.br", 
+      },
     ],
   },
 };
