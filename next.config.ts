@@ -103,6 +103,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "www.boulevardvilavelha.com.br", 
       },
+      {
+        protocol: "https",
+        hostname: "blogger.googleusercontent.com", 
+      },
     ],
   },
 };
