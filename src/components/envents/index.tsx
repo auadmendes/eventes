@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { deleteEvent, getEvents, updateEvent } from "@/actions/events";
 import EventCard from "./EventCard";
 import EditEventPopup from "../EditEventPopup";
@@ -22,23 +22,30 @@ export default function EventsPage({
   onCountChange,
 }: EventsPageProps) {
   const [events, setEvents] = useState<Event[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // fetching fresh data
+  const [loading, setLoading] = useState(false); // infinite scroll loading more
 
   const [page, setPage] = useState(1);
   const LIMIT = 20;
 
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+
   const visibleEvents = events.slice(0, page * LIMIT);
 
-  // ✅ Fetch all events initially
-  async function fetchEvents(replace = true) {
+  // ✅ Fetch all events (client filters + sorting)
+  const fetchEvents = useCallback(async (replace = true) => {
     try {
       setIsLoading(true);
-      const fetchedEvents = await getEvents();
+      const fetchedEvents: Event[] = (await getEvents()).map((e: any) => ({
+        ...e,
+        highlighted: e.highlighted ?? false, // convert null → false
+        site: e.font || "Todos",
+        distances: e.distances ?? undefined,
+        description: e.description ?? undefined,
+      }));
 
-      const mappedEvents = fetchedEvents.map((e: any) => ({
+      const mappedEvents: Event[] = fetchedEvents.map((e) => ({
         ...e,
         highlighted: e.highlighted === true,
         site: e.font || "Todos",
@@ -46,7 +53,6 @@ export default function EventsPage({
         description: e.description ?? undefined,
       }));
 
-      // Filtering
       let filtered = mappedEvents;
 
       if (filterCategories.length > 0) {
@@ -89,35 +95,31 @@ export default function EventsPage({
       filtered = filtered.sort((a, b) => {
         if (a.highlighted && !b.highlighted) return -1;
         if (!a.highlighted && b.highlighted) return 1;
-
-        const dateA = new Date(a.date).getTime();
-        const dateB = new Date(b.date).getTime();
-        return dateA - dateB;
+        return new Date(a.date).getTime() - new Date(b.date).getTime();
       });
 
       setEvents(filtered);
       onCountChange?.(filtered.length);
-      if (replace) setPage(1); // reset pagination if refreshing
+      if (replace) setPage(1); // reset pagination
     } catch (err) {
       console.error("Error fetching events:", err);
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [filterCategories, filterSites, searchQuery, filterStartDate, onCountChange]);
 
   // ✅ Initial + refetch when filters change
   useEffect(() => {
     fetchEvents(true);
-  }, [filterCategories, filterSites, searchQuery, filterStartDate]);
+  }, [fetchEvents]);
 
   // ✅ Auto refresh every 2 minutes
   useEffect(() => {
     const interval = setInterval(() => {
       fetchEvents(true);
     }, 2 * 60 * 1000);
-
     return () => clearInterval(interval);
-  }, []);
+  }, [fetchEvents]);
 
   // ✅ Infinite scroll
   useEffect(() => {
@@ -131,7 +133,7 @@ export default function EventsPage({
           setTimeout(() => {
             setPage((prev) => prev + 1);
             setLoading(false);
-          }, 8800); // simulate async fetch delay
+          }, 800); // simulate async delay
         }
       }
     };
@@ -178,7 +180,7 @@ export default function EventsPage({
   if (isLoading && events.length === 0) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="w-12 h-12 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+        <Loader2 className="w-12 h-12 animate-spin text-gray-400" />
       </div>
     );
   }
@@ -188,19 +190,37 @@ export default function EventsPage({
   }
 
   return (
-    <div>
+    <>
       <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-1">
         {visibleEvents.map((event) => (
-          <EventCard key={event.id} event={event} onEdit={handleEdit} onDeleted={() => handleDelete(event.id)} />
+          <EventCard
+            key={event.id}
+            event={event}
+            onEdit={handleEdit}
+            onDeleted={() => handleDelete(event.id)}
+          />
         ))}
       </main>
 
-      {/* Spinner at the bottom */}
+      {/* Spinner while loading next page */}
       {loading && (
-        <div className="flex justify-center py-6">
-          <Loader2 className="w-6 h-6 animate-spin text-gray-500" />
+        <div className="flex justify-center p-6">
+          <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
         </div>
       )}
-    </div>
+
+      {/* End message */}
+      {visibleEvents.length >= events.length && !isLoading && (
+        <p className="text-center text-gray-500 p-6">No more events.</p>
+      )}
+
+      {/* Edit Popup */}
+      <EditEventPopup
+        event={selectedEvent}
+        isOpen={isPopupOpen}
+        onClose={() => setIsPopupOpen(false)}
+        onSave={handleSave}
+      />
+    </>
   );
 }
