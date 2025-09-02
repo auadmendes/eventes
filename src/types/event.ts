@@ -6,21 +6,20 @@ export interface Like {
 
 export interface Event {
   id: string;
-  title: string;
   link: string;
-  image: string;
+  title: string;
   date: string;
   end_date: string | null;
   UF: string;
   category: string;
   font: string;
-  site: string;
-  createdAt: string;
-  updatedAt: string;
-  extra: string[];
-  highlighted?: boolean | null;  // 👈 allow null
-  likes?: { id: string; user_id: string; event_id: string }[];
+  image: string;
+  location: string | null;
+  highlighted?: boolean;
+  distances?: string;
+  description?: string;
+  extra?: string[];
+  likes?: Like[];
 }
-
 
 export type NewEvent = Omit<Event, "id" | "likes" | "highlighted">;
