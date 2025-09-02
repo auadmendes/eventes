@@ -29,11 +29,11 @@ export default function EventCard({ event, onEdit }: EventCardProps) {
   const [expanded, setExpanded] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  const [events, setEvents] = useState<Event[]>([]);
+  // const [events, setEvents] = useState<Event[]>([]);
 
-  function removeEventFromList(id: string) {
-    setEvents((prev) => prev.filter((e) => e.id !== id));
-  }
+  // function removeEventFromList(id: string) {
+  //   setEvents((prev) => prev.filter((e) => e.id !== id));
+  // }
 
 
   useEffect(() => {
@@ -180,7 +180,7 @@ export default function EventCard({ event, onEdit }: EventCardProps) {
         {user?.emailAddresses?.some(emailObj => allowedemailList.includes(emailObj.emailAddress)) && (
           <DeleteButton
             id={event.id}
-            onDelete={(id) => removeEventFromList(id)}
+            
             deleteAction={deleteEvent}
             label="event"
           />
