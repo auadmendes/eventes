@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { X, ChevronDown, ChevronUp } from "lucide-react";
+import { X } from "lucide-react";
 import { categories } from "@/utils/categories";
 import { sites } from "@/utils/places";
 import { Event } from "@/types/event";

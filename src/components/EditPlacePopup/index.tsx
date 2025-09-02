@@ -55,9 +55,10 @@ export default function EditPlacePopup({
 
   if (!isOpen || !formData) return null;
 
-  const handleChange = (key: keyof Place, value: any) => {
-    setFormData({ ...formData, [key]: value });
+  const handleChange = (key: keyof Place, value: Place[keyof Place]) => {
+    setFormData(prev => prev ? { ...prev, [key]: value } : null);
   };
+
 
   // const handleTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   const tagsArray = e.target.value.split(",").map(t => t.trim());
