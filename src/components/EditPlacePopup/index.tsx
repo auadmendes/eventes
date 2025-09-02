@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X, ChevronDown, ChevronUp } from "lucide-react";
+import { X } from "lucide-react";
 import { categories } from "@/utils/categories";
 import { Place } from "@/types/place";
 import { CollapsibleSection } from "../CollapseSection";
@@ -29,7 +29,7 @@ export default function EditPlacePopup({
   const [showDescription, setShowDescription] = useState(false);
   const [showTags, setShowTags] = useState(false);
 
-  const [initialPlaceId, setInitialPlaceId] = useState<string | null>(null);
+  //const [initialPlaceId, setInitialPlaceId] = useState<string | null>(null);
 
   useEffect(() => {
     if (isOpen && place) {
@@ -59,10 +59,10 @@ export default function EditPlacePopup({
     setFormData({ ...formData, [key]: value });
   };
 
-  const handleTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const tagsArray = e.target.value.split(",").map(t => t.trim());
-    setFormData(prev => prev ? { ...prev, tags: tagsArray } : null);
-  };
+  // const handleTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const tagsArray = e.target.value.split(",").map(t => t.trim());
+  //   setFormData(prev => prev ? { ...prev, tags: tagsArray } : null);
+  // };
 
   const handleSubmit = async () => {
     if (!formData) return;
