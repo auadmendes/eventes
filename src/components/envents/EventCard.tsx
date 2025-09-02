@@ -15,6 +15,7 @@ import { Event } from "@/types/event";
 
 import { formatInTimeZone } from "date-fns-tz";
 import DeleteButton from "../DeleteButton";
+import { deleteEvent } from "@/actions/events";
 
 interface EventCardProps {
   event: Event;
@@ -26,8 +27,14 @@ export default function EventCard({ event, onEdit }: EventCardProps) {
   const { id, title, date, location, image, link, highlighted, category, font, end_date } = event;
   const { user } = useUser();
   const [expanded, setExpanded] = useState(false);
-
   const [saved, setSaved] = useState(false);
+
+  const [events, setEvents] = useState<Event[]>([]);
+
+  function removeEventFromList(id: string) {
+    setEvents((prev) => prev.filter((e) => e.id !== id));
+  }
+
 
   useEffect(() => {
     const savedEvents = JSON.parse(localStorage.getItem("savedEvents") || "[]");
@@ -171,7 +178,12 @@ export default function EventCard({ event, onEdit }: EventCardProps) {
       <div className="flex justify-center items-center bg-white hover:bg-red-400 rounded-bl-xl 
       rounded-br-xl text-slate-500 hover:text-white transition-all transform">
         {user?.emailAddresses?.some(emailObj => allowedemailList.includes(emailObj.emailAddress)) && (
-          <DeleteButton eventId={id} />
+          <DeleteButton
+            id={event.id}
+            onDelete={(id) => removeEventFromList(id)}
+            deleteAction={deleteEvent}
+            label="event"
+          />
         )}
       </div>
     </div>

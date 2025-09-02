@@ -11,6 +11,7 @@ interface ShareButtonProps {
 export default function ShareButton({ title, url }: ShareButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const popupRef = useRef<HTMLDivElement>(null);
+  const [copied, setCopied] = useState(false);
 
   const togglePopup = () => setIsOpen(!isOpen);
 
@@ -95,12 +96,13 @@ const shareLinks = [
           key={link.name}
           onClick={() => {
             navigator.clipboard.writeText(link.copy);
-            alert("Link copied! You can now share it anywhere.");
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
             setIsOpen(false);
           }}
           className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
         >
-          {link.icon} {link.name}
+          {link.icon} {copied ? "Copied!" : link.name}
         </button>
       )
     )}

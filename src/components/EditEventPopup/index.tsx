@@ -3,6 +3,7 @@ import { X, ChevronDown, ChevronUp } from "lucide-react";
 import { categories } from "@/utils/categories";
 import { sites } from "@/utils/places";
 import { Event } from "@/types/event";
+import { CollapsibleSection } from "../CollapseSection";
 
 interface EditEventPopupProps {
   event: Event | null;
@@ -69,28 +70,7 @@ export default function EditEventPopup({
   };
 
   // Reusable collapsible section component
-  const CollapsibleSection = ({
-    title,
-    isOpen,
-    onToggle,
-    children,
-  }: {
-    title: string;
-    isOpen: boolean;
-    onToggle: () => void;
-    children: React.ReactNode;
-  }) => (
-    <div className="mb-2 border rounded">
-      <button
-        type="button"
-        className="w-full flex justify-between items-center p-2 font-medium"
-        onClick={onToggle}
-      >
-        {title} {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-      </button>
-      {isOpen && <div className="p-2 border-t">{children}</div>}
-    </div>
-  );
+
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 overflow-auto p-4">

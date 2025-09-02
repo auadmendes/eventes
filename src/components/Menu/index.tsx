@@ -1,6 +1,6 @@
 "use client";
 
-import { Home, Bell, Bookmark, PlusSquare } from "lucide-react";
+import { Home, Bell, Bookmark, PlusSquare, MapPinHouse, MapPlus } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -29,24 +29,34 @@ export function Menu() {
           <span className="hidden lg:block font-medium">Home</span>
         </Link>
 
+        <Link href="/PlacesHome" className={linkClasses("/PlacesHome")}>
+          <MapPinHouse className={iconClasses("/PlacesHome")} />
+          <span className="hidden lg:block font-medium">Onde Ir</span>
+        </Link>
+
         {/* Notifications */}
         {/* href="/notifications" */}
         <Link href="/" className={linkClasses("/notifications")}>
           <Bell className={iconClasses("/notifications")} />
-          <span className="hidden lg:block font-medium">Notifications</span>
+          <span className="hidden lg:block font-medium">Notificacões</span>
         </Link>
 
         {/* Saves */}
         <Link href="/saved" className={linkClasses("/saved")}>
           <Bookmark className={iconClasses("/saved")} />
-          <span className="hidden lg:block font-medium">Saves</span>
+          <span className="hidden lg:block font-medium">Savos</span>
         </Link>
 
         {/* Create */}
         {/* href="/create" */}
         <Link href="/create" className={linkClasses("/create")}>
           <PlusSquare className={iconClasses("/create")} />
-          <span className="hidden lg:block font-medium">Create</span>
+          <span className="hidden lg:block font-medium">Criar</span>
+        </Link>
+
+        <Link href="/createplaces" className={linkClasses("/createplaces")}>
+          <MapPlus className={iconClasses("/createplaces")} />
+          <span className="hidden lg:block font-medium">Criar Lugar</span>
         </Link>
       </nav>
     </header>

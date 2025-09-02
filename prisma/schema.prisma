@@ -44,3 +44,42 @@ model Like {
 
   @@map("likes")
 }
+
+model Place {
+  id                    String   @id @default(auto()) @map("_id") @db.ObjectId
+  place_name            String
+  short_description     String
+  description           String?
+  city                  String
+  neighborhood          String?
+  address               String?
+  location              String? // can store as "lat,lng" or GeoJSON string
+  image                 String?
+  gallery_images        String[] // array of URLs
+  link                  String?
+  category              String?
+  phone_number          String?
+  email                 String?
+  opening_hours         String? // free-text or JSON string
+  price_range           String? // e.g., $, $$, $$$
+  ticket_required       Boolean? @default(false)
+  ticket_link           String?
+  wheelchair_accessible Boolean? @default(false)
+  parking               String?
+  pet_friendly          Boolean? @default(false)
+  rating                Float?   @default(0)
+  reviews_count         Int?     @default(0)
+  tags                  String[] // array of keywords
+  instagram             String?
+  facebook              String?
+  tripadvisor           String?
+  best_time_to_visit    String?
+  nearby_places         String[] // array of Place IDs for recommendations
+
+  date_created DateTime @default(now())
+  last_updated DateTime @updatedAt
+  published    Boolean  @default(true)
+  created_by   String? // optional admin/user ID
+
+  @@map("places")
+}

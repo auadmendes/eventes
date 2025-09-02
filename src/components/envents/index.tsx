@@ -152,7 +152,7 @@ export default function EventsPage({
           setTimeout(() => {
             setPage((prev) => prev + 1);
             setLoading(false);
-          }, 800); // simulate async delay
+          }, 80000); // simulate async delay
         }
       }
     };

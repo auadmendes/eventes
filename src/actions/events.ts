@@ -116,8 +116,7 @@ export async function createEvent(eventData: NewEvent) {
   });
 }
 
-export async function deleteEvent(eventId: string) {
-  // Optional: check if event exists first
+export async function deleteEvent(eventId: string): Promise<void> {
   const existing = await prisma.event.findUnique({ where: { id: eventId } });
   if (!existing) {
     throw new Error("Event not found");
@@ -129,5 +128,5 @@ export async function deleteEvent(eventId: string) {
   // Delete the event
   await prisma.event.delete({ where: { id: eventId } });
 
-  return { success: true };
+  // No need to return anything
 }

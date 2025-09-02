@@ -107,6 +107,18 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "blogger.googleusercontent.com", 
       },
+      {
+        protocol: "https",
+        hostname: "cdn.conventodapenha.org.br", 
+      },
+      {
+        protocol: "https",
+        hostname: "ceturb.es.gov.br", 
+      },
+      {
+        protocol: "https",
+        hostname: "dynamic-media-cdn.tripadvisor.com", 
+      },
     ],
   },
 };
