@@ -3,8 +3,27 @@ import { useEffect, useState, useCallback } from "react";
 import { deleteEvent, getEvents, updateEvent } from "@/actions/events";
 import EventCard from "./EventCard";
 import EditEventPopup from "../EditEventPopup";
-import { Event } from "@/types/event";
+import { Event, Like } from "@/types/event";
 import { Loader2 } from "lucide-react";
+
+interface RawEvent {
+  id: string;
+  link: string;
+  title: string;
+  date: string;
+  end_date: string | null;
+  UF: string;
+  category: string;
+  font: string;
+  image: string;
+  location: string | null;
+  highlighted: boolean | null;
+  distances?: string | null;
+  description?: string | null;
+  extra?: string[];
+  likes?: Like[];
+}
+
 
 interface EventsPageProps {
   filterCategories?: string[];
@@ -37,7 +56,7 @@ export default function EventsPage({
   const fetchEvents = useCallback(async (replace = true) => {
     try {
       setIsLoading(true);
-      const fetchedEvents: Event[] = (await getEvents()).map((e) => ({
+      const fetchedEvents: Event[] = (await getEvents()).map((e: RawEvent) => ({
         ...e,
         highlighted: e.highlighted ?? false, // convert null → false
         site: e.font || "Todos",
