@@ -66,6 +66,7 @@ export const neighborhoods = [
   "Novo Horizonte",
   "Feu Rosa",
   "Valparaíso",
+  "Porto Canoa",
   // Guarapari
   "Praia do Morro",
   "Centro",

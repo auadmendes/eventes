@@ -119,6 +119,14 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "dynamic-media-cdn.tripadvisor.com", 
       },
+      {
+        protocol: "http",
+        hostname: "www.serra.es.gov.br",
+      },
+      {
+        protocol: "https",
+        hostname: "www.serra.es.gov.br",
+      },
     ],
   },
 };
