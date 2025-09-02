@@ -37,7 +37,7 @@ export default function EventsPage({
   const fetchEvents = useCallback(async (replace = true) => {
     try {
       setIsLoading(true);
-      const fetchedEvents: Event[] = (await getEvents()).map((e: any) => ({
+      const fetchedEvents: Event[] = (await getEvents()).map((e) => ({
         ...e,
         highlighted: e.highlighted ?? false, // convert null → false
         site: e.font || "Todos",
