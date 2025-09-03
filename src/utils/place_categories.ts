@@ -40,7 +40,9 @@ export const cities = [
   "Alegre",
   "Piúma",
   "Marataízes",
-  "Venda Nova do Imigrante"
+  "Venda Nova do Imigrante",
+  "Itaúnas",
+  "Caparaó",
 ];
 
 export const neighborhoods = [

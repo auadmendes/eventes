@@ -151,6 +151,18 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'mosteirozen.com.br',
       },
+      {
+        protocol: 'https',
+        hostname: 'setur.es.gov.br',
+      },
+      {
+        protocol: 'https',
+        hostname: 'guia.elasviajando.com.br',
+      },
+      {
+        protocol: 'https',
+        hostname: 'guia.elasviajando.com.br',
+      },
     ],
   },
 };
