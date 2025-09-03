@@ -127,6 +127,26 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "www.serra.es.gov.br",
       },
+      {
+        protocol: "http",
+        hostname: "photos.app.goo.glr",
+      },
+      {
+        protocol: "https",
+        hostname: "photos.app.goo.gl",
+      },
+      {
+        protocol: "http",
+        hostname: "photos.fife.usercontent.google.com",
+      },
+      {
+        protocol: "https",
+        hostname: "photos.fife.usercontent.google.com",
+      },
+      {
+        protocol: 'https',
+        hostname: 'photos.fife.usercontent.google.com',
+      },
     ],
   },
 };

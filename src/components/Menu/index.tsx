@@ -1,11 +1,19 @@
 "use client";
 
+import { useUser } from "@clerk/nextjs";
+import { usePathname } from "next/navigation";
+
 import { Home, Bell, Bookmark, PlusSquare, MapPinHouse, MapPlus } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { allowedemailList } from "@/utils/emailList";
 
 export function Menu() {
   const pathname = usePathname();
+  const { user } = useUser();
+
+  const isAllowed = user?.emailAddresses?.some((emailObj) =>
+      allowedemailList.includes(emailObj.emailAddress)
+    );
 
   const linkClasses = (href: string) =>
     `flex items-center gap-1 lg:items-start lg:w-full rounded-lg lg:p-1 
@@ -49,15 +57,19 @@ export function Menu() {
 
         {/* Create */}
         {/* href="/create" */}
-        <Link href="/create" className={linkClasses("/create")}>
-          <PlusSquare className={iconClasses("/create")} />
-          <span className="hidden lg:block font-medium">Criar</span>
-        </Link>
-
-        <Link href="/createplaces" className={linkClasses("/createplaces")}>
-          <MapPlus className={iconClasses("/createplaces")} />
-          <span className="hidden lg:block font-medium">Criar Lugar</span>
-        </Link>
+        
+        {isAllowed && (
+          <>
+            <Link href="/create" className={linkClasses("/create")}>
+              <PlusSquare className={iconClasses("/create")} />
+              <span className="hidden lg:block font-medium">Criar</span>
+            </Link>
+            <Link href="/createplaces" className={linkClasses("/createplaces")}>
+              <MapPlus className={iconClasses("/createplaces")} />
+              <span className="hidden lg:block font-medium">Criar Lugar</span>
+            </Link>
+          </>
+        )}
       </nav>
     </header>
   );
