@@ -108,6 +108,18 @@ export default function EditEventPopup({
             disabled={isSaving}
           />
         </label>
+        
+        {/* End Date */}
+        <label className="block mb-2">
+          End Date:
+          <input
+            type="date"
+            className="w-full border rounded p-2"
+            value={formData.end_date ? formData.end_date.split("T")[0] : ""}
+            onChange={(e) => handleChange("end_date", e.target.value)}
+            disabled={isSaving}
+          />
+        </label>
 
         {/* Description */}
         <label className="block mb-2">
