@@ -147,6 +147,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'photos.fife.usercontent.google.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'mosteirozen.com.br',
+      },
     ],
   },
 };
