@@ -39,6 +39,7 @@ export const cities = [
   "Marechal Floriano",
   "Alegre",
   "Piúma",
+  "Pedra Azul",
   "Marataízes",
   "Venda Nova do Imigrante",
   "Itaúnas",
