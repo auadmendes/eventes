@@ -1,5 +1,6 @@
 export const categories = [
   "Todos", // always include this manually
+  "Ciência e Tecnologia",
   "Esporte",
   "Teatro",
   "Shows e Festas",

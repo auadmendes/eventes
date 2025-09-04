@@ -5,6 +5,10 @@ import { sites } from "@/utils/places";
 import { Event } from "@/types/event";
 import { CollapsibleSection } from "../CollapseSection";
 
+
+import DatePicker, { registerLocale } from "react-datepicker";
+import { format } from "date-fns";
+
 interface EditEventPopupProps {
   event: Event | null;
   isOpen: boolean;
@@ -97,29 +101,56 @@ export default function EditEventPopup({
           />
         </label>
 
-        {/* Date */}
-        <label className="block mb-2">
-          Date:
-          <input
-            type="date"
-            className="w-full border rounded p-2"
-            value={formData.date.split("T")[0]}
-            onChange={(e) => handleChange("date", e.target.value)}
-            disabled={isSaving}
-          />
-        </label>
-        
-        {/* End Date */}
-        <label className="block mb-2">
-          End Date:
-          <input
-            type="date"
-            className="w-full border rounded p-2"
-            value={formData.end_date ? formData.end_date.split("T")[0] : ""}
-            onChange={(e) => handleChange("end_date", e.target.value)}
-            disabled={isSaving}
-          />
-        </label>
+      {/* Date */ }
+      <label className="flex flex-col mb-2">
+        Date:
+        <DatePicker
+          selected={
+            formData.date
+              ? (() => {
+                  // normalize: keep only YYYY-MM-DD
+                  const [y, m, d] = formData.date.split("T")[0].split("-");
+                  return new Date(Number(y), Number(m) - 1, Number(d));
+                })()
+              : null
+          }
+          onChange={(date: Date | null) =>
+            handleChange("date", date ? date.toLocaleDateString("en-CA") : "")
+          }
+          dateFormat="dd/MM/yyyy"
+          locale="pt-BR"
+          className="w-full px-4 py-2 rounded-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholderText="Selecione a data"
+          disabled={isSaving}
+        />
+
+
+      </label>
+
+      {/* End Date */}
+      <label className="flex flex-col mb-2">
+        End Date:
+        <DatePicker
+          selected={
+            formData.end_date
+              ? (() => {
+                  // normalize: keep only YYYY-MM-DD before creating Date
+                  const [y, m, d] = formData.end_date.split("T")[0].split("-");
+                  return new Date(Number(y), Number(m) - 1, Number(d));
+                })()
+              : null
+          }
+          onChange={(date: Date | null) =>
+            handleChange("end_date", date ? date.toLocaleDateString("en-CA") : "")
+          }
+          dateFormat="dd/MM/yyyy"
+          locale="pt-BR"
+          className="w-full px-4 py-2 rounded-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholderText="Selecione a data final"
+          disabled={isSaving}
+        />
+      </label>
+
 
         {/* Description */}
         <label className="block mb-2">

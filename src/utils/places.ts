@@ -1,5 +1,6 @@
 export const sites = [
   // "Todos", // always include this manually
+  "EventES",
   "Sympla",
   "Espaço Patrick Ribeiro",
   "Mapa Cultural ES",
