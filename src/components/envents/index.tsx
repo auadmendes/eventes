@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback } from "react";
 import { deleteEvent, getEvents, updateEvent } from "@/actions/events";
 import EventCard from "./EventCard";
 import EditEventPopup from "../EditEventPopup";
-import { Event, Like } from "@/types/event";
+import { Event } from "@/types/event";
 import { Loader2 } from "lucide-react";
 
 interface EventsPageProps {

@@ -145,7 +145,7 @@ export default function EventCard({ event, onEdit }: EventCardProps) {
       </div>
 
       <div className="flex justify-between items-center border-t px-4 py-2">
-        <ShareButton title={title} url={link} id={id} />
+        <ShareButton title={title} id={id} />
 
         {user?.emailAddresses?.some(
           (emailObj) => allowedemailList.includes(emailObj.emailAddress)

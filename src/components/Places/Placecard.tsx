@@ -152,7 +152,7 @@ export default function PlaceCard({ place, onEdit, onDelete }: PlaceCardProps) {
 
       {/* Bottom icons */}
       <div className="flex justify-between items-center border-t px-4 py-2">
-        <ShareButton title={place_name} url={link || ""} />
+        <ShareButton title={place_name} id={id} />
 
         <button
           onClick={toggleSave}

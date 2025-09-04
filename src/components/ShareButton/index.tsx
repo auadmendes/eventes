@@ -5,11 +5,10 @@ import { useState, useEffect, useRef } from "react";
 import { FaWhatsapp, FaFacebook, FaLinkedin, FaTwitter, FaShareAlt } from "react-icons/fa";
 interface ShareButtonProps {
   title: string;
-  url: string;
   id: string;
 }
 
-export default function ShareButton({ title, url, id }: ShareButtonProps) {
+export default function ShareButton({ title, id }: ShareButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const popupRef = useRef<HTMLDivElement>(null);
   const [copied, setCopied] = useState(false);
@@ -36,33 +35,33 @@ export default function ShareButton({ title, url, id }: ShareButtonProps) {
   const messageWithLink = `${title} - EventES - ${eventUrl}`;
   const encodedMessage = encodeURIComponent(messageWithLink);
 
-const shareLinks = [
-  { 
-    name: "WhatsApp", 
-    url: `https://api.whatsapp.com/send?text=${encodedMessage}`, 
-    icon: <FaWhatsapp size={16} /> 
-  },
-  { 
-    name: "Twitter", 
-    url: `https://twitter.com/intent/tweet?text=${encodedMessage}`, 
-    icon: <FaTwitter size={16} /> 
-  },
-  { 
-    name: "Facebook", 
-    url: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`, 
-    icon: <FaFacebook size={16} /> 
-  },
-  { 
-    name: "LinkedIn", 
-    url: `https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${encodedMessage}`, 
-    icon: <FaLinkedin size={16} /> 
-  },
-  {
-    name: "Copy Link",
-    copy: `${title} - EventES - ${eventUrl}`, // use eventUrl here
-    icon: <FaShareAlt size={16} />
-  }
-];
+  const shareLinks = [
+    { 
+      name: "WhatsApp", 
+      url: `https://api.whatsapp.com/send?text=${encodedMessage}`, 
+      icon: <FaWhatsapp size={16} /> 
+    },
+    { 
+      name: "Twitter", 
+      url: `https://twitter.com/intent/tweet?text=${encodedMessage}`, 
+      icon: <FaTwitter size={16} /> 
+    },
+    { 
+      name: "Facebook", 
+      url: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`, 
+      icon: <FaFacebook size={16} /> 
+    },
+    { 
+      name: "LinkedIn", 
+      url: `https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${encodedMessage}`, 
+      icon: <FaLinkedin size={16} /> 
+    },
+    {
+      name: "Copy Link",
+      copy: `${title} - EventES - ${eventUrl}`, // use eventUrl here
+      icon: <FaShareAlt size={16} />
+    }
+  ];
 
 
   return (
