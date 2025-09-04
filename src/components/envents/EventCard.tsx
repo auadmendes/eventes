@@ -17,6 +17,8 @@ import { formatInTimeZone } from "date-fns-tz";
 import DeleteButton from "../DeleteButton";
 import { deleteEvent } from "@/actions/events";
 
+import Link from "next/link";
+
 interface EventCardProps {
   event: Event;
   onEdit?: (event: Event) => void;
@@ -57,24 +59,24 @@ export default function EventCard({ event, onEdit }: EventCardProps) {
 
   return (
     <div
-      className={`rounded-2xl shadow-md bg-background-paper 
+      className={`rounded-2xl shadow-md bg-background-paper
         overflow-visible hover:shadow-lg transition flex flex-col
         ${highlighted ? "border-2 border-light-secondary" : "border border-transparent"}`}
     >
-      <a href={link} target="_blank" rel="noopener noreferrer">
-        <div className="relative w-full h-48 rounded-tl-2xl rounded-tr-2xl overflow-hidden">
-          <Image
-            src={
-              image && image.trim() !== ""
-                ? image
-                : "https://media.gettyimages.com/id/175746178/pt/foto/vit%C3%B3ria.jpg?s=1024x1024&w=gi&k=20&c=lhe0kvpAwgUVsyqYwR9tlnkrYlzlWX2K3o2jRLG4b1c="
-            }
-            alt={title}
-            fill
-            className="object-cover"
-          />
-        </div>
-      </a>
+<div className="relative w-full h-48 rounded-tl-2xl rounded-tr-2xl overflow-hidden">
+  <Link href={`/event/${id}`}>
+    <Image
+      src={
+        image && image.trim() !== ""
+          ? image
+          : "https://media.gettyimages.com/id/175746178/pt/foto/vit%C3%B3ria.jpg?s=1024x1024&w=gi&k=20&c=lhe0kvpAwgUVsyqYwR9tlnkrYlzlWX2K3o2jRLG4b1c="
+      }
+      alt={title}
+      fill
+      className="object-cover cursor-pointer"
+    />
+  </Link>
+</div>
 
       <div className="flex-1 p-4">
         <p className="text-xs text-text-muted mb-1">
@@ -125,7 +127,12 @@ export default function EventCard({ event, onEdit }: EventCardProps) {
         <span className="inline-block mt-2 px-3 py-1 bg-light-secondary text-white text-xs rounded-full">
           {category}
         </span>
-       <span className="flex items-center gap-1 text-xs text-primary font-light mt-4">
+        
+        <span className="ml-1 inline-block mt-2 underline text-blue-600 text-xs rounded-full">
+          <a target="_blank" href={link}>Site do evento</a>
+        </span>
+        
+        <span className="flex items-center gap-1 text-xs text-primary font-light mt-4">
           {font}
         </span>
 
@@ -138,7 +145,7 @@ export default function EventCard({ event, onEdit }: EventCardProps) {
       </div>
 
       <div className="flex justify-between items-center border-t px-4 py-2">
-        <ShareButton title={title} url={link} />
+        <ShareButton title={title} url={link} id={id} />
 
         {user?.emailAddresses?.some(
           (emailObj) => allowedemailList.includes(emailObj.emailAddress)

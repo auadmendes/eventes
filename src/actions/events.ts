@@ -26,6 +26,29 @@ export async function getEvents() {
   return events;
 }
 
+export async function getEventById(id: string): Promise<Event | null> {
+  // ignore invalid ids like "favicon.ico"
+  if (!id || id === "favicon.ico") return null;
+
+  const event = await prisma.event.findUnique({
+    where: { id },
+    include: { likes: true },
+  });
+
+  if (!event) return null;
+
+  return {
+    ...event,
+    highlighted: event.highlighted ?? false, // boolean
+    distances: event.distances ?? undefined,
+    description: event.description ?? undefined,
+    end_date: event.end_date ?? null,
+    extra: event.extra ?? [],
+  };
+}
+
+
+
 
 export async function likeEvent(userId: string, eventId: string) {
   // check if already liked

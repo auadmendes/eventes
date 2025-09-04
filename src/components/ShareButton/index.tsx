@@ -6,12 +6,16 @@ import { FaWhatsapp, FaFacebook, FaLinkedin, FaTwitter, FaShareAlt } from "react
 interface ShareButtonProps {
   title: string;
   url: string;
+  id: string;
 }
 
-export default function ShareButton({ title, url }: ShareButtonProps) {
+export default function ShareButton({ title, url, id }: ShareButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const popupRef = useRef<HTMLDivElement>(null);
   const [copied, setCopied] = useState(false);
+
+  const siteUrl = "https://lucianohorta.com"; // your domain
+  const eventUrl = `${siteUrl}/event/${id}`;
 
   const togglePopup = () => setIsOpen(!isOpen);
 
@@ -26,13 +30,10 @@ export default function ShareButton({ title, url }: ShareButtonProps) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const encodedUrl = encodeURIComponent(url);
   
 
-
-
-  const customMessage = "EventES - Lucianohorta.com";
-  const messageWithLink = `${title} - ${customMessage} ${url}`; // append the URL
+  const encodedUrl = encodeURIComponent(eventUrl);
+  const messageWithLink = `${title} - EventES - ${eventUrl}`;
   const encodedMessage = encodeURIComponent(messageWithLink);
 
 const shareLinks = [
@@ -58,7 +59,7 @@ const shareLinks = [
   },
   {
     name: "Copy Link",
-    copy: `${title} - EventES - lucianohorta.com ${url}`, // <-- text to copy
+    copy: `${title} - EventES - ${eventUrl}`, // use eventUrl here
     icon: <FaShareAlt size={16} />
   }
 ];

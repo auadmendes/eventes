@@ -15,7 +15,7 @@ export interface Event {
   font: string;
   image: string;
   location: string | null;
-  highlighted?: boolean;
+  highlighted?: boolean | null;
   distances?: string;
   description?: string;
   extra?: string[];

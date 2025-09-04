@@ -33,7 +33,7 @@ export default function DeleteButton({ id, onDelete, deleteAction, label }: Dele
     <button
       onClick={handleClick}
       disabled={isDeleting}
-      className="flex items-center justify-center p-2 text-xs text-red-500 hover:text-white hover:bg-red-500 rounded transition"
+      className="flex items-center justify-center p-2 text-xs rounded transition"
     >
       {isDeleting ? `Deleting...` : `Delete ${label || ""}`}
     </button>
