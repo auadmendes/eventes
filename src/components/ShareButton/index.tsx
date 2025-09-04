@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-
 import { FaWhatsapp, FaFacebook, FaLinkedin, FaTwitter, FaShareAlt } from "react-icons/fa";
+
 interface ShareButtonProps {
   title: string;
   id: string;
+  image?: string;
 }
 
 export default function ShareButton({ title, id }: ShareButtonProps) {
@@ -13,12 +14,12 @@ export default function ShareButton({ title, id }: ShareButtonProps) {
   const popupRef = useRef<HTMLDivElement>(null);
   const [copied, setCopied] = useState(false);
 
-  const siteUrl = "https://www.lucianohorta.com/"; // your domain
+  const siteUrl = "https://www.lucianohorta.com";
   const eventUrl = `${siteUrl}/event/${id}`;
 
   const togglePopup = () => setIsOpen(!isOpen);
 
-  // Close popup when clicking outside
+  // close popup on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (popupRef.current && !popupRef.current.contains(e.target as Node)) {
@@ -29,40 +30,36 @@ export default function ShareButton({ title, id }: ShareButtonProps) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  
-
   const encodedUrl = encodeURIComponent(eventUrl);
-  const messageWithLink = `${title} - EventES - ${eventUrl}`;
-  const encodedMessage = encodeURIComponent(messageWithLink);
+  const encodedMessage = encodeURIComponent(`${title} - EventES\n${eventUrl}`);
 
   const shareLinks = [
-    { 
-      name: "WhatsApp", 
-      url: `https://api.whatsapp.com/send?text=${encodedMessage}`, 
-      icon: <FaWhatsapp size={16} /> 
+    {
+      name: "WhatsApp",
+      url: `https://api.whatsapp.com/send?text=${encodedMessage}`,
+      icon: <FaWhatsapp size={16} />,
     },
-    { 
-      name: "Twitter", 
-      url: `https://twitter.com/intent/tweet?text=${encodedMessage}`, 
-      icon: <FaTwitter size={16} /> 
+    {
+      name: "Twitter",
+      url: `https://twitter.com/intent/tweet?text=${encodedMessage}`,
+      icon: <FaTwitter size={16} />,
     },
-    { 
-      name: "Facebook", 
-      url: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`, 
-      icon: <FaFacebook size={16} /> 
+    {
+      name: "Facebook",
+      url: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+      icon: <FaFacebook size={16} />,
     },
-    { 
-      name: "LinkedIn", 
-      url: `https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${encodedMessage}`, 
-      icon: <FaLinkedin size={16} /> 
+    {
+      name: "LinkedIn",
+      url: `https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${encodedMessage}`,
+      icon: <FaLinkedin size={16} />,
     },
     {
       name: "Copy Link",
-      copy: `${title} - EventES - ${eventUrl}`, // use eventUrl here
-      icon: <FaShareAlt size={16} />
-    }
+      copy: `${title} - EventES\n${eventUrl}`,
+      icon: <FaShareAlt size={16} />,
+    },
   ];
-
 
   return (
     <div className="relative">
@@ -74,44 +71,40 @@ export default function ShareButton({ title, id }: ShareButtonProps) {
         <span className="text-xs">Share</span>
       </button>
 
-{isOpen && (
-  <div
-    ref={popupRef}
-    className="absolute left-0 mt-1 w-44 bg-white border rounded-lg shadow-lg z-50"
-  >
-    {shareLinks.map((link) =>
-      "url" in link ? (
-        <a
-          key={link.name}
-          href={link.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-          onClick={() => setIsOpen(false)}
+      {isOpen && (
+        <div
+          ref={popupRef}
+          className="absolute left-0 mt-1 w-44 bg-white border rounded-lg shadow-lg z-50"
         >
-          {link.icon} {link.name}
-        </a>
-      ) : (
-        <button
-          key={link.name}
-          onClick={() => {
-            navigator.clipboard.writeText(link.copy);
-            setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
-            setIsOpen(false);
-          }}
-          className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-        >
-          {link.icon} {copied ? "Copied!" : link.name}
-        </button>
-      )
-    )}
-  </div>
-)}
-
-
-
-      
+          {shareLinks.map((link) =>
+            "url" in link ? (
+              <a
+                key={link.name}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                onClick={() => setIsOpen(false)}
+              >
+                {link.icon} {link.name}
+              </a>
+            ) : (
+              <button
+                key={link.name}
+                onClick={() => {
+                  navigator.clipboard.writeText(link.copy);
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 2000);
+                  setIsOpen(false);
+                }}
+                className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+              >
+                {link.icon} {copied ? "Copied!" : link.name}
+              </button>
+            )
+          )}
+        </div>
+      )}
     </div>
   );
 }
