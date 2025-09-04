@@ -25,7 +25,7 @@ interface EventCardProps {
   onDeleted?: () => void;
 }
 
-export default function EventCard({ event, onEdit }: EventCardProps) {
+export default function EventCardDetails({ event, onEdit }: EventCardProps) {
   const { id, title, date, location, image, link, highlighted, category, font, end_date } = event;
   const { user } = useUser();
   const [expanded, setExpanded] = useState(false);
@@ -63,7 +63,7 @@ export default function EventCard({ event, onEdit }: EventCardProps) {
         overflow-visible hover:shadow-lg transition flex flex-col
         ${highlighted ? "border-2 border-light-secondary" : "border border-transparent"}`}
     >
-    <div className="relative w-full h-48 rounded-tl-2xl rounded-tr-2xl overflow-hidden">
+    <div className="relative w-full h-96 lg:h-[700px] rounded-tl-2xl rounded-tr-2xl overflow-hidden">
       <Link href={`/event/${id}`}>
         <Image
           src={
@@ -73,7 +73,7 @@ export default function EventCard({ event, onEdit }: EventCardProps) {
           }
           alt={title}
           fill
-          className="object-cover cursor-pointer"
+          className="object-fill cursor-pointer"
         />
       </Link>
     </div>
@@ -182,7 +182,7 @@ export default function EventCard({ event, onEdit }: EventCardProps) {
 
         
       </div>
-      <div className="flex justify-center items-center bg-white hover:bg-red-400 rounded-bl-xl 
+      {/* <div className="flex justify-center items-center bg-white hover:bg-red-400 rounded-bl-xl 
       rounded-br-xl text-slate-500 hover:text-white transition-all transform">
         {user?.emailAddresses?.some(emailObj => allowedemailList.includes(emailObj.emailAddress)) && (
           <DeleteButton
@@ -192,7 +192,7 @@ export default function EventCard({ event, onEdit }: EventCardProps) {
             label="event"
           />
         )}
-      </div>
+      </div> */}
     </div>
   );
 }

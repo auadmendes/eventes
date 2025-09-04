@@ -1,8 +1,8 @@
-import EventCard from "@/components/envents/EventCard";
 import { getEventById } from "@/actions/events"; 
 import { Event } from "@/types/event";
 import { Menu } from "@/components/Menu";
 import { Header } from "@/components/Header";
+import EventCardDetails from "@/components/envents/EventCardDetails";
 
 interface EventPageProps {
   params: Promise<{ id: string }>; // 👈 params is now async
@@ -24,7 +24,7 @@ export default async function EventPage({ params }: EventPageProps) {
         </aside>
 
         <main className="p-6 mb-16 md:mb-0 w-full md:max-w-[800px]">
-          <EventCard event={event} />
+          <EventCardDetails event={event} />
         </main>
       </div>
 
