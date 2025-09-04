@@ -5,11 +5,46 @@ import { Menu } from "@/components/Menu";
 import { Header } from "@/components/Header";
 
 interface EventPageProps {
-  params: Promise<{ id: string }>; // 👈 params is now async
+  params: { id: string }; // ✅ sync, not Promise
+}
+
+export async function generateMetadata({ params }: { params: { id: string } }) {
+  const event = await getEventById(params.id);
+
+  if (!event) {
+    return {
+      title: "Event not found - EventES",
+      description: "Este evento não foi encontrado.",
+    };
+  }
+
+  return {
+    title: `${event.title} - EventES`,
+    description: event.description || "Confira este evento incrível no EventES!",
+    openGraph: {
+      title: event.title,
+      description: event.description || "Confira este evento incrível no EventES!",
+      url: `https://www.lucianohorta.com/event/${event.id}`,
+      images: [
+        {
+          url: event.image || "https://www.lucianohorta.com/default-og-image.jpg",
+          width: 1200,
+          height: 630,
+          alt: event.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: event.title,
+      description: event.description || "Confira este evento incrível no EventES!",
+      images: [event.image || "https://www.lucianohorta.com/default-og-image.jpg"],
+    },
+  };
 }
 
 export default async function EventPage({ params }: EventPageProps) {
-  const { id } = await params; // 👈 must await before using
+  const { id } = params; // ✅ no await here
   const event: Event | null = await getEventById(id);
 
   if (!event) return <p>Event not found.</p>;

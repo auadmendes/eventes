@@ -13,7 +13,7 @@ export default function ShareButton({ title, id }: ShareButtonProps) {
   const popupRef = useRef<HTMLDivElement>(null);
   const [copied, setCopied] = useState(false);
 
-  const siteUrl = "https://lucianohorta.com"; // your domain
+  const siteUrl = "https://www.lucianohorta.com/"; // your domain
   const eventUrl = `${siteUrl}/event/${id}`;
 
   const togglePopup = () => setIsOpen(!isOpen);
