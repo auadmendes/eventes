@@ -15,7 +15,8 @@ export const categories = [
   "Pride",
   "Saúde e Bem-Estar",
   "Cultura",
-  "cinema",
+  "Cinema",
   "Geek",
+  "Pet",
   "Outros"
 ];

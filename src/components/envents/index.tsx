@@ -6,25 +6,6 @@ import EditEventPopup from "../EditEventPopup";
 import { Event, Like } from "@/types/event";
 import { Loader2 } from "lucide-react";
 
-interface RawEvent {
-  id: string;
-  link: string;
-  title: string;
-  date: string;
-  end_date: string | null;
-  UF: string;
-  category: string;
-  font: string;
-  image: string;
-  location: string | null;
-  highlighted: boolean | null;
-  distances?: string | null;
-  description?: string | null;
-  extra?: string[];
-  likes?: Like[];
-}
-
-
 interface EventsPageProps {
   filterCategories?: string[];
   filterSites?: string[];
@@ -41,77 +22,53 @@ export default function EventsPage({
   onCountChange,
 }: EventsPageProps) {
   const [events, setEvents] = useState<Event[]>([]);
-  const [isLoading, setIsLoading] = useState(true); // fetching fresh data
-  const [loading, setLoading] = useState(false); // infinite scroll loading more
-
+  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const LIMIT = 20;
-
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const visibleEvents = events.slice(0, page * LIMIT);
 
-  // ✅ Fetch all events (client filters + sorting)
-  const fetchEvents = useCallback(async (replace = true) => {
+  const fetchEvents = useCallback(async () => {
     try {
       setIsLoading(true);
-      const fetchedEvents: Event[] = (await getEvents()).map((e: RawEvent) => ({
+      const fetchedEvents: Event[] = (await getEvents()).map((e) => ({
         ...e,
-        highlighted: e.highlighted ?? false, // convert null → false
+        highlighted: e.highlighted ?? false,
         site: e.font || "Todos",
         distances: e.distances ?? undefined,
         description: e.description ?? undefined,
       }));
 
-      const mappedEvents: Event[] = fetchedEvents.map((e) => ({
-        ...e,
-        highlighted: e.highlighted === true,
-        site: e.font || "Todos",
-        distances: e.distances ?? undefined,
-        description: e.description ?? undefined,
-      }));
+      let filtered = fetchedEvents;
 
-      let filtered = mappedEvents;
-
-      if (filterCategories.length > 0) {
-        filtered = filtered.filter((e) =>
-          filterCategories.includes(e.category)
-        );
-      }
-
-      if (filterSites.length > 0) {
+      if (filterCategories.length > 0)
+        filtered = filtered.filter((e) => filterCategories.includes(e.category));
+      if (filterSites.length > 0)
         filtered = filtered.filter((e) => filterSites.includes(e.font));
-      }
-
       if (searchQuery.trim() !== "") {
         const lower = searchQuery.toLowerCase();
         filtered = filtered.filter((e) => {
           const titleMatch = e.title.toLowerCase().includes(lower);
-          const locationMatch =
-            e.location?.toLowerCase().includes(lower) ?? false;
-
+          const locationMatch = e.location?.toLowerCase().includes(lower) ?? false;
           const dateString = new Date(e.date).toLocaleDateString("pt-BR", {
             day: "2-digit",
             month: "long",
             year: "numeric",
           });
-
           const dateMatch = dateString.toLowerCase().includes(lower);
           return titleMatch || locationMatch || dateMatch;
         });
       }
-
       if (filterStartDate) {
         const startTime = new Date(filterStartDate).getTime();
-        filtered = filtered.filter((e) => {
-          const eventTime = new Date(e.date).getTime();
-          return eventTime >= startTime;
-        });
+        filtered = filtered.filter((e) => new Date(e.date).getTime() >= startTime);
       }
 
       // Sort highlighted first, then by date
-      filtered = filtered.sort((a, b) => {
+      filtered.sort((a, b) => {
         if (a.highlighted && !b.highlighted) return -1;
         if (!a.highlighted && b.highlighted) return 1;
         return new Date(a.date).getTime() - new Date(b.date).getTime();
@@ -119,7 +76,7 @@ export default function EventsPage({
 
       setEvents(filtered);
       onCountChange?.(filtered.length);
-      if (replace) setPage(1); // reset pagination
+      setPage(1);
     } catch (err) {
       console.error("Error fetching events:", err);
     } finally {
@@ -127,17 +84,9 @@ export default function EventsPage({
     }
   }, [filterCategories, filterSites, searchQuery, filterStartDate, onCountChange]);
 
-  // ✅ Initial + refetch when filters change
+  // ✅ Fetch once on mount
   useEffect(() => {
-    fetchEvents(true);
-  }, [fetchEvents]);
-
-  // ✅ Auto refresh every 2 minutes
-  useEffect(() => {
-    const interval = setInterval(() => {
-      fetchEvents(true);
-    }, 2 * 60 * 1000);
-    return () => clearInterval(interval);
+    fetchEvents();
   }, [fetchEvents]);
 
   // ✅ Infinite scroll
@@ -152,7 +101,7 @@ export default function EventsPage({
           setTimeout(() => {
             setPage((prev) => prev + 1);
             setLoading(false);
-          }, 800); // simulate async delay
+          }, 800);
         }
       }
     };
@@ -177,23 +126,26 @@ export default function EventsPage({
     setIsPopupOpen(true);
   };
 
-  const handleSave = async (updatedEvent: Event) => {
-    try {
-      const savedEvent = await updateEvent(updatedEvent);
-      const normalizedEvent: Event = {
-        ...savedEvent,
-        highlighted: savedEvent.highlighted ?? false,
-        distances: savedEvent.distances ?? undefined,
-        description: savedEvent.description ?? undefined,
-      };
+const handleSave = async (updatedEvent: Event) => {
+  try {
+    const savedEvent = await updateEvent(updatedEvent);
 
-      setEvents((prev) =>
-        prev.map((e) => (e.id === normalizedEvent.id ? normalizedEvent : e))
-      );
-    } catch (error) {
-      console.error("Error updating event:", error);
-    }
-  };
+    // normalize to match Event type
+    const normalizedEvent: Event = {
+      ...savedEvent,
+      highlighted: savedEvent.highlighted ?? false,
+      distances: savedEvent.distances ?? undefined,
+      description: savedEvent.description ?? undefined,
+    };
+
+    setEvents((prev) =>
+      prev.map((e) => (e.id === normalizedEvent.id ? normalizedEvent : e))
+    );
+  } catch (error) {
+    console.error("Error updating event:", error);
+  }
+};
+
 
   // --- UI ---
   if (isLoading && events.length === 0) {
@@ -221,19 +173,16 @@ export default function EventsPage({
         ))}
       </main>
 
-      {/* Spinner while loading next page */}
       {loading && (
         <div className="flex justify-center p-6">
           <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
         </div>
       )}
 
-      {/* End message */}
       {visibleEvents.length >= events.length && !isLoading && (
         <p className="text-center text-gray-500 p-6">No more events.</p>
       )}
 
-      {/* Edit Popup */}
       <EditEventPopup
         event={selectedEvent}
         isOpen={isPopupOpen}
