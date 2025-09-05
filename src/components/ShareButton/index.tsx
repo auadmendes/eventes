@@ -6,60 +6,64 @@ import { FaWhatsapp, FaFacebook, FaLinkedin, FaTwitter, FaShareAlt } from "react
 interface ShareButtonProps {
   title: string;
   id: string;
-  image?: string;
+  url?: string;
 }
 
-export default function ShareButton({ title, id }: ShareButtonProps) {
+export default function ShareButton({ title, id, url }: ShareButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const popupRef = useRef<HTMLDivElement>(null);
   const [copied, setCopied] = useState(false);
+  const popupRef = useRef<HTMLDivElement>(null);
 
   const siteUrl = "https://www.lucianohorta.com";
   const eventUrl = `${siteUrl}/event/${id}`;
 
   const togglePopup = () => setIsOpen(!isOpen);
 
-  // close popup on outside click
+  // Close popup on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (popupRef.current && !popupRef.current.contains(e.target as Node)) {
         setIsOpen(false);
       }
     };
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const encodedUrl = encodeURIComponent(eventUrl);
-  const encodedMessage = encodeURIComponent(`${title} - EventES\n${eventUrl}`);
+  const message = `${title} - EventES\n${eventUrl}${url ? `\n${url}` : ""}`;
+  const encodedMessage = encodeURIComponent(message);
 
-  const shareLinks = [
-    {
-      name: "WhatsApp",
-      url: `https://api.whatsapp.com/send?text=${encodedMessage}`,
-      icon: <FaWhatsapp size={16} />,
-    },
-    {
-      name: "Twitter",
-      url: `https://twitter.com/intent/tweet?text=${encodedMessage}`,
-      icon: <FaTwitter size={16} />,
-    },
-    {
-      name: "Facebook",
-      url: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
-      icon: <FaFacebook size={16} />,
-    },
-    {
-      name: "LinkedIn",
-      url: `https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${encodedMessage}`,
-      icon: <FaLinkedin size={16} />,
-    },
-    {
-      name: "Copy Link",
-      copy: `${title} - EventES\n${eventUrl}`,
-      icon: <FaShareAlt size={16} />,
-    },
-  ];
+const shareLinks = [
+  {
+    name: "WhatsApp",
+    url: `https://api.whatsapp.com/send?text=${encodedMessage}`,
+    icon: <FaWhatsapp size={16} />,
+  },
+  {
+    name: "Twitter",
+    url: `https://twitter.com/intent/tweet?text=${encodedMessage}`,
+    icon: <FaTwitter size={16} />,
+  },
+  {
+    name: "Facebook",
+    url: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedMessage}`,
+    icon: <FaFacebook size={16} />,
+  },
+  {
+    name: "LinkedIn",
+    url: `https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${encodeURIComponent(title)}&summary=${encodedMessage}`,
+    icon: <FaLinkedin size={16} />,
+  },
+  {
+    name: "Copy Link",
+    copy: message, // Aqui usa exatamente a mesma mensagem
+    icon: <FaShareAlt size={16} />,
+  },
+];
+
+
 
   return (
     <div className="relative">
@@ -86,7 +90,8 @@ export default function ShareButton({ title, id }: ShareButtonProps) {
                 className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 onClick={() => setIsOpen(false)}
               >
-                {link.icon} {link.name}
+                {link.icon}
+                {link.name}
               </a>
             ) : (
               <button
@@ -99,7 +104,8 @@ export default function ShareButton({ title, id }: ShareButtonProps) {
                 }}
                 className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
               >
-                {link.icon} {copied ? "Copied!" : link.name}
+                {link.icon}
+                {copied ? "Copied!" : link.name}
               </button>
             )
           )}
