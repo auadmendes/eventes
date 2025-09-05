@@ -49,14 +49,16 @@ import { getEventById } from "@/actions/events";
 import { Event } from "@/types/event";
 import { Menu } from "@/components/Menu";
 import { Header } from "@/components/Header";
-import EventCardDetails from "@/components/envents/EventCardDetails";
 import { Metadata } from "next";
+import EventCardDetails from "@/components/envents/EventCardDetails";
 
 export const dynamic = "force-dynamic"; // ✅ force SSR
 
 interface EventPageProps {
   params: Promise<{ id: string }>; // ✅ Promise
 }
+
+
 
 // ✅ Generate OG tags dynamically (SSR)
 export async function generateMetadata({ params }: EventPageProps): Promise<Metadata> {
@@ -90,24 +92,26 @@ export async function generateMetadata({ params }: EventPageProps): Promise<Meta
   };
 }
 
-
-
 export default async function EventPage({ params }: EventPageProps) {
   const { id } = await params; // ✅ await aqui
   const event: Event | null = await getEventById(id);
 
+  
   if (!event) return <p>Event not found.</p>;
 
   return (
-    <div className="min-h-screen bg-background-default text-text-dark flex flex-col">
+    <div className="min-h-screen bg-background-default text-text-dark flex flex-col p-0">
       <Header />
       <div className="flex flex-1 flex-col md:flex-row">
         <aside className="hidden md:block w-64 p-6">
           <Menu />
         </aside>
 
-        <main className="p-6 mb-16 md:mb-0 w-full md:max-w-[800px]">
-          <EventCardDetails event={event} />
+        <main className="p-1 mb-16 md:mb-0 w-full md:max-w-[800px]">
+            {/* <span className="text-sm inline-block text-slate-600 mb-3">Detalhes do evento</span> */}
+          <div className="mt-1">
+            <EventCardDetails event={event} />
+          </div>
         </main>
       </div>
 

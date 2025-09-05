@@ -14,8 +14,8 @@ import { allowedemailList} from '../../utils/emailList';
 import { Event } from "@/types/event";
 
 import { formatInTimeZone } from "date-fns-tz";
-import DeleteButton from "../DeleteButton";
-import { deleteEvent } from "@/actions/events";
+// import DeleteButton from "../DeleteButton";
+// import { deleteEvent } from "@/actions/events";
 
 import Link from "next/link";
 
@@ -147,7 +147,7 @@ export default function EventCardDetails({ event, onEdit }: EventCardProps) {
       <div className="flex justify-between items-center border-t px-4 py-2">
         <ShareButton title={title} url={link} id={id} />
 
-        {user?.emailAddresses?.some(
+        {/* {user?.emailAddresses?.some(
           (emailObj) => allowedemailList.includes(emailObj.emailAddress)
         ) && (
           <button
@@ -157,7 +157,7 @@ export default function EventCardDetails({ event, onEdit }: EventCardProps) {
             <Edit size={18} />
             <span className="text-xs">Edit</span>
           </button>
-        )}
+        )} */}
 
         <LikeButton
           eventId={id}

@@ -52,7 +52,7 @@ export default function Home() {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 p-6 mb-16 md:mb-0 w-full">
+        <main className="flex-1 p-2 mb-16 md:mb-0 w-full">
           
           {/* Category filter */}
           <div className="flex flex-col max-w-full md:w-full sticky top-0 z-50 bg-white shadow-sm rounded-sm px-2 p-2 mb-4">
