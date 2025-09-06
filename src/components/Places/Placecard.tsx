@@ -9,6 +9,7 @@ import { allowedemailList } from "@/utils/emailList";
 import DeleteButton from "../DeleteButton";
 import { Place } from "@/types/place";
 import { deletePlace } from "@/actions/places";
+import Link from "next/link";
 
 interface PlaceCardProps {
   place: Place;
@@ -60,7 +61,9 @@ export default function PlaceCard({ place, onEdit, onDelete }: PlaceCardProps) {
 
   return (
     <div className="rounded-2xl shadow-md bg-background-paper hover:shadow-lg transition flex flex-col border border-transparent">
-      <a href={link} target="_blank" rel="noopener noreferrer">
+      
+      {/* ✅ Internal route like EventCard */}
+      <Link href={`/place/${id}`}>
         <div className="relative w-full h-48 overflow-hidden rounded-t-2xl">
           <Image
             src={
@@ -69,10 +72,10 @@ export default function PlaceCard({ place, onEdit, onDelete }: PlaceCardProps) {
             }
             alt={place_name}
             fill
-            className="object-cover"
+            className="object-cover cursor-pointer"
           />
         </div>
-      </a>
+      </Link>
 
       <div className="flex-1 p-4">
         <h3 className="text-lg font-semibold text-text-dark">{place_name}</h3>
@@ -128,6 +131,16 @@ export default function PlaceCard({ place, onEdit, onDelete }: PlaceCardProps) {
             {category}
           </span>
         )}
+        
+
+        {/* External link (like EventCard "Site do evento") */}
+        {link && (
+          <span className="ml-1 inline-block mt-2 underline text-blue-600 text-xs rounded-full">
+            <a target="_blank" href={link} rel="noopener noreferrer">
+              Site oficial
+            </a>
+          </span>
+        )}
 
         {/* Accessibility */}
         <div className="flex flex-wrap w-full gap-2 mt-2 text-xs text-text-dark">
@@ -152,7 +165,7 @@ export default function PlaceCard({ place, onEdit, onDelete }: PlaceCardProps) {
 
       {/* Bottom icons */}
       <div className="flex justify-between items-center border-t px-4 py-2">
-        <ShareButton title={place_name} id={id} />
+        <ShareButton title={place.place_name} id={place.id} type="place" />
 
         <button
           onClick={toggleSave}

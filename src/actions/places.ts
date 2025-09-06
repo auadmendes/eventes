@@ -92,3 +92,42 @@ export async function updatePlace(placeId: string, data: Partial<NewPlace>): Pro
     tags: updated.tags ?? undefined,
   };
 }
+
+export async function getPlaceById(id: string): Promise<Place | null> {
+  // ignore invalid ids like "favicon.ico"
+  if (!id || id === "favicon.ico") return null;
+
+  const place = await prisma.place.findUnique({
+    where: { id },
+  });
+
+  if (!place) return null;
+
+  return {
+    id: place.id,
+    place_name: place.place_name,
+    short_description: place.short_description ?? undefined,
+    description: place.description ?? undefined,
+    city: place.city,
+    neighborhood: place.neighborhood ?? undefined,
+    address: place.address ?? undefined,
+    location: place.location ?? undefined,
+    image: place.image ?? undefined,
+    gallery_images: place.gallery_images ?? undefined,
+    link: place.link ?? undefined,
+    category: place.category ?? undefined,
+    phone_number: place.phone_number ?? undefined,
+    email: place.email ?? undefined,
+    opening_hours: place.opening_hours ?? undefined,
+    price_range: place.price_range ?? undefined,
+    ticket_required: place.ticket_required ?? undefined,
+    ticket_link: place.ticket_link ?? undefined,
+    wheelchair_accessible: place.wheelchair_accessible ?? undefined,
+    parking: place.parking ?? undefined,
+    pet_friendly: place.pet_friendly ?? undefined,
+    rating: place.rating ?? undefined,
+    tags: place.tags ?? undefined,
+    best_time_to_visit: place.best_time_to_visit ?? undefined,
+    published: place.published ?? false,
+  };
+}
