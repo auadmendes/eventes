@@ -63,9 +63,9 @@ export default function CreateEvent() {
     }
   }
 
-  function updateField(field: keyof NewEvent, value: any) {
-    setForm((prev) => ({ ...prev, [field]: value }));
-  }
+function updateField<K extends keyof NewEvent>(field: K, value: NewEvent[K]) {
+  setForm((prev) => ({ ...prev, [field]: value }));
+}
 
   function handleLinkChange(index: number, field: keyof UsefulLink, value: string) {
     setForm((prev) => {

@@ -47,9 +47,10 @@ export default function EditEventPopup({
 
   if (!isOpen || !formData) return null;
 
-  const handleChange = (key: keyof Event, value: any) => {
+  const handleChange = <K extends keyof Event>(key: K, value: Event[K]) => {
     setFormData({ ...formData, [key]: value });
   };
+
 
   // --- Links management ---
   const handleLinkChange = (index: number, field: keyof UsefulLink, value: string) => {
