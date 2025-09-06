@@ -59,11 +59,11 @@ export default function EventCardDetails({ event, onEdit }: EventCardProps) {
 
   return (
     <div
-      className={`rounded-2xl shadow-md bg-background-paper
+      className={`rounded-2xl shadow-md bg-background-paper max-w-full
         overflow-visible hover:shadow-lg transition flex flex-col
         ${highlighted ? "border-2 border-light-secondary" : "border border-transparent"}`}
     >
-    <div className="relative w-full h-96 lg:h-[700px] rounded-tl-2xl rounded-tr-2xl overflow-hidden">
+    <div className="relative w-full h-80 max-h-[300px]  rounded-tl-2xl rounded-tr-2xl overflow-hidden">
       <Link href={`/event/${id}`}>
         <Image
           src={

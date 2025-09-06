@@ -107,7 +107,7 @@ export default async function EventPage({ params }: EventPageProps) {
           <Menu />
         </aside>
 
-        <main className="p-1 mb-16 md:mb-0 w-full md:max-w-[800px]">
+        <main className="p-1 mb-16 md:mb-0 w-full md:max-w-[700px]">
             {/* <span className="text-sm inline-block text-slate-600 mb-3">Detalhes do evento</span> */}
           <div className="mt-1">
             <EventCardDetails event={event} />

@@ -163,6 +163,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'guia.elasviajando.com.br',
       },
+      {
+        protocol: 'https',
+        hostname: 'scontent-gru1-2.cdninstagram.com',
+      },
     ],
   },
 };
