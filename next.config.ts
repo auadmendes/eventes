@@ -167,6 +167,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'scontent-gru1-2.cdninstagram.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'encrypted-tbn0.gstatic.com',
+      },
     ],
   },
 };
