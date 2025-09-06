@@ -47,9 +47,6 @@ export async function getEventById(id: string): Promise<Event | null> {
   };
 }
 
-
-
-
 export async function likeEvent(userId: string, eventId: string) {
   // check if already liked
   const existing = await prisma.like.findFirst({
@@ -112,13 +109,13 @@ export async function updateEvent(updatedEvent: Event) {
       font: updatedEvent.font,
       image: updatedEvent.image,
       highlighted: updatedEvent.highlighted,
-      description: updatedEvent.description ?? null, // <- add this
+      description: updatedEvent.description ?? null,
+      links: updatedEvent.links ?? [], // ✅ add this line
     },
   });
 
   return savedEvent;
 }
-
 
 export async function createEvent(eventData: NewEvent) {
   return await prisma.event.create({
@@ -134,10 +131,15 @@ export async function createEvent(eventData: NewEvent) {
       location: eventData.location,
       distances: eventData.distances ?? null,
       extra: eventData.extra ?? [],
-      description: eventData.description ?? null, // <- add this
+      description: eventData.description ?? null,
+      links: eventData.links?.map(link => ({
+        title: link.title,
+        url: link.url
+      })) || [], // <-- include links here
     },
   });
 }
+
 
 export async function deleteEvent(eventId: string): Promise<void> {
   const existing = await prisma.event.findUnique({ where: { id: eventId } });

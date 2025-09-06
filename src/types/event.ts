@@ -4,6 +4,11 @@ export interface Like {
   event_id: string;
 }
 
+export interface UsefulLink {
+  title: string;
+  url: string;
+}
+
 export interface Event {
   id: string;
   link: string;
@@ -20,6 +25,7 @@ export interface Event {
   description?: string;
   extra?: string[];
   likes?: Like[];
+  links?: UsefulLink[]; // ✅ added
 }
 
 export type NewEvent = Omit<Event, "id" | "likes" | "highlighted">;

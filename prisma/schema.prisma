@@ -14,8 +14,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+type UsefulLink {
+  title String
+  url   String
+}
+
 model Event {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
   link        String
   title       String
   date        String
@@ -29,6 +34,7 @@ model Event {
   location    String?
   distances   String?
   extra       String[]
+  links       UsefulLink[]
 
   likes Like[] @relation("EventLikes")
 
@@ -46,7 +52,7 @@ model Like {
 }
 
 model Place {
-  id                    String   @id @default(auto()) @map("_id") @db.ObjectId
+  id                    String       @id @default(auto()) @map("_id") @db.ObjectId
   place_name            String
   short_description     String
   description           String?
@@ -62,19 +68,20 @@ model Place {
   email                 String?
   opening_hours         String? // free-text or JSON string
   price_range           String? // e.g., $, $$, $$$
-  ticket_required       Boolean? @default(false)
+  ticket_required       Boolean?     @default(false)
   ticket_link           String?
-  wheelchair_accessible Boolean? @default(false)
+  wheelchair_accessible Boolean?     @default(false)
   parking               String?
-  pet_friendly          Boolean? @default(false)
-  rating                Float?   @default(0)
-  reviews_count         Int?     @default(0)
+  pet_friendly          Boolean?     @default(false)
+  rating                Float?       @default(0)
+  reviews_count         Int?         @default(0)
   tags                  String[] // array of keywords
   instagram             String?
   facebook              String?
   tripadvisor           String?
   best_time_to_visit    String?
   nearby_places         String[] // array of Place IDs for recommendations
+  links                 UsefulLink[]
 
   date_created DateTime @default(now())
   last_updated DateTime @updatedAt

@@ -134,6 +134,36 @@ export default function EventCard({ event, onEdit }: EventCardProps) {
           <a target="_blank" href={link}>Site do evento</a>
         </span>
         
+        {event.links && event.links.length > 0 && (
+          <div className="mt-3">
+            <p className="text-sm font-semibold mb-1">Links:</p>
+
+            <div className="flex flex-wrap gap-2">
+              {(expanded ? event.links : event.links.slice(0, 3)).map((linkItem, idx) => (
+                <a
+                  key={idx}
+                  href={linkItem.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline text-sm bg-gray-100 px-2 py-1 rounded"
+                >
+                  {linkItem.title || linkItem.url}
+                </a>
+              ))}
+            </div>
+
+            {event.links.length > 3 && (
+              <button
+                onClick={() => setExpanded(!expanded)}
+                className="text-xs text-dark-primary mt-2 hover:underline block"
+              >
+                {expanded ? "Veja Menos" : `Veja todos ${event.links.length} links`}
+              </button>
+            )}
+          </div>
+        )}
+
+
         <span className="flex items-center gap-1 text-xs text-primary font-light mt-4">
           {font}
         </span>

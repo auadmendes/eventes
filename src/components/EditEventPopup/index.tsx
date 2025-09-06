@@ -2,11 +2,9 @@ import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import { categories } from "@/utils/categories";
 import { sites } from "@/utils/places";
-import { Event } from "@/types/event";
+import { Event, UsefulLink } from "@/types/event";
 import { CollapsibleSection } from "../CollapseSection";
-
-
-import DatePicker, { registerLocale } from "react-datepicker";
+import DatePicker from "react-datepicker";
 import { format } from "date-fns";
 
 interface EditEventPopupProps {
@@ -25,15 +23,15 @@ export default function EditEventPopup({
   const [formData, setFormData] = useState<Event | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
-  // Collapsible sections state
   const [showImage, setShowImage] = useState(false);
   const [showDistances, setShowDistances] = useState(false);
-  const [showLink, setShowLink] = useState(false);
+  const [showLinks, setShowLinks] = useState(false);
 
   useEffect(() => {
     if (event) {
       setFormData({
         ...event,
+        links: event.links || [],
         title: event.title || "",
         link: event.link || "",
         location: event.location || "",
@@ -50,8 +48,31 @@ export default function EditEventPopup({
 
   if (!isOpen || !formData) return null;
 
-  const handleChange = (key: keyof Event, value: string) => {
+  const handleChange = (key: keyof Event, value: any) => {
     setFormData({ ...formData, [key]: value });
+  };
+
+  // --- Links management ---
+  const handleLinkChange = (index: number, field: keyof UsefulLink, value: string) => {
+    if (!formData) return;
+    const updatedLinks = [...(formData.links || [])];
+    updatedLinks[index] = { ...updatedLinks[index], [field]: value };
+    setFormData({ ...formData, links: updatedLinks });
+  };
+
+  const addLink = () => {
+    if (!formData) return;
+    setFormData({
+      ...formData,
+      links: [...(formData.links || []), { title: "", url: "" }],
+    });
+  };
+
+  const removeLink = (index: number) => {
+    if (!formData) return;
+    const updatedLinks = [...(formData.links || [])];
+    updatedLinks.splice(index, 1);
+    setFormData({ ...formData, links: updatedLinks });
   };
 
   const handleSubmit = async () => {
@@ -60,9 +81,7 @@ export default function EditEventPopup({
     try {
       const payload: Event = {
         ...formData,
-        date: formData.date.includes("T")
-          ? formData.date
-          : `${formData.date}T00:00:00Z`,
+        date: formData.date.includes("T") ? formData.date : `${formData.date}T00:00:00Z`,
       };
       await onSave(payload);
       onClose();
@@ -72,9 +91,6 @@ export default function EditEventPopup({
       setIsSaving(false);
     }
   };
-
-  // Reusable collapsible section component
-
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 overflow-auto p-4">
@@ -101,56 +117,49 @@ export default function EditEventPopup({
           />
         </label>
 
-      {/* Date */ }
-      <label className="flex flex-col mb-2">
-        Date:
-        <DatePicker
-          selected={
-            formData.date
-              ? (() => {
-                  // normalize: keep only YYYY-MM-DD
-                  const [y, m, d] = formData.date.split("T")[0].split("-");
-                  return new Date(Number(y), Number(m) - 1, Number(d));
-                })()
-              : null
-          }
-          onChange={(date: Date | null) =>
-            handleChange("date", date ? date.toLocaleDateString("en-CA") : "")
-          }
-          dateFormat="dd/MM/yyyy"
-          locale="pt-BR"
-          className="w-full px-4 py-2 rounded-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholderText="Selecione a data"
-          disabled={isSaving}
-        />
+        {/* Date */}
+        <label className="flex flex-col mb-2">
+          Date:
+          <DatePicker
+            selected={
+              formData.date
+                ? (() => {
+                    const [y, m, d] = formData.date.split("T")[0].split("-");
+                    return new Date(Number(y), Number(m) - 1, Number(d));
+                  })()
+                : null
+            }
+            onChange={(date: Date | null) =>
+              handleChange("date", date ? date.toISOString().split("T")[0] : "")
+            }
+            dateFormat="dd/MM/yyyy"
+            className="w-full px-4 py-2 rounded-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholderText="Selecione a data"
+            disabled={isSaving}
+          />
+        </label>
 
-
-      </label>
-
-      {/* End Date */}
-      <label className="flex flex-col mb-2">
-        End Date:
-        <DatePicker
-          selected={
-            formData.end_date
-              ? (() => {
-                  // normalize: keep only YYYY-MM-DD before creating Date
-                  const [y, m, d] = formData.end_date.split("T")[0].split("-");
-                  return new Date(Number(y), Number(m) - 1, Number(d));
-                })()
-              : null
-          }
-          onChange={(date: Date | null) =>
-            handleChange("end_date", date ? date.toLocaleDateString("en-CA") : "")
-          }
-          dateFormat="dd/MM/yyyy"
-          locale="pt-BR"
-          className="w-full px-4 py-2 rounded-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholderText="Selecione a data final"
-          disabled={isSaving}
-        />
-      </label>
-
+        {/* End Date */}
+        <label className="flex flex-col mb-2">
+          End Date:
+          <DatePicker
+            selected={
+              formData.end_date
+                ? (() => {
+                    const [y, m, d] = formData.end_date.split("T")[0].split("-");
+                    return new Date(Number(y), Number(m) - 1, Number(d));
+                  })()
+                : null
+            }
+            onChange={(date: Date | null) =>
+              handleChange("end_date", date ? date.toISOString().split("T")[0] : "")
+            }
+            dateFormat="dd/MM/yyyy"
+            className="w-full px-4 py-2 rounded-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholderText="Selecione a data final"
+            disabled={isSaving}
+          />
+        </label>
 
         {/* Description */}
         <label className="block mb-2">
@@ -164,21 +173,56 @@ export default function EditEventPopup({
           />
         </label>
 
-        {/* Collapsible Sections */}
+        {/* Links Section */}
         <CollapsibleSection
-          title="Link"
-          isOpen={showLink}
-          onToggle={() => setShowLink(!showLink)}
+          title="Useful Links"
+          isOpen={showLinks}
+          onToggle={() => setShowLinks(!showLinks)}
         >
-          <input
-            type="text"
-            className="w-full border rounded p-2"
-            value={formData.link}
-            onChange={(e) => handleChange("link", e.target.value)}
-            disabled={isSaving}
-          />
+          <div className="space-y-3">
+            {(formData.links || []).map((link, index) => (
+              <div
+                key={index}
+                className="flex flex-col sm:flex-row gap-2 items-start sm:items-center"
+              >
+                <input
+                  type="text"
+                  placeholder="Title"
+                  value={link.title}
+                  onChange={(e) => handleLinkChange(index, "title", e.target.value)}
+                  className="border p-2 rounded flex-1"
+                  disabled={isSaving}
+                />
+                <input
+                  type="url"
+                  placeholder="URL"
+                  value={link.url}
+                  onChange={(e) => handleLinkChange(index, "url", e.target.value)}
+                  className="border p-2 rounded flex-1"
+                  disabled={isSaving}
+                />
+                <button
+                  type="button"
+                  onClick={() => removeLink(index)}
+                  className="px-2 py-1 bg-red-500 text-white rounded mt-2 sm:mt-0"
+                  disabled={isSaving}
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={addLink}
+              className="px-3 py-1 bg-green-600 text-white rounded"
+              disabled={isSaving}
+            >
+              + Add Link
+            </button>
+          </div>
         </CollapsibleSection>
 
+        {/* Distances & Image */}
         <CollapsibleSection
           title="Distances"
           isOpen={showDistances}
@@ -218,9 +262,7 @@ export default function EditEventPopup({
               disabled={isSaving}
             >
               {categories.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
+                <option key={cat} value={cat}>{cat}</option>
               ))}
             </select>
           </label>
@@ -234,14 +276,13 @@ export default function EditEventPopup({
               disabled={isSaving}
             >
               {sites.map((site) => (
-                <option key={site} value={site}>
-                  {site}
-                </option>
+                <option key={site} value={site}>{site}</option>
               ))}
             </select>
           </label>
         </div>
 
+        {/* Buttons */}
         <div className="mt-4 flex justify-end gap-2">
           <button
             onClick={onClose}
