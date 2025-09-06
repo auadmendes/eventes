@@ -107,6 +107,36 @@ export default function PlaceCard({ place, onEdit, onDelete }: PlaceCardProps) {
           </button>
         )}
 
+        {/* Useful Links */}
+        {place.links && place.links.length > 0 && (
+          <div className="mt-3">
+            <p className="text-xs font-light mb-1">Links:</p>
+
+            <div className="flex flex-wrap gap-2">
+              {(expanded ? place.links : place.links.slice(0, 3)).map((linkItem, idx) => (
+                <a
+                  key={idx}
+                  href={linkItem.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline text-sm bg-gray-100 px-2 py-1 rounded"
+                >
+                  {linkItem.title || linkItem.url}
+                </a>
+              ))}
+            </div>
+
+            {place.links.length > 3 && (
+              <button
+                onClick={() => setExpanded(!expanded)}
+                className="text-xs text-dark-primary mt-2 hover:underline block"
+              >
+                {expanded ? "Veja Menos" : `Veja todos ${place.links.length} links`}
+              </button>
+            )}
+          </div>
+        )}
+
         {/* Tags */}
         <div className="flex flex-wrap gap-2 mt-2 text-xs">
           {tags && tags.length > 0 ? (

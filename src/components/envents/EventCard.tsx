@@ -136,7 +136,7 @@ export default function EventCard({ event, onEdit }: EventCardProps) {
         
         {event.links && event.links.length > 0 && (
           <div className="mt-3">
-            <p className="text-sm font-semibold mb-1">Links:</p>
+            <p className="text-xs font-light mb-1">Links:</p>
 
             <div className="flex flex-wrap gap-2">
               {(expanded ? event.links : event.links.slice(0, 3)).map((linkItem, idx) => (

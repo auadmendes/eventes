@@ -179,25 +179,25 @@ export default function CreatePlaceComponent() {
         </button>
 
         {links.map((link, idx) => (
-          <div key={idx} className="flex flex-col md:flex-row gap-2 items-start">
+          <div key={idx} className="flex flex-col w-full sm:flex-row gap-2 items-start sm:items-center">
             <input
               type="text"
               placeholder="Título"
               value={link.title}
               onChange={(e) => handleLinkChange(idx, "title", e.target.value)}
-              className="border p-2 rounded flex-1"
+              className="border p-2 rounded w-full"
             />
             <input
               type="url"
               placeholder="URL"
               value={link.url}
               onChange={(e) => handleLinkChange(idx, "url", e.target.value)}
-              className="border p-2 rounded flex-1"
+              className="border p-2 rounded w-full"
             />
             <button
               type="button"
               onClick={() => removeLink(idx)}
-              className="px-2 py-1 bg-red-500 text-white rounded"
+              className="px-2 py-1 bg-red-500 text-white rounded mt-2 sm:mt-0 w-full md:w-14 h-10"
             >
               ✕
             </button>

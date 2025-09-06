@@ -28,7 +28,7 @@ export interface NewPlace {
   rating?: number;
   tags?: string[];
   best_time_to_visit?: string;
-  published?: boolean;
+  published?: boolean;  
 }
 
 
@@ -59,6 +59,7 @@ export async function getPlaces(): Promise<Place[]> {
     image: p.image ?? undefined,
     gallery_images: p.gallery_images ?? undefined,
     link: p.link ?? undefined,
+    links: p.links ?? [], // ✅ include links
     category: p.category ?? undefined,
     ticket_required: p.ticket_required ?? undefined,
     wheelchair_accessible: p.wheelchair_accessible ?? undefined,
@@ -85,15 +86,28 @@ export async function updatePlace(placeId: string, data: Partial<NewPlace>): Pro
     city: updated.city,
     neighborhood: updated.neighborhood ?? undefined,
     address: updated.address ?? undefined,
+    location: updated.location ?? undefined,
     image: updated.image ?? undefined,
+    gallery_images: updated.gallery_images ?? undefined,
     link: updated.link ?? undefined,
+    links: updated.links ?? [], // ✅ include links
     category: updated.category ?? undefined,
+    phone_number: updated.phone_number ?? undefined,
+    email: updated.email ?? undefined,
+    opening_hours: updated.opening_hours ?? undefined,
+    price_range: updated.price_range ?? undefined,
     ticket_required: updated.ticket_required ?? undefined,
+    ticket_link: updated.ticket_link ?? undefined,
     wheelchair_accessible: updated.wheelchair_accessible ?? undefined,
+    parking: updated.parking ?? undefined,
     pet_friendly: updated.pet_friendly ?? undefined,
+    rating: updated.rating ?? undefined,
     tags: updated.tags ?? undefined,
+    best_time_to_visit: updated.best_time_to_visit ?? undefined,
+    published: updated.published ?? false,
   };
 }
+
 
 export async function getPlaceById(id: string): Promise<Place | null> {
   // ignore invalid ids like "favicon.ico"

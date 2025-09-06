@@ -28,29 +28,33 @@ export default function EditPlacePopup({
   const [showLink, setShowLink] = useState(false);
   const [showDescription, setShowDescription] = useState(false);
   const [showTags, setShowTags] = useState(false);
+  const [showLinks, setShowLinks] = useState(false);
 
   //const [initialPlaceId, setInitialPlaceId] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (isOpen && place) {
-      setFormData({
-        ...place,
-        place_name: place.place_name || "",
-        short_description: place.short_description || "",
-        description: place.description || "",
-        link: place.link || "",
-        address: place.address || "",
-        city: place.city || "",
-        neighborhood: place.neighborhood || "",
-        category: place.category || categories[0],
-        image: place.image || "",
-        tags: place.tags || [],
-        wheelchair_accessible: place.wheelchair_accessible ?? false,
-        pet_friendly: place.pet_friendly ?? false,
-        ticket_required: place.ticket_required ?? false,
-      });
-    }
-  }, [isOpen, place]);
+useEffect(() => {
+  if (isOpen && place) {
+    setFormData({
+      ...place,  // includes id
+      place_name: place.place_name || "",
+      short_description: place.short_description || "",
+      description: place.description || "",
+      link: place.link || "",
+      links: place.links || [],
+      address: place.address || "",
+      city: place.city || "",
+      neighborhood: place.neighborhood || "",
+      category: place.category || categories[0],
+      image: place.image || "",
+      tags: place.tags || [],
+      wheelchair_accessible: place.wheelchair_accessible ?? false,
+      pet_friendly: place.pet_friendly ?? false,
+      ticket_required: place.ticket_required ?? false,
+    });
+  }
+}, [isOpen, place]);
+
+
 
 
   if (!isOpen || !formData) return null;
@@ -78,7 +82,28 @@ export default function EditPlacePopup({
     }
   };
 
-  
+  const handleLinkChange = (index: number, field: "title" | "url", value: string) => {
+    if (!formData) return;
+    const updatedLinks = [...(formData.links || [])];
+    updatedLinks[index] = { ...updatedLinks[index], [field]: value };
+    setFormData({ ...formData, links: updatedLinks });
+  };
+
+  const addLink = () => {
+    if (!formData) return;
+    setFormData({
+      ...formData,
+      links: [...(formData.links || []), { title: "", url: "" }],
+    });
+  };
+
+  const removeLink = (index: number) => {
+    if (!formData) return;
+    const updatedLinks = [...(formData.links || [])];
+    updatedLinks.splice(index, 1);
+    setFormData({ ...formData, links: updatedLinks });
+  };
+
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 overflow-auto p-4">
@@ -178,6 +203,54 @@ export default function EditPlacePopup({
             placeholder="Full description"
           />
         </CollapsibleSection>
+
+        {/* Collapsible: Links */}
+        <CollapsibleSection
+          title="Useful Links"
+          isOpen={showLinks}
+          onToggle={() => setShowLinks(!showLinks)}
+        >
+          <div className="space-y-4">
+            {(formData.links || []).map((link, index) => (
+              <div key={index} className="flex flex-col gap-2">
+                <input
+                  type="text"
+                  placeholder="Title"
+                  value={link.title}
+                  onChange={(e) => handleLinkChange(index, "title", e.target.value)}
+                  className="border p-2 rounded w-full"
+                  disabled={isSaving}
+                />
+                <input
+                  type="url"
+                  placeholder="URL"
+                  value={link.url}
+                  onChange={(e) => handleLinkChange(index, "url", e.target.value)}
+                  className="border p-2 rounded w-full"
+                  disabled={isSaving}
+                />
+                <button
+                  type="button"
+                  onClick={() => removeLink(index)}
+                  className="px-3 py-1 bg-red-500 text-white rounded w-full"
+                  disabled={isSaving}
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={addLink}
+              className="px-3 py-1 bg-green-600 text-white rounded w-full"
+              disabled={isSaving}
+            >
+              + Add Link
+            </button>
+          </div>
+        </CollapsibleSection>
+
+
 
         {/* Collapsible: Image */}
         <CollapsibleSection

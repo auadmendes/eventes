@@ -12,6 +12,7 @@ export interface Place {
   image?: string;
   gallery_images?: string[];
   link?: string;
+  links?: { title: string; url: string }[];
   category?: string;
 
   phone_number?: string;

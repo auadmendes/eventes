@@ -28,6 +28,7 @@ export default function PlacesPage({
 
   const [editingPlace, setEditingPlace] = useState<Place | null>(null);
 
+
   const [page, setPage] = useState(1);
   const LIMIT = 20;
 
@@ -134,6 +135,10 @@ const handleSavePlace = async (updatedPlace: Place) => {
       wheelchair_accessible: updatedPlace.wheelchair_accessible,
       pet_friendly: updatedPlace.pet_friendly,
       tags: updatedPlace.tags && updatedPlace.tags.length > 0 ? updatedPlace.tags : undefined,
+      links: updatedPlace.links?.map(l => ({
+        title: l.title || "", // ensure title is string
+        url: l.url || ""      // ensure url is string too
+      })),
     };
 
     const saved = await updatePlace(updatedPlace.id, dataToUpdate);
@@ -192,8 +197,10 @@ const handleSavePlace = async (updatedPlace: Place) => {
         place={editingPlace}
         isOpen={!!editingPlace}
         onClose={() => setEditingPlace(null)}
-        onSave={handleSavePlace}
+        onSave={handleSavePlace} // your existing handleSavePlace function
       />
+
+
     </>
   );
 }
