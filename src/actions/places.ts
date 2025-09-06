@@ -14,6 +14,7 @@ export interface NewPlace {
   image?: string;
   gallery_images?: string[];
   link?: string;
+  links?: { title: string; url: string }[]; // ✅ Add this
   category?: string;
   phone_number?: string;
   email?: string;
@@ -29,6 +30,7 @@ export interface NewPlace {
   best_time_to_visit?: string;
   published?: boolean;
 }
+
 
 export async function createPlace(data: NewPlace) {
   return await prisma.place.create({

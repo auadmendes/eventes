@@ -5,7 +5,6 @@ import { sites } from "@/utils/places";
 import { Event, UsefulLink } from "@/types/event";
 import { CollapsibleSection } from "../CollapseSection";
 import DatePicker from "react-datepicker";
-import { format } from "date-fns";
 
 interface EditEventPopupProps {
   event: Event | null;
