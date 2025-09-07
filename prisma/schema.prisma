@@ -19,6 +19,21 @@ type UsefulLink {
   url   String
 }
 
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId   String   @unique
+  email     String   @unique
+  name      String?
+  image     String?
+  isAdmin   Boolean  @default(false) // 👈 add default so new users aren’t admins
+  city      String?
+  bio       String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
 model Event {
   id          String       @id @default(auto()) @map("_id") @db.ObjectId
   link        String
@@ -89,4 +104,21 @@ model Place {
   created_by   String? // optional admin/user ID
 
   @@map("places")
+}
+
+model City {
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  name          String         @unique
+  neighborhoods Neighborhood[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Neighborhood {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  city      City     @relation(fields: [cityId], references: [id])
+  cityId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

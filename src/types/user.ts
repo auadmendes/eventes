@@ -1,9 +1,33 @@
+// types/user.ts
+
 export interface UserType {
-    id: string;
-    name: string;
-    email: string;
-    clerkUserId: string;
-    createdAt: Date;
-    //updatedAt: Date;
-    // Add other fields if they exist in your Prisma User model
+  id: string;
+  clerkId: string;   // match Prisma field
+  email: string;
+  name?: string;
+  image?: string;
+  city?: string;
+  bio?: string;
+  isAdmin: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// For creating a profile
+export interface CreateProfileInput {
+  clerkId: string;
+  email: string; // required
+  name?: string;
+  image?: string;
+  city?: string;
+  bio?: string;
+}
+
+// For updating a profile
+export interface UpdateProfileInput {
+  clerkId: string;
+  name?: string;
+  image?: string;
+  city?: string;
+  bio?: string;
 }

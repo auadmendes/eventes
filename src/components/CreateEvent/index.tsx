@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { NewEvent, UsefulLink } from "@/types/event";
 import { createEvent } from "@/actions/events";
 import Image from "next/image";
 import { categories } from "@/utils/categories";
 import { sites } from "@/utils/places";
+import { getCities, getNeighborhoods } from "@/actions/city";
 
 import 'react-date-picker/dist/DatePicker.css';
 import 'react-calendar/dist/Calendar.css';
@@ -14,6 +15,11 @@ import DatePicker from "react-date-picker";
 export default function CreateEvent() {
   const [isSaving, setIsSaving] = useState(false);
   const [showLinks, setShowLinks] = useState(false);
+
+  const [cities, setCities] = useState<any[]>([]);
+  const [neighborhoods, setNeighborhoods] = useState<any[]>([]);
+  const [selectedCity, setSelectedCity] = useState<string | null>(null);
+  const [selectedNeighborhood, setSelectedNeighborhood] = useState<string | null>(null);
 
   const [form, setForm] = useState<NewEvent>({
     link: "",
@@ -26,9 +32,31 @@ export default function CreateEvent() {
     image: "",
     location: "",
     distances: "",
+    description: "",
     extra: [],
-    links: [], // ✅ initialize links
+    links: [],
   });
+
+  // Load cities on mount
+  useEffect(() => {
+    (async () => {
+      const citiesData = await getCities();
+      setCities(citiesData);
+    })();
+  }, []);
+
+  // Load neighborhoods when city changes
+  useEffect(() => {
+    if (!selectedCity) {
+      setNeighborhoods([]);
+      setSelectedNeighborhood(null);
+      return;
+    }
+    (async () => {
+      const data = await getNeighborhoods(selectedCity);
+      setNeighborhoods(data);
+    })();
+  }, [selectedCity]);
 
   function formatLocalDate(date: Date): string {
     const yyyy = date.getFullYear();
@@ -39,10 +67,14 @@ export default function CreateEvent() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!selectedNeighborhood) {
+      alert("Selecione uma cidade e um bairro!");
+      return;
+    }
+
     setIsSaving(true);
     try {
-      await createEvent(form);
-      // Clear all fields
+      await createEvent({ ...form, location: selectedNeighborhood });
       setForm({
         link: "",
         title: "",
@@ -58,14 +90,16 @@ export default function CreateEvent() {
         extra: [],
         links: [],
       });
+      setSelectedCity(null);
+      setSelectedNeighborhood(null);
     } finally {
       setIsSaving(false);
     }
   }
 
-function updateField<K extends keyof NewEvent>(field: K, value: NewEvent[K]) {
-  setForm((prev) => ({ ...prev, [field]: value }));
-}
+  function updateField<K extends keyof NewEvent>(field: K, value: NewEvent[K]) {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  }
 
   function handleLinkChange(index: number, field: keyof UsefulLink, value: string) {
     setForm((prev) => {
@@ -106,53 +140,82 @@ function updateField<K extends keyof NewEvent>(field: K, value: NewEvent[K]) {
           disabled={isSaving}
         />
 
-        {/* <div className="flex gap-2"> */}
-          <label htmlFor="">
-            Início
-            <DatePicker
-              value={selectedDate}
-              onChange={(value) => {
-                const date: Date | null = Array.isArray(value) ? value[0] ?? null : value;
-                if (date) updateField("date", formatLocalDate(date));
-                else updateField("date", "");
-              }}
-              disabled={isSaving}
-              format="dd/MM/yyyy"
-              dayPlaceholder="dd/mm/yyyy"
-              className="w-full rounded-lg border border-gray-300 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </label>
-          <label htmlFor="">
-            Fim
-            <DatePicker
-              value={selectedEndDate}
-              onChange={(value) => {
-                const date: Date | null = Array.isArray(value) ? value[0] ?? null : value;
-                if (date) {
-                  const yyyy = date.getFullYear();
-                  const mm = String(date.getMonth() + 1).padStart(2, "0");
-                  const dd = String(date.getDate()).padStart(2, "0");
-                  updateField("end_date", `${yyyy}-${mm}-${dd}`);
-                } else {
-                  updateField("end_date", "");
-                }
-              }}
-              disabled={isSaving}
-              format="dd/MM/yyyy"
-              dayPlaceholder="dd/mm/yyyy"
-              className="w-full rounded-lg border border-gray-300 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </label>
-        {/* </div> */}
+        <label>
+          Início
+          <DatePicker
+            value={selectedDate}
+            onChange={(value) => {
+              const date: Date | null = Array.isArray(value) ? value[0] ?? null : value;
+              if (date) updateField("date", formatLocalDate(date));
+              else updateField("date", "");
+            }}
+            disabled={isSaving}
+            format="dd/MM/yyyy"
+            dayPlaceholder="dd/mm/yyyy"
+            className="w-full rounded-lg border p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </label>
 
-        <input
-          type="text"
-          placeholder="Local"
-          value={form.location ?? ""}
-          onChange={(e) => updateField("location", e.target.value)}
-          disabled={isSaving}
-          className="border p-2 rounded"
-        />
+        <label>
+          Fim
+          <DatePicker
+            value={selectedEndDate}
+            onChange={(value) => {
+              const date: Date | null = Array.isArray(value) ? value[0] ?? null : value;
+              if (date) {
+                const yyyy = date.getFullYear();
+                const mm = String(date.getMonth() + 1).padStart(2, "0");
+                const dd = String(date.getDate()).padStart(2, "0");
+                updateField("end_date", `${yyyy}-${mm}-${dd}`);
+              } else {
+                updateField("end_date", "");
+              }
+            }}
+            disabled={isSaving}
+            format="dd/MM/yyyy"
+            dayPlaceholder="dd/mm/yyyy"
+            className="w-full rounded-lg border p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </label>
+
+        {/* --- City & Neighborhood --- */}
+        <label>
+          Cidade
+          <select
+            value={selectedCity || ""}
+            onChange={(e) => setSelectedCity(e.target.value)}
+            disabled={isSaving}
+            className="border p-2 rounded w-full"
+          >
+            <option value="">Selecione a cidade</option>
+            {cities.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label>
+          Bairro / Local
+          <select
+            value={selectedNeighborhood || ""}
+            onChange={(e) => {
+              const neighborhood = neighborhoods.find(n => n.id === e.target.value);
+              setSelectedNeighborhood(neighborhood ? neighborhood.name : null);
+            }}
+            disabled={isSaving || !selectedCity}
+            className="border p-2 rounded w-full"
+          >
+            <option value="">Selecione o bairro</option>
+            {neighborhoods.map((n) => (
+              <option key={n.id} value={n.id}>
+                {n.name}
+              </option>
+            ))}
+          </select>
+</label>
+
 
         <input
           type="text"
@@ -237,7 +300,6 @@ function updateField<K extends keyof NewEvent>(field: K, value: NewEvent[K]) {
             />
           )}
         </div>
-
         {/* --- Useful Links section --- */}
         <div className="border p-3 rounded">
           <button
@@ -286,6 +348,7 @@ function updateField<K extends keyof NewEvent>(field: K, value: NewEvent[K]) {
           )}
         </div>
 
+        {/* --- Submit Button --- */}
         <button
           type="submit"
           className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center justify-center gap-2"
@@ -300,3 +363,4 @@ function updateField<K extends keyof NewEvent>(field: K, value: NewEvent[K]) {
     </div>
   );
 }
+

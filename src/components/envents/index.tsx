@@ -53,15 +53,12 @@ export default function EventsPage({
         filtered = filtered.filter((e) => {
           const titleMatch = e.title.toLowerCase().includes(lower);
           const locationMatch = e.location?.toLowerCase().includes(lower) ?? false;
-          const dateString = new Date(e.date).toLocaleDateString("pt-BR", {
-            day: "2-digit",
-            month: "long",
-            year: "numeric",
-          });
+          const dateString = new Date(e.date).toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" });
           const dateMatch = dateString.toLowerCase().includes(lower);
           return titleMatch || locationMatch || dateMatch;
         });
       }
+
       if (filterStartDate) {
         const startTime = new Date(filterStartDate).getTime();
         filtered = filtered.filter((e) => new Date(e.date).getTime() >= startTime);
@@ -73,6 +70,7 @@ export default function EventsPage({
         if (!a.highlighted && b.highlighted) return 1;
         return new Date(a.date).getTime() - new Date(b.date).getTime();
       });
+
 
       setEvents(filtered);
       onCountChange?.(filtered.length);

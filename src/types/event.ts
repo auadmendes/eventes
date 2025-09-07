@@ -29,3 +29,4 @@ export interface Event {
 }
 
 export type NewEvent = Omit<Event, "id" | "likes" | "highlighted">;
+
