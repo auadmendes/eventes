@@ -61,7 +61,7 @@ export default function EventCard({ event, onEdit }: EventCardProps) {
 
   return (
     <div
-      className={`rounded-2xl shadow-md bg-background-paper
+      className={`rounded-2xl shadow-md bg-white
         overflow-visible hover:shadow-lg transition flex flex-col
         ${highlighted ? "border-2 border-light-secondary" : "border border-transparent"}`}
     >

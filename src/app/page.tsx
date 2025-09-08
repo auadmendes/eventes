@@ -40,7 +40,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-background-default text-text-dark flex flex-col">
+    <div className="min-h-screen bg-slate-100 text-text-dark flex flex-col">
       {/* Top Header */}
       <Header />
 

@@ -171,6 +171,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'encrypted-tbn0.gstatic.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'd4wlxs7f09dde.cloudfront.net',
+      },
     ],
   },
 };

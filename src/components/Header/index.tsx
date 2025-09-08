@@ -68,7 +68,7 @@ export function Header() {
 
   const profileLinks = hasProfile
     ? [
-        { href: "/create", label: "Criar", icon: <PlusSquare /> },
+        { href: "/create", label: "Criar Evento", icon: <PlusSquare /> },
         { href: "/createplaces", label: "Criar Lugar", icon: <MapPlus /> },
       ]
     : [];
@@ -106,10 +106,10 @@ export function Header() {
         {/* Desktop Menu */}
         <nav className="hidden lg:flex gap-4">
           {allLinks.map((link) => (
-            <Link key={link.href} href={link.href} className={linkClasses(link.href)}>
+            <Link key={link.href} href={link.href} title={link.label} className={linkClasses(link.href)}>
               {link.icon}
               {/* Text hidden below lg */}
-              <span className="hidden lg:inline font-medium">{link.label}</span>
+              <span className="lg:hidden md:inline font-medium">{link.label}</span>
             </Link>
           ))}
         </nav>

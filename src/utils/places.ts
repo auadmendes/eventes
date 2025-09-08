@@ -16,5 +16,6 @@ export const sites = [
   "Parque Botânico Vale",
   "Shopping Vila Velha",
   "Boulevard Vila Velha",
+  "Clube do Ingresso",
   "Outros"
 ];
