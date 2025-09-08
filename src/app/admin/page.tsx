@@ -131,44 +131,41 @@ export default function AdminPage() {
           <Menu />
         </aside>
         <main className="flex-1 flex flex-col mt-8 px-4">
-          {/* Users Table */}
-          <div className="w-full max-w-3xl bg-white dark:bg-gray-900 p-6 border rounded-lg shadow mb-8">
-            <h1 className="text-2xl font-bold mb-6 text-center">Admin Panel</h1>
-            <div className="overflow-y-auto max-h-80 border rounded">
-              <table className="w-full border-collapse text-sm">
-                <thead className="sticky top-0 bg-white dark:bg-gray-900">
-                  <tr className="border-b">
-                    <th className="text-left p-2">Name</th>
-                    <th className="text-left p-2">Email</th>
-                    <th className="text-left p-2">Admin</th>
-                    <th className="p-2">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {users.map((u) => (
-                    <tr key={u.id} className="border-b hover:bg-gray-50 dark:hover:bg-gray-800">
-                      <td className="p-2">{u.name || "—"}</td>
-                      <td className="p-2">{u.email}</td>
-                      <td className="p-2">{u.isAdmin ? "✅ Yes" : "❌ No"}</td>
-                      <td className="p-2">
-                        <button
-                          disabled={loading}
-                          onClick={() => handleToggleAdmin(u.id, u.isAdmin)}
-                          className={`px-3 py-1 rounded transition ${
-                            u.isAdmin
-                              ? "bg-red-600 text-white hover:bg-red-700"
-                              : "bg-green-600 text-white hover:bg-green-700"
-                          }`}
-                        >
-                          {u.isAdmin ? "Revoke Admin" : "Make Admin"}
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+        {/* Users List (mobile-friendly cards) */}
+        <div className="w-full max-w-3xl bg-white dark:bg-gray-900 p-6 border rounded-lg shadow mb-8">
+        <h1 className="text-2xl font-bold mb-6 text-center">Admin Panel</h1>
+
+        <div className="space-y-3 max-h-80 overflow-y-auto">
+            {users.map((u) => (
+            <div
+                key={u.id}
+                className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-800"
+            >
+                <div className="flex-1">
+                <p className="font-medium">{u.name || "—"}</p>
+                <p className="text-sm text-gray-500">{u.email}</p>
+                <p className="text-sm mt-1">
+                    {u.isAdmin ? "✅ Admin" : "❌ User"}
+                </p>
+                </div>
+                <div className="flex-shrink-0">
+                <button
+                    disabled={loading}
+                    onClick={() => handleToggleAdmin(u.id, u.isAdmin)}
+                    className={`px-3 py-1 rounded transition ${
+                    u.isAdmin
+                        ? "bg-red-600 text-white hover:bg-red-700"
+                        : "bg-green-600 text-white hover:bg-green-700"
+                    }`}
+                >
+                    {u.isAdmin ? "Revoke Admin" : "Make Admin"}
+                </button>
+                </div>
             </div>
-          </div>
+            ))}
+        </div>
+        </div>
+
 
           {/* Cities Management */}
           <div className="w-full max-w-3xl bg-white dark:bg-gray-900 p-6 border rounded-lg shadow mb-8">
