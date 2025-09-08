@@ -15,8 +15,8 @@ export interface Event {
   title: string;
   date: string;
   end_date: string | null;
-  UF?: string;
-  city?: string;              // <-- add this
+  UF?: string | null;   // ✅ allow null
+  city?: string;
   category: string;
   font: string;
   image: string;

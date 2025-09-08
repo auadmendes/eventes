@@ -230,7 +230,7 @@ export default function CreateEvent() {
         <input
           type="text"
           placeholder="UF"
-          value={form.UF}
+          value={form.UF || ""}        // ✅ convert null/undefined to empty string
           onChange={(e) => updateField("UF", e.target.value)}
           disabled={isSaving}
           className="border p-2 rounded"
