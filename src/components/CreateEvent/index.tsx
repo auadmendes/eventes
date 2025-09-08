@@ -11,13 +11,14 @@ import { getCities, getNeighborhoods } from "@/actions/city";
 import 'react-date-picker/dist/DatePicker.css';
 import 'react-calendar/dist/Calendar.css';
 import DatePicker from "react-date-picker";
+import { City, Neighborhood } from "@/types/city";
 
 export default function CreateEvent() {
   const [isSaving, setIsSaving] = useState(false);
   const [showLinks, setShowLinks] = useState(false);
 
-  const [cities, setCities] = useState<any[]>([]);
-  const [neighborhoods, setNeighborhoods] = useState<any[]>([]);
+  const [cities, setCities] = useState<City[]>([]);
+  const [neighborhoods, setNeighborhoods] = useState<Neighborhood[]>([]);
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [selectedNeighborhood, setSelectedNeighborhood] = useState<string | null>(null);
 

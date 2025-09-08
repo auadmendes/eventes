@@ -5,6 +5,11 @@ import { useEffect, useState } from "react";
 import { upsertProfile, getProfile } from "@/actions/users"; // server actions
 import { Header } from "@/components/Header";
 
+
+interface ApiError {
+  message: string;
+}
+
 export default function ProfilePage() {
   const { user } = useUser();
   const [name, setName] = useState("");
@@ -57,12 +62,15 @@ export default function ProfilePage() {
       });
       setMessage("✅ Profile saved!");
       setProfileExists(true);
-    } catch (err: any) {
-      console.error("Error saving profile:", err);
-      setMessage(`❌ Error: ${err.message}`);
-    } finally {
-      setLoading(false);
+    } catch (err: unknown) {
+    console.error("Error saving profile:", err);
+
+    if ((err as ApiError).message) {
+        setMessage(`❌ Error: ${(err as ApiError).message}`);
+    } else {
+        setMessage("❌ An unknown error occurred");
     }
+}
   };
 
   return (
