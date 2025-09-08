@@ -137,59 +137,59 @@ export default function CreatePlaceComponent() {
         )}
       />
 
-{/* --- City --- */}
-<label>
-  Cidade
-  <select
-    value={selectedCity || ""}
-    onChange={async (e) => {
-      const cityId = e.target.value;
-      setSelectedCity(cityId || null);
+      {/* --- City --- */}
+      <label>
+        Cidade
+        <select
+          value={selectedCity || ""}
+          onChange={async (e) => {
+            const cityId = e.target.value;
+            setSelectedCity(cityId || null);
 
-      // Fetch neighborhoods for this city ID
-      if (cityId) {
-        try {
-          const data = await getNeighborhoods(cityId);
-          setNeighborhoods(data);
-          setSelectedNeighborhood(""); // reset neighborhood when city changes
-        } catch (err) {
-          console.error("Erro ao carregar bairros:", err);
-          setNeighborhoods([]);
-          setSelectedNeighborhood("");
-        }
-      } else {
-        setNeighborhoods([]);
-        setSelectedNeighborhood("");
-      }
-    }}
-    className="border p-2 rounded w-full"
-  >
-    <option value="">Selecione a cidade</option>
-    {cities.map((c) => (
-      <option key={c.id} value={c.id}>
-        {c.name}
-      </option>
-    ))}
-  </select>
-</label>
+            // Fetch neighborhoods for this city ID
+            if (cityId) {
+              try {
+                const data = await getNeighborhoods(cityId);
+                setNeighborhoods(data);
+                setSelectedNeighborhood(""); // reset neighborhood when city changes
+              } catch (err) {
+                console.error("Erro ao carregar bairros:", err);
+                setNeighborhoods([]);
+                setSelectedNeighborhood("");
+              }
+            } else {
+              setNeighborhoods([]);
+              setSelectedNeighborhood("");
+            }
+          }}
+          className="border p-2 rounded w-full"
+        >
+          <option value="">Selecione a cidade</option>
+          {cities.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.name}
+            </option>
+          ))}
+        </select>
+      </label>
 
-{/* --- Neighborhood --- */}
-<label>
-  Bairro
-  <select
-    value={selectedNeighborhood || ""}
-    onChange={(e) => setSelectedNeighborhood(e.target.value || "")} // store ID
-    disabled={!selectedCity}
-    className="border p-2 rounded w-full"
-  >
-    <option value="">Selecione o bairro</option>
-    {neighborhoods.map((n) => (
-      <option key={n.id} value={n.id}>
-        {n.name}
-      </option>
-    ))}
-  </select>
-</label>
+      {/* --- Neighborhood --- */}
+      <label>
+        Bairro
+        <select
+          value={selectedNeighborhood || ""}
+          onChange={(e) => setSelectedNeighborhood(e.target.value || "")} // store ID
+          disabled={!selectedCity}
+          className="border p-2 rounded w-full"
+        >
+          <option value="">Selecione o bairro</option>
+          {neighborhoods.map((n) => (
+            <option key={n.id} value={n.id}>
+              {n.name}
+            </option>
+          ))}
+        </select>
+      </label>
 
 
 

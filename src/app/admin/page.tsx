@@ -124,13 +124,13 @@ export default function AdminPage() {
   if (!allowed) return <p className="text-center mt-10">🚫 Access Denied</p>;
 
   return (
-    <div className="min-h-screen bg-background-default text-text-dark flex flex-col">
+    <div className="w-full min-h-screen bg-background-default text-text-dark flex flex-col">
       <Header />
-      <div className="flex flex-1">
-        <aside className="hidden md:block w-64 p-4 border-r border-gray-200">
+      <div className="flex flex-1 mt-14 bg-slate-100">
+        {/* <aside className="hidden md:block w-64 p-4 border-r border-gray-200">
           <Menu />
-        </aside>
-        <main className="flex-1 flex flex-col mt-8 px-4">
+        </aside> */}
+        <main className="flex-1 flex flex-col w-full items-center mt-8 px-4">
         {/* Users List (mobile-friendly cards) */}
         <div className="w-full max-w-3xl bg-white dark:bg-gray-900 p-6 border rounded-lg shadow mb-8">
         <h1 className="text-2xl font-bold mb-6 text-center">Admin Panel</h1>
@@ -264,9 +264,9 @@ export default function AdminPage() {
       </div>
 
       {/* Mobile Menu */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-background-paper p-4 shadow-md">
+      {/* <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-background-paper p-4 shadow-md">
         <Menu />
-      </nav>
+      </nav> */}
     </div>
   );
 }

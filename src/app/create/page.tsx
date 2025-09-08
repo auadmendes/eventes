@@ -51,9 +51,9 @@ export default function CreateEventsPage() {
       </div>
 
       {/* Mobile Menu (Bottom Bar) */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-background-paper p-4">
+      {/* <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-background-paper p-4">
         <Menu />
-      </nav>
+      </nav> */}
     </div>
   );
 }

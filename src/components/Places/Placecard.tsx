@@ -60,7 +60,9 @@ export default function PlaceCard({ place, onEdit, onDelete }: PlaceCardProps) {
   };
 
   return (
-    <div className="rounded-2xl shadow-md bg-background-paper hover:shadow-lg transition flex flex-col border border-transparent">
+    <div className="rounded-2xl shadow-md bg-background-paper hover:shadow-lg 
+      transition flex flex-col border border-transparent"
+    >
       
       {/* ✅ Internal route like EventCard */}
       <Link href={`/place/${id}`}>

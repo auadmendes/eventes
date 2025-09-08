@@ -37,7 +37,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Logo from "../../../public/logo.png";
 
-import { Home, Bell, Bookmark, PlusSquare, MapPinHouse, MapPlus, Shield, Menu as MenuIcon, X } from "lucide-react";
+import { Home, User2, Bookmark, PlusSquare, MapPinHouse, MapPlus, Shield, Menu as MenuIcon, X } from "lucide-react";
 import { checkUserRole } from "@/actions/users";
 import { LoggedUser } from "../User";
 
@@ -63,6 +63,7 @@ export function Header() {
     { href: "/PlacesHome", label: "Onde Ir", icon: <MapPinHouse /> },
     // { href: "/notifications", label: "Notificações", icon: <Bell /> },
     { href: "/saved", label: "Salvos", icon: <Bookmark /> },
+    { href: "/Profile", label: "Perfil", icon: <User2 /> },
   ];
 
   const profileLinks = hasProfile
@@ -113,7 +114,7 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="hidden lg:block mt-2">
+        <div className="hidden lg:block mt-2 ml-2">
           <LoggedUser />
         </div>
       </div>
