@@ -16,18 +16,19 @@ import {
 
 import { Header } from "@/components/Header";
 import { Menu } from "@/components/Menu";
+import { AppUser } from "@/types/user";
+import { City, Neighborhood } from "@/types/city";
 
 export default function AdminPage() {
   const { user, isLoaded } = useUser();
   const [allowed, setAllowed] = useState(false);
-  const [users, setUsers] = useState<any[]>([]);
-  const [cities, setCities] = useState<any[]>([]);
-  const [neighborhoods, setNeighborhoods] = useState<any[]>([]);
+  const [users, setUsers] = useState<AppUser[]>([]);
+  const [cities, setCities] = useState<City[]>([]);
+  const [neighborhoods, setNeighborhoods] = useState<Neighborhood[]>([]);
   const [loading, setLoading] = useState(false);
   const [cityName, setCityName] = useState("");
   const [neighborhoodName, setNeighborhoodName] = useState("");
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
-
   // Check admin access
   useEffect(() => {
     if (!isLoaded || !user) return;
