@@ -47,15 +47,15 @@ export default function Home() {
       {/* Main Content + Sidebar */}
       <div className="flex flex-1 flex-col md:flex-row">
         {/* Sidebar (Desktop) */}
-        <aside className="hidden md:block w-64 p-6">
+        {/* <aside className="hidden md:block w-64 p-6">
           <Menu />
-        </aside>
+        </aside> */}
 
         {/* Main Content */}
         <main className="flex-1 p-2 mb-16 md:mb-0 w-full">
           
           {/* Category filter */}
-          <div className="flex flex-col max-w-full md:w-full sticky top-0 z-50 bg-white shadow-sm rounded-sm px-2 p-2 mb-4">
+          <div className="flex flex-col max-w-full md:w-full sticky top-16 z-50 bg-white shadow-sm rounded-sm px-2 p-2 mb-12">
             <span className="text-xs text-light-primary">Categoria</span>
             <Select
               isMulti
