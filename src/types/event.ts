@@ -15,18 +15,21 @@ export interface Event {
   title: string;
   date: string;
   end_date: string | null;
-  UF: string;
+  UF?: string;
+  city?: string;              // <-- add this
   category: string;
   font: string;
   image: string;
-  location: string | null;
+  location: string | null;   // neighborhood
   highlighted?: boolean | null;
   distances?: string;
   description?: string;
   extra?: string[];
   likes?: Like[];
-  links?: UsefulLink[]; // ✅ added
+  links?: UsefulLink[];
 }
 
+
 export type NewEvent = Omit<Event, "id" | "likes" | "highlighted">;
+
 

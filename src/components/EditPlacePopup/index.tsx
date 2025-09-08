@@ -5,7 +5,8 @@ import { X } from "lucide-react";
 import { categories } from "@/utils/categories";
 import { Place } from "@/types/place";
 import { CollapsibleSection } from "../CollapseSection";
-import { cities, neighborhoods } from "@/utils/place_categories";
+import { City, Neighborhood } from "@/types/city";
+import { getCities, getNeighborhoods } from "@/actions/city";
 
 interface EditPlacePopupProps {
   place: Place | null;
@@ -29,52 +30,77 @@ export default function EditPlacePopup({
   const [showDescription, setShowDescription] = useState(false);
   const [showTags, setShowTags] = useState(false);
   const [showLinks, setShowLinks] = useState(false);
+  const [cityNeighborhoods, setCityNeighborhoods] = useState(false);
 
-  //const [initialPlaceId, setInitialPlaceId] = useState<string | null>(null);
+  // Cities / neighborhoods
+  const [cities, setCities] = useState<City[]>([]);
+  const [neighborhoods, setNeighborhoods] = useState<Neighborhood[]>([]);
+  const [selectedCity, setSelectedCity] = useState<string | null>(null);
+  const [selectedNeighborhood, setSelectedNeighborhood] = useState<string | null>(null);
 
-useEffect(() => {
-  if (isOpen && place) {
-    setFormData({
-      ...place,  // includes id
-      place_name: place.place_name || "",
-      short_description: place.short_description || "",
-      description: place.description || "",
-      link: place.link || "",
-      links: place.links || [],
-      address: place.address || "",
-      city: place.city || "",
-      neighborhood: place.neighborhood || "",
-      category: place.category || categories[0],
-      image: place.image || "",
-      tags: place.tags || [],
-      wheelchair_accessible: place.wheelchair_accessible ?? false,
-      pet_friendly: place.pet_friendly ?? false,
-      ticket_required: place.ticket_required ?? false,
-    });
-  }
-}, [isOpen, place]);
+  // Sync formData when popup opens
+  useEffect(() => {
+    if (isOpen && place) {
+      setFormData({
+        ...place,
+        place_name: place.place_name || "",
+        short_description: place.short_description || "",
+        description: place.description || "",
+        link: place.link || "",
+        links: place.links || [],
+        address: place.address || "",
+        city: place.city || "",
+        neighborhood: place.neighborhood || "",
+        category: place.category || categories[0],
+        image: place.image || "",
+        tags: place.tags || [],
+        wheelchair_accessible: place.wheelchair_accessible ?? false,
+        pet_friendly: place.pet_friendly ?? false,
+        ticket_required: place.ticket_required ?? false,
+      });
+    }
+  }, [isOpen, place]);
 
+  // Load all cities once
+  useEffect(() => {
+    (async () => {
+      const citiesData = await getCities();
+      setCities(citiesData);
+    })();
+  }, []);
 
+  // When editing, pre-fill city + neighborhood
+  useEffect(() => {
+    if (place) {
+      setSelectedCity(place.city || null);
+      setSelectedNeighborhood(place.neighborhood || null);
+    }
+  }, [place]);
 
+  // Load neighborhoods when city changes
+  useEffect(() => {
+    if (!selectedCity) {
+      setNeighborhoods([]);
+      setSelectedNeighborhood(null);
+      return;
+    }
+    (async () => {
+      const data = await getNeighborhoods(selectedCity);
+      setNeighborhoods(data);
+    })();
+  }, [selectedCity]);
 
-  if (!isOpen || !formData) return null;
-
+  // ---------- handlers ----------
   const handleChange = (key: keyof Place, value: Place[keyof Place]) => {
-    setFormData(prev => prev ? { ...prev, [key]: value } : null);
+    setFormData((prev) => (prev ? { ...prev, [key]: value } : null));
   };
-
-
-  // const handleTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const tagsArray = e.target.value.split(",").map(t => t.trim());
-  //   setFormData(prev => prev ? { ...prev, tags: tagsArray } : null);
-  // };
 
   const handleSubmit = async () => {
     if (!formData) return;
     setIsSaving(true);
     try {
       await onSave(formData);
-      onClose(); // close popup after saving
+      onClose();
     } catch (error) {
       console.error("Error saving place:", error);
     } finally {
@@ -104,6 +130,8 @@ useEffect(() => {
     setFormData({ ...formData, links: updatedLinks });
   };
 
+  // ---------- render ----------
+  if (!isOpen || !formData) return null;
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 overflow-auto p-4">
@@ -130,43 +158,50 @@ useEffect(() => {
           />
         </label>
 
-        {/* City Select */}
-        <label className="block mb-2">
-          City:
+        {/* City & Neighborhood */}
+        <CollapsibleSection
+          title="Cidade e Bairro"
+          isOpen={cityNeighborhoods}
+          onToggle={() => setCityNeighborhoods(!cityNeighborhoods)}
+        >
+          {/* City Select */}
           <select
             className="w-full border rounded p-2"
-            value={formData.city}
-            onChange={(e) => handleChange("city", e.target.value)}
+            value={selectedCity || ""}
+            onChange={(e) => {
+              const city = cities.find((c) => c.id === e.target.value);
+              setSelectedCity(city ? city.id : null);
+              handleChange("city", city ? city.name : ""); // ✅ save name/title, not ID
+            }}
             disabled={isSaving}
           >
+            <option value="">Select city</option>
             {cities.map((c) => (
-              <option key={c} value={c}>
-                {c}
+              <option key={c.id} value={c.id}>
+                {c.name}
               </option>
             ))}
           </select>
-        </label>
 
-        {/* Neighborhood Select */}
-        <label className="block mb-2">
-          Neighborhood:
+          {/* Neighborhood Select */}
           <select
             className="w-full border rounded p-2"
-            value={formData.neighborhood || ""}
-            onChange={(e) => handleChange("neighborhood", e.target.value)}
-            disabled={isSaving}
+            value={selectedNeighborhood || ""}
+            onChange={(e) => {
+              const neighborhood = neighborhoods.find((n) => n.id === e.target.value);
+              setSelectedNeighborhood(neighborhood ? neighborhood.id : null);
+              handleChange("neighborhood", neighborhood ? neighborhood.name : ""); // ✅ save name/title
+            }}
+            disabled={isSaving || !selectedCity}
           >
             <option value="">Select neighborhood</option>
             {neighborhoods.map((n) => (
-              <option key={n} value={n}>
-                {n}
+              <option key={n.id} value={n.id}>
+                {n.name}
               </option>
             ))}
           </select>
-        </label>
-
-
-        
+        </CollapsibleSection>
 
         {/* Address */}
         <label className="block mb-2">
@@ -180,7 +215,7 @@ useEffect(() => {
           />
         </label>
 
-        {/* Collapsible: Description */}
+        {/* Description */}
         <CollapsibleSection
           title="Description"
           isOpen={showDescription}
@@ -204,7 +239,7 @@ useEffect(() => {
           />
         </CollapsibleSection>
 
-        {/* Collapsible: Links */}
+        {/* Useful Links */}
         <CollapsibleSection
           title="Useful Links"
           isOpen={showLinks}
@@ -250,9 +285,7 @@ useEffect(() => {
           </div>
         </CollapsibleSection>
 
-
-
-        {/* Collapsible: Image */}
+        {/* Image */}
         <CollapsibleSection
           title="Image"
           isOpen={showImage}
@@ -268,7 +301,7 @@ useEffect(() => {
           />
         </CollapsibleSection>
 
-        {/* Collapsible: Link */}
+        {/* Link */}
         <CollapsibleSection
           title="Link"
           isOpen={showLink}
@@ -284,21 +317,23 @@ useEffect(() => {
           />
         </CollapsibleSection>
 
-        {/* Collapsible: Tags */}
+        {/* Tags */}
         <CollapsibleSection
           title="Tags"
           isOpen={showTags}
           onToggle={() => setShowTags(!showTags)}
         >
-        <input
-          type="text"
-          className="w-full border rounded p-2"
-          value={formData.tags?.join(", ") || ""}
-          onChange={(e) =>
-            setFormData(prev => prev ? { ...prev, tags: e.target.value.split(",").map(t => t.trim()) } : null)
-          }
-          placeholder="tag1, tag2, tag3"
-        />
+          <input
+            type="text"
+            className="w-full border rounded p-2"
+            value={formData.tags?.join(", ") || ""}
+            onChange={(e) =>
+              setFormData((prev) =>
+                prev ? { ...prev, tags: e.target.value.split(",").map((t) => t.trim()) } : null
+              )
+            }
+            placeholder="tag1, tag2, tag3"
+          />
         </CollapsibleSection>
 
         {/* Checkboxes */}
@@ -307,9 +342,7 @@ useEffect(() => {
             <input
               type="checkbox"
               checked={formData.wheelchair_accessible}
-              onChange={(e) =>
-                handleChange("wheelchair_accessible", e.target.checked)
-              }
+              onChange={(e) => handleChange("wheelchair_accessible", e.target.checked)}
               disabled={isSaving}
             />
             Wheelchair Accessible
@@ -319,9 +352,7 @@ useEffect(() => {
             <input
               type="checkbox"
               checked={formData.pet_friendly}
-              onChange={(e) =>
-                handleChange("pet_friendly", e.target.checked)
-              }
+              onChange={(e) => handleChange("pet_friendly", e.target.checked)}
               disabled={isSaving}
             />
             Pet Friendly
@@ -331,9 +362,7 @@ useEffect(() => {
             <input
               type="checkbox"
               checked={formData.ticket_required}
-              onChange={(e) =>
-                handleChange("ticket_required", e.target.checked)
-              }
+              onChange={(e) => handleChange("ticket_required", e.target.checked)}
               disabled={isSaving}
             />
             Ticket Required

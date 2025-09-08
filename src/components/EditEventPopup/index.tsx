@@ -6,6 +6,9 @@ import { Event, UsefulLink } from "@/types/event";
 import { CollapsibleSection } from "../CollapseSection";
 import DatePicker from "react-datepicker";
 
+import { City, Neighborhood } from "@/types/city";
+import { getCities, getNeighborhoods } from "@/actions/city";
+
 interface EditEventPopupProps {
   event: Event | null;
   isOpen: boolean;
@@ -24,7 +27,42 @@ export default function EditEventPopup({
 
   const [showImage, setShowImage] = useState(false);
   const [showDistances, setShowDistances] = useState(false);
+  const [cityNeighborhoods, setcityNeighborhoods] = useState(false);
   const [showLinks, setShowLinks] = useState(false);
+  const [cities, setCities] = useState<City[]>([]);
+  const [neighborhoods, setNeighborhoods] = useState<Neighborhood[]>([]);
+  const [selectedCity, setSelectedCity] = useState<string | null>(null);
+  const [selectedNeighborhood, setSelectedNeighborhood] = useState<string | null>(null);
+
+  // Load all cities once
+useEffect(() => {
+  (async () => {
+    const citiesData = await getCities();
+    setCities(citiesData);
+  })();
+}, []);
+
+// When editing an event, pre-fill city + neighborhood
+useEffect(() => {
+  if (event) {
+    setSelectedCity(event.city || null); // assumes your Event has city
+    setSelectedNeighborhood(event.location || null); // location is neighborhood
+  }
+}, [event]);
+
+// Load neighborhoods when city changes
+useEffect(() => {
+  if (!selectedCity) {
+    setNeighborhoods([]);
+    setSelectedNeighborhood(null);
+    return;
+  }
+  (async () => {
+    const data = await getNeighborhoods(selectedCity);
+    setNeighborhoods(data);
+  })();
+}, [selectedCity]);
+
 
   useEffect(() => {
     if (event) {
@@ -172,6 +210,52 @@ export default function EditEventPopup({
             rows={4}
           />
         </label>
+
+        <CollapsibleSection
+          title="Cidade e Bairro"
+          isOpen={cityNeighborhoods}
+          onToggle={() => setcityNeighborhoods(!cityNeighborhoods)}
+        >
+          {/* --- City & Neighborhood --- */}
+          <label>
+            Cidade
+            <select
+              value={selectedCity || ""}
+              onChange={(e) => setSelectedCity(e.target.value)}
+              disabled={isSaving}
+              className="border p-2 rounded w-full"
+            >
+              <option value="">Selecione a cidade</option>
+              {cities.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label>
+            Bairro / Local
+            <select
+              value={selectedNeighborhood || ""}
+              onChange={(e) => {
+                const neighborhood = neighborhoods.find((n) => n.id === e.target.value);
+                setSelectedNeighborhood(neighborhood ? neighborhood.name : null);
+                handleChange("location", neighborhood ? neighborhood.name : ""); // update event.location
+              }}
+              disabled={isSaving || !selectedCity}
+              className="border p-2 rounded w-full"
+            >
+              <option value="">Selecione o bairro</option>
+              {neighborhoods.map((n) => (
+                <option key={n.id} value={n.id}>
+                  {n.name}
+                </option>
+              ))}
+            </select>
+          </label>
+
+        </CollapsibleSection>
 
         {/* Links Section */}
         <CollapsibleSection

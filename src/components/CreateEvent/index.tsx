@@ -215,7 +215,7 @@ export default function CreateEvent() {
               </option>
             ))}
           </select>
-</label>
+        </label>
 
 
         <input

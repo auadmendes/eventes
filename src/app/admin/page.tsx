@@ -170,19 +170,19 @@ export default function AdminPage() {
           {/* Cities Management */}
           <div className="w-full max-w-3xl bg-white dark:bg-gray-900 p-6 border rounded-lg shadow mb-8">
             <h2 className="text-xl font-bold mb-4">Cities</h2>
-            <div className="flex gap-2 mb-4">
+            <div className="flex flex-col gap-2 mb-4 w-full">
               <input
                 type="text"
                 value={cityName}
                 onChange={(e) => setCityName(e.target.value)}
                 placeholder="New city"
-                className="border p-2 rounded flex-1"
+                className="border p-2 rounded w-full"
               />
               <button
                 onClick={handleAddCity}
-                className="bg-blue-600 text-white px-4 rounded hover:bg-blue-700"
+                className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
               >
-                Add City
+                Add Cidade
               </button>
             </div>
             <ul className="max-h-60 overflow-y-auto border rounded">
@@ -211,7 +211,7 @@ export default function AdminPage() {
           {/* Neighborhood Management */}
           <div className="w-full max-w-3xl bg-white dark:bg-gray-900 p-6 border rounded-lg shadow mb-8">
             <h2 className="text-xl font-bold mb-4">Neighborhoods</h2>
-            <div className="flex gap-2 mb-4">
+            <div className="flex flex-col gap-2 mb-4">
               <select
                 value={selectedCity || ""}
                 onChange={(e) => setSelectedCity(e.target.value)}
@@ -231,9 +231,9 @@ export default function AdminPage() {
               />
               <button
                 onClick={handleAddNeighborhood}
-                className="bg-blue-600 text-white px-4 rounded hover:bg-blue-700"
+                className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
               >
-                Add Neighborhood
+                Add Bairro
               </button>
             </div>
             <ul className="max-h-60 overflow-y-auto border rounded">
