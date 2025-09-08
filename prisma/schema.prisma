@@ -39,7 +39,7 @@ model Event {
   link        String
   title       String
   date        String
-  UF          String
+  UF          String?
   category    String
   end_date    String?
   font        String
