@@ -7,6 +7,7 @@ import { createPlace, NewPlace } from "@/actions/places";
 import { categories } from "@/utils/place_categories";
 import Image from "next/image";
 import { getCities, getNeighborhoods } from "@/actions/city";
+import { City, Neighborhood } from "@/types/city";
 
 export default function CreatePlaceComponent() {
   const { register, handleSubmit, control, reset, watch, setValue } = useForm<NewPlace>({
@@ -25,8 +26,8 @@ export default function CreatePlaceComponent() {
   const [success, setSuccess] = useState("");
   const [links, setLinks] = useState<{ title: string; url: string }[]>([]);
 
-  const [cities, setCities] = useState<any[]>([]);
-  const [neighborhoods, setNeighborhoods] = useState<any[]>([]);
+  const [cities, setCities] = useState<City[]>([]);
+  const [neighborhoods, setNeighborhoods] = useState<Neighborhood[]>([]);
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [selectedNeighborhood, setSelectedNeighborhood] = useState<string | null>(null);
 
