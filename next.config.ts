@@ -175,6 +175,14 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'd4wlxs7f09dde.cloudfront.net',
       },
+      {
+        protocol: 'https',
+        hostname: 'img.clerk.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'scontent-gig4-2.cdninstagram.com',
+      },
     ],
   },
 };

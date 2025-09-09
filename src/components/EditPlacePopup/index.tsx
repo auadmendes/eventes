@@ -134,7 +134,7 @@ export default function EditPlacePopup({
   if (!isOpen || !formData) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 overflow-auto p-4">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999] overflow-auto p-4">
       <div className="bg-white p-6 rounded-xl w-full max-w-md relative">
         <button
           onClick={onClose}
@@ -369,14 +369,27 @@ export default function EditPlacePopup({
           </label>
         </div>
 
-        {/* Save button */}
-        <button
-          onClick={handleSubmit}
-          disabled={isSaving}
-          className="w-full bg-blue-600 text-white rounded-lg py-2 mt-4 hover:bg-blue-700 disabled:opacity-50"
-        >
-          {isSaving ? "Saving..." : "Save"}
-        </button>
+{/* Buttons */}
+<div className="mt-4 flex justify-end gap-2">
+  <button
+    onClick={onClose}
+    className="px-4 py-2 border rounded hover:bg-gray-100"
+    disabled={isSaving}
+  >
+    Cancel
+  </button>
+  <button
+    onClick={handleSubmit}
+    disabled={isSaving}
+    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center justify-center gap-2"
+  >
+    {isSaving && (
+      <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+    )}
+    Save
+  </button>
+</div>
+
       </div>
     </div>
   );

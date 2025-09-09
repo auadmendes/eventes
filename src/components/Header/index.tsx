@@ -37,7 +37,8 @@ import Link from "next/link";
 import Image from "next/image";
 import Logo from "../../../public/logo.png";
 
-import { Home, User2, Bookmark, PlusSquare, MapPinHouse, MapPlus, Shield, Menu as MenuIcon, X } from "lucide-react";
+import { Home, HandPlatter, User2, Bookmark, PlusSquare, MapPinHouse, MapPlus, Shield, Menu as MenuIcon, X } from "lucide-react";
+import { GrUserWorker } from "react-icons/gr";
 import { checkUserRole } from "@/actions/users";
 import { LoggedUser } from "../User";
 
@@ -61,19 +62,24 @@ export function Header() {
   const links = [
     { href: "/", label: "Home", icon: <Home /> },
     { href: "/PlacesHome", label: "Onde Ir", icon: <MapPinHouse /> },
+    { href: "/service", label: "Serviços", icon: <GrUserWorker size={24} /> },
     // { href: "/notifications", label: "Notificações", icon: <Bell /> },
     { href: "/saved", label: "Salvos", icon: <Bookmark /> },
     { href: "/Profile", label: "Perfil", icon: <User2 /> },
+    { href: "/create-service", label: "Criar meu anúncio", icon: <HandPlatter /> },
   ];
 
   const profileLinks = hasProfile
     ? [
-        { href: "/create", label: "Criar Evento", icon: <PlusSquare /> },
+        
         { href: "/createplaces", label: "Criar Lugar", icon: <MapPlus /> },
       ]
     : [];
 
-  const adminLinks = isAdmin ? [{ href: "/admin", label: "Admin Panel", icon: <Shield /> }] : [];
+  const adminLinks = isAdmin ? [
+    { href: "/admin", label: "Admin Panel", icon: <Shield /> },
+    { href: "/create", label: "Criar Evento", icon: <PlusSquare /> },
+  ] : [];
 
   const allLinks = [...links, ...profileLinks, ...adminLinks];
 
@@ -100,7 +106,7 @@ export function Header() {
         >
           {menuOpen ? <X size={24} /> : <MenuIcon size={24} />}
         </button>
-        <div className="lg:hidden mt-1">
+        <div className="lg:hidden">
           <LoggedUser />
         </div>
         {/* Desktop Menu */}
@@ -114,7 +120,7 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="hidden lg:block mt-2 ml-2">
+        <div className="hidden lg:block mt-1.5 ml-2">
           <LoggedUser />
         </div>
       </div>

@@ -129,7 +129,7 @@ export default function CreateEvent() {
   const selectedEndDate = form.end_date ? new Date(form.end_date + 'T00:00') : null;
 
   return (
-    <div className="p-6">
+    <div className="w-full p-6">
       <h1 className="text-xl font-bold mb-4">Criar evento</h1>
       <form onSubmit={handleSubmit} className="grid gap-3 max-w-xl">
         <input
@@ -137,7 +137,7 @@ export default function CreateEvent() {
           placeholder="Título"
           value={form.title}
           onChange={(e) => updateField("title", e.target.value)}
-          className="border p-2 rounded"
+          className="border p-2 rounded w-full"
           disabled={isSaving}
         />
 
@@ -153,7 +153,7 @@ export default function CreateEvent() {
             disabled={isSaving}
             format="dd/MM/yyyy"
             dayPlaceholder="dd/mm/yyyy"
-            className="w-full rounded-lg border p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-lg border p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
           />
         </label>
 
@@ -175,7 +175,7 @@ export default function CreateEvent() {
             disabled={isSaving}
             format="dd/MM/yyyy"
             dayPlaceholder="dd/mm/yyyy"
-            className="w-full rounded-lg border p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-lg border p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
           />
         </label>
 
@@ -286,8 +286,8 @@ export default function CreateEvent() {
             <Image
               src={form.image}
               alt="Preview"
-              width={450}
-              height={250}
+              width={350}
+              height={150}
               className="object-cover rounded border w-full"
               onError={(e) => { (e.currentTarget as HTMLImageElement).src = "https://via.placeholder.com/150"; }}
             />
@@ -297,12 +297,12 @@ export default function CreateEvent() {
               alt="Placeholder"
               width={150}
               height={250}
-              className="object-cover rounded border w-full"
+              className="object-cover rounded border w-full h-20"
             />
           )}
         </div>
         {/* --- Useful Links section --- */}
-        <div className="border p-3 rounded">
+        <div className="border p-3 rounded bg-white">
           <button
             type="button"
             onClick={() => setShowLinks((s) => !s)}
@@ -341,7 +341,7 @@ export default function CreateEvent() {
               <button
                 type="button"
                 onClick={addLink}
-                className="px-3 py-1 bg-green-600 text-white rounded"
+                className="px-3 py-1 bg-green-600 text-white rounded w-full"
               >
                 + Add Link
               </button>
