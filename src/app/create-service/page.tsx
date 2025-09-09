@@ -50,18 +50,20 @@ useEffect(() => {
 
     // initialize form with profile image
     setForm({
-    userId: p.id,
-    city: "",
-    neighborhood: "",
-    title: "",
-    description: "",
-    services: [],
-    email: user.primaryEmailAddress?.emailAddress || "",
-    phone: "",
-    showPhone: false,
-    links: [],
-    image: p.image || user.imageUrl || "", // ✅ store image in form
+      userId: p.id,
+      city: "",
+      neighborhood: "",
+      title: "",
+      description: "",
+      services: [],
+      mainService: "", // ← add this
+      email: user.primaryEmailAddress?.emailAddress || "",
+      phone: "",
+      showPhone: false,
+      links: [],
+      image: p.image || user.imageUrl || "",
     });
+
 
 
     setProfileLoaded(true);
@@ -114,12 +116,14 @@ const handleSubmit = async (e: React.FormEvent) => {
       title: "",
       description: "",
       services: [], // reset
+      mainService: "", // ← add this
       email: profile!.email,
       phone: "",
       showPhone: false,
       links: [],
       image: "", // reset
     });
+
   } catch (err) {
     console.error(err);
     setMessage("❌ Erro ao criar serviço.");
