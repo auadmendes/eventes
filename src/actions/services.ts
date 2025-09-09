@@ -9,31 +9,31 @@ import { Service } from "@/types/services";
 export async function createService(data: CreateServiceInput) {
   try {
     const service = await prisma.service.create({
-    data: {
+      data: {
         userId: data.userId,
         city: data.city,
         neighborhood: data.neighborhood,
         title: data.title,
         description: data.description,
-        services: data.services,
+        mainService: data.mainService, // single string
+        services: data.services,       // array
         email: data.email,
-        phone: data.phone,
+        phone: data.phone || null,
         showPhone: data.showPhone ?? false,
         links: data.links || [],
-        image: data.image || "", // <-- save image
+        image: data.image || "",
         isValidated: false,
         validatedAt: null,
         validatedBy: null,
-    },
+      },
     });
-
-
     return service;
   } catch (error) {
     console.error("Error creating service:", error);
     throw error;
   }
 }
+
 
 // Fetch all validated services
 export async function getServices(): Promise<ServiceType[]> {

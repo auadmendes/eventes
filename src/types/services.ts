@@ -46,6 +46,7 @@ export interface CreateServiceInput {
   email: string;
   phone?: string;
   showPhone?: boolean;
+  mainService: string;
   links?: UsefulLink[];
   image?: string; // <-- add this
 }
