@@ -21,6 +21,12 @@ import { City, Neighborhood } from "@/types/city";
 import { Service } from "@/types/services";
 import Image from "next/image";
 
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
+import { FaFacebook, FaInstagram, FaWhatsapp } from "react-icons/fa";
+import Section from "@/components/Section";
+
 export default function AdminPage() {
   const MAX_LENGTH = 100; // max characters before truncating
   const { user, isLoaded } = useUser();
@@ -180,15 +186,12 @@ export default function AdminPage() {
               </div>
             </div>
 
-            {/* Pending Services Panel */}
-            <div className="w-full max-w-3xl bg-white dark:bg-gray-900 p-6 border rounded-lg shadow mb-8">
-              <h1 className="text-2xl font-bold mb-6 text-center">
-                Pending Services
-              </h1>
-              {pendingServices.length === 0 && (
-                <p className="text-center text-gray-500">No pending services</p>
-              )}
-              <div className="flex flex-col gap-4 max-h-96 overflow-y-auto">
+          {/* Pending Services Panel */}
+          <Section title="Pending Services">
+            {pendingServices.length === 0 ? (
+              <p className="text-center text-gray-500">No pending services</p>
+            ) : (
+              <div className="flex flex-col gap-6 max-h-96 overflow-y-auto">
                 {pendingServices.map((s) => {
                   const isExpanded = expanded[s.id] || false;
                   const shortDescription =
@@ -199,75 +202,123 @@ export default function AdminPage() {
                   return (
                     <div
                       key={s.id}
-                      className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-800"
+                      className="flex flex-col bg-gray-50 dark:bg-gray-800 p-4 rounded-lg shadow hover:shadow-lg transition space-y-3"
                     >
-                      <div className="flex-1 space-y-1">
-                        <p>
-                          <strong>User:</strong> {s.user.name}
-                        </p>
-                        <p>
-                          <strong>Title:</strong> {s.title}
-                        </p>
-                        <p>
-                          <strong>Main Service:</strong> {s.services[0] || "—"}
-                        </p>
-                        <p>
-                          <strong>Description:</strong>{" "}
-                          {isExpanded ? s.description : shortDescription}{" "}
-                          {s.description.length > MAX_LENGTH && (
-                            <button
-                              onClick={() =>
-                                setExpanded((prev) => ({
-                                  ...prev,
-                                  [s.id]: !isExpanded,
-                                }))
-                              }
-                              className="text-blue-600 ml-1"
-                            >
-                              {isExpanded ? "Leia menos" : "Leia mais"}
-                            </button>
+                      <div className="flex flex-col md:flex-row gap-4">
+                        {/* Carousel / Single Image */}
+                        <div className="md:w-48 w-full">
+                          {s.images && s.images.length > 0 ? (
+                            <Slider dots infinite speed={500} slidesToShow={1} slidesToScroll={1}>
+                              {s.images.map((img, idx) => (
+                                <div key={idx} className="w-full h-40">
+                                  <Image
+                                    src={img}
+                                    alt={`${s.title} - ${idx + 1}`}
+                                    width={200}
+                                    height={160}
+                                    className="w-full h-40 object-cover rounded border"
+                                  />
+                                </div>
+                              ))}
+                            </Slider>
+                          ) : s.image ? (
+                            <Image
+                              src={s.image}
+                              alt={s.title}
+                              width={200}
+                              height={160}
+                              className="w-full h-40 object-cover rounded border"
+                            />
+                          ) : (
+                            <div className="w-full h-40 bg-gray-200 dark:bg-gray-700 rounded flex items-center justify-center">
+                              <span className="text-gray-500">No Image</span>
+                            </div>
                           )}
-                        </p>
-                        <p>
-                          <strong>Phone:</strong> {s.phone || "—"}
-                        </p>
-                        <p>
-                          <strong>City:</strong> {s.city}
-                        </p>
-                        <p>
-                          <strong>Neighborhood:</strong> {s.neighborhood}
-                        </p>
-                        
-                        {s.image && (
-                          
-                          <Image
-                            src={s.image}
-                            alt={s.title}
-                            width={400}
-                            height={200}
-                            className="w-24 h-24 object-cover rounded mt-2 border"
-                          />
-                        )}
+                        </div>
+
+                        {/* Service Info */}
+                        <div className="flex-1 space-y-1 text-sm">
+                          <p><strong>User:</strong> {s.user.name}</p>
+                          <p><strong>Email:</strong> {s.email}</p>
+                          <p>
+                            <strong>Services:</strong> {s.services.join(", ") || "—"}
+                          </p>
+                          <p>
+                            <strong>Description:</strong>{" "}
+                            {isExpanded ? s.description : shortDescription}{" "}
+                            {s.description.length > MAX_LENGTH && (
+                              <button
+                                onClick={() =>
+                                  setExpanded((prev) => ({ ...prev, [s.id]: !isExpanded }))
+                                }
+                                className="text-blue-600 ml-1 underline text-sm"
+                              >
+                                {isExpanded ? "Leia menos" : "Leia mais"}
+                              </button>
+                            )}
+                          </p>
+                          <p><strong>Phone:</strong> {s.phone || "—"}</p>
+                          <p><strong>City:</strong> {s.city}</p>
+                          <p><strong>Neighborhood:</strong> {s.neighborhood}</p>
+
+                          {/* Links */}
+                          {s.links && s.links.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mt-1">
+                              {s.links.map((link, idx) => (
+                                <a
+                                  key={idx}
+                                  href={link.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-blue-600 underline text-sm"
+                                >
+                                  {link.title}
+                                </a>
+                              ))}
+                            </div>
+                          )}
+
+                          {/* Website */}
+                          {s.website && (
+                            <p>
+                              <strong>Website:</strong>{" "}
+                              <a href={s.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+                                {s.website}
+                              </a>
+                            </p>
+                          )}
+
+                          {/* Social */}
+                          <div className="flex gap-4 mt-2">
+                            {s.facebook && <a href={s.facebook} target="_blank" rel="noopener noreferrer"><FaFacebook className="text-blue-600 w-6 h-6" /></a>}
+                            {s.instagram && <a href={s.instagram} target="_blank" rel="noopener noreferrer"><FaInstagram className="text-pink-500 w-6 h-6" /></a>}
+                            {s.whatsapp && <a href={`https://wa.me/${s.whatsapp}`} target="_blank" rel="noopener noreferrer"><FaWhatsapp className="text-green-500 w-6 h-6" /></a>}
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex-shrink-0">
+
+                      <div className="flex justify-end">
                         <button
                           onClick={() => handleValidateService(s.id)}
                           disabled={loading}
-                          className="mt-2 sm:mt-0 bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700"
+                          className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 flex items-center gap-2"
                         >
-                          Validate
+                          ✅ Validate
                         </button>
                       </div>
                     </div>
                   );
                 })}
               </div>
-            </div>
+            )}
+          </Section>
+
             {/* END - Pending Services Panel */}
           </div>
 
           {/* Cities & Neighborhoods Panel */}
-          <div className="flex flex-col lg:flex-row gap-y-6 lg:gap-x-6 w-full">
+          <Section title="Cities and neighbors">
+            <div className="flex flex-col lg:flex-row gap-y-6 lg:gap-x-6 w-full">
             {/* Cities Management */}
             <div className="w-full max-w-3xl bg-white dark:bg-gray-900 p-6 border rounded-lg shadow mb-8">
               <h2 className="text-xl font-bold mb-4">Cities</h2>
@@ -378,6 +429,8 @@ export default function AdminPage() {
               </ul>
             </div>
           </div>
+          </Section>
+          
         </main>
       </div>
     </div>

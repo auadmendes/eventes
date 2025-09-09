@@ -15,13 +15,18 @@ export async function createService(data: CreateServiceInput) {
         neighborhood: data.neighborhood,
         title: data.title,
         description: data.description,
-        mainService: data.mainService, // single string
-        services: data.services,       // array
+        mainService: data.mainService,     // single string
+        services: data.services,           // array
         email: data.email,
         phone: data.phone || null,
         showPhone: data.showPhone ?? false,
         links: data.links || [],
         image: data.image || "",
+        images: data.images || [],         // <-- add this
+        instagram: data.instagram || "",   // <-- add this
+        facebook: data.facebook || "",     // <-- add this
+        website: data.website || "",       // <-- add this
+        whatsapp: data.whatsapp || "",     // <-- add this
         isValidated: false,
         validatedAt: null,
         validatedBy: null,
@@ -33,6 +38,7 @@ export async function createService(data: CreateServiceInput) {
     throw error;
   }
 }
+
 
 
 // Fetch all validated services

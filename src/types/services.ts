@@ -43,13 +43,19 @@ export interface CreateServiceInput {
   title: string;
   description: string;
   services: string[];
+  mainService: string;
   email: string;
   phone?: string;
   showPhone?: boolean;
-  mainService: string;
   links?: UsefulLink[];
-  image?: string; // <-- add this
+  image?: string;      // primary image (default user image)
+  images?: string[];   // additional images
+  instagram?: string;
+  facebook?: string;
+  website?: string;
+  whatsapp?: string;
 }
+
 
 
 // Input for updating a service
@@ -81,7 +87,8 @@ export type Service = {
   showPhone: boolean;
   email: string;
   image: string;
-  instagram: string | null; // ✅ allow null
+  images?: string[];  // ✅ add this
+  instagram: string | null;
   facebook: string | null;
   website: string | null;
   whatsapp: string | null;
