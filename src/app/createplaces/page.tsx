@@ -2,7 +2,6 @@
 
 import CreateAPlaceComponent from "@/components/Places/CreatePlaceComponent";
 import { Header } from "@/components/Header";
-import { Menu } from "@/components/Menu";
 import { allowedemailList } from "@/utils/emailList";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
@@ -20,9 +19,9 @@ export default function CreatePlacesPage() {
 
       <div className="flex flex-1 flex-col md:flex-row">
         {/* Sidebar (Desktop) */}
-        <aside className="hidden md:block w-64 p-6">
+        {/* <aside className="hidden md:block w-64 p-6">
           <Menu />
-        </aside>
+        </aside> */}
 
         {/* Main Content */}
         <main className="flex-1 p-6 mb-16 md:mb-0 w-full">

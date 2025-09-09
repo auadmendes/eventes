@@ -1,7 +1,6 @@
 'use client';
 
 import { Header } from "@/components/Header";
-import { Menu } from "@/components/Menu";
 import { useEffect, useState } from "react";
 import { categories } from "@/utils/place_categories";
 import { ArrowUp } from "lucide-react";

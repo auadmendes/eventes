@@ -19,6 +19,7 @@ import { Header } from "@/components/Header";
 import { AppUser } from "@/types/user";
 import { City, Neighborhood } from "@/types/city";
 import { Service } from "@/types/services";
+import Image from "next/image";
 
 export default function AdminPage() {
   const MAX_LENGTH = 100; // max characters before truncating
@@ -236,10 +237,14 @@ export default function AdminPage() {
                         <p>
                           <strong>Neighborhood:</strong> {s.neighborhood}
                         </p>
+                        
                         {s.image && (
-                          <img
+                          
+                          <Image
                             src={s.image}
                             alt={s.title}
+                            width={400}
+                            height={200}
                             className="w-24 h-24 object-cover rounded mt-2 border"
                           />
                         )}

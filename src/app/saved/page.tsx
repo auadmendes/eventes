@@ -2,7 +2,7 @@
 
 import EventCard from "@/components/envents/EventCard";
 import { Header } from "@/components/Header";
-import { Menu } from "@/components/Menu";
+
 import { ArrowUp } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -53,10 +53,10 @@ export default function SavedEventsPage() {
           {/* Main Content + Sidebar */}
           <div className="flex flex-1 flex-col md:flex-row">
             {/* Sidebar (Desktop) */}
-            <aside className="hidden md:block w-64 p-6">
+            {/* <aside className="hidden md:block w-64 p-6">
               <Menu />
             </aside>
-    
+     */}
             {/* Main Content */}
             <main className="flex-1 p-6 mb-16 md:mb-0 w-full">
                 <span>Nenhum Evento Salvo</span>
@@ -64,9 +64,9 @@ export default function SavedEventsPage() {
     
           </div>
         {/* Mobile Menu (Bottom Bar) */}
-          <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-background-paper p-4">
+          {/* <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-background-paper p-4">
             <Menu />
-          </nav>
+          </nav> */}
           {showScrollTop && (
             <button
               onClick={scrollToTop}
@@ -88,9 +88,9 @@ export default function SavedEventsPage() {
           {/* Main Content + Sidebar */}
           <div className="flex flex-1 flex-col md:flex-row">
             {/* Sidebar (Desktop) */}
-            <aside className="hidden md:block w-64 p-6">
+            {/* <aside className="hidden md:block w-64 p-6">
               <Menu />
-            </aside>
+            </aside> */}
     
             {/* Main Content */}
             <main className="flex-1 p-6 mb-16 md:mb-0 w-full">
@@ -104,9 +104,9 @@ export default function SavedEventsPage() {
           </div>
     
           {/* Mobile Menu (Bottom Bar) */}
-          <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-background-paper p-4">
+          {/* <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-background-paper p-4">
             <Menu />
-          </nav>
+          </nav> */}
           {showScrollTop && (
             <button
               onClick={scrollToTop}

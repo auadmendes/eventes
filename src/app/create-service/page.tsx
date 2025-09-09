@@ -69,10 +69,14 @@ useEffect(() => {
 }, [isLoaded, user, router]);
 
 
-  const updateField = (field: keyof CreateServiceInput, value: any) => {
+  const updateField = <K extends keyof CreateServiceInput>(
+    field: K,
+    value: CreateServiceInput[K]
+  ) => {
     if (!form) return;
     setForm((prev) => ({ ...prev!, [field]: value }));
   };
+
 
   // 🔹 Useful links handlers
   const addLink = () => updateField("links", [...(form?.links || []), { title: "", url: "" }]);

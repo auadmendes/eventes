@@ -2,7 +2,6 @@
 
 import CreateEvent from "@/components/CreateEvent";
 import { Header } from "@/components/Header";
-import { Menu } from "@/components/Menu";
 import { allowedemailList } from "@/utils/emailList";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
