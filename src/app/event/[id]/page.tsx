@@ -47,7 +47,7 @@
 
 import { getEventById } from "@/actions/events"; 
 import { Event } from "@/types/event";
-import { Menu } from "@/components/Menu";
+// import { Menu } from "@/components/Menu";
 import { Header } from "@/components/Header";
 import { Metadata } from "next";
 import EventCardDetails from "@/components/envents/EventCardDetails";
@@ -103,9 +103,9 @@ export default async function EventPage({ params }: EventPageProps) {
     <div className="min-h-screen bg-background-default text-text-dark flex flex-col p-0">
       <Header />
       <div className="flex flex-1 flex-col md:flex-row">
-        <aside className="hidden md:block w-64 p-6">
+        {/* <aside className="hidden md:block w-64 p-6">
           <Menu />
-        </aside>
+        </aside> */}
 
         <main className="p-1 mb-16 md:mb-0 w-full md:max-w-[700px]">
             {/* <span className="text-sm inline-block text-slate-600 mb-3">Detalhes do evento</span> */}
@@ -115,9 +115,9 @@ export default async function EventPage({ params }: EventPageProps) {
         </main>
       </div>
 
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-background-paper p-4">
+      {/* <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-background-paper p-4">
         <Menu />
-      </nav>
+      </nav> */}
     </div>
   );
 }
