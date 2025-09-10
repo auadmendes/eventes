@@ -9,7 +9,7 @@ import Image from "next/image";
 import type { CreateServiceInput, UsefulLink } from "@/types/services";
 import { createService } from "@/actions/services"; // Your local function
 import { getProfile } from "@/actions/users"; // Your local function
-import { services } from "@/utils/services";
+import { servicescategories } from "@/utils/services";
 
 export default function CreateServicePage() {
   const { user, isLoaded } = useUser();
@@ -48,6 +48,7 @@ export default function CreateServicePage() {
       setForm({
         userId: p.id,
         city: "",
+        userName: p.name || user.fullName || "",
         neighborhood: "",
         title: "",
         description: "",
@@ -81,6 +82,7 @@ export default function CreateServicePage() {
     updated.splice(index, 1);
     updateField("links", updated);
   };
+
   const handleLinkChange = (index: number, field: keyof UsefulLink, value: string) => {
     const updated = [...(form?.links || [])];
     updated[index] = { ...updated[index], [field]: value };
@@ -93,11 +95,13 @@ export default function CreateServicePage() {
     if ((form.images || []).length >= 3) return;
     updateField("images", [...(form.images || []), ""]);
   };
+
   const removeImage = (index: number) => {
     const updated = [...(form?.images || [])];
     updated.splice(index, 1);
     updateField("images", updated);
   };
+
   const handleImageChange = (index: number, value: string) => {
     const updated = [...(form?.images || [])];
     updated[index] = value;
@@ -144,6 +148,7 @@ export default function CreateServicePage() {
       // Reset form but keep user info
       setForm({
         userId: profile!.id,
+        userName: profile!.name || user?.fullName || "",
         city: "",
         neighborhood: "",
         title: "",
@@ -192,7 +197,11 @@ export default function CreateServicePage() {
               <label className="font-semibold">Serviço principal</label>
               <select value={form.services[0] || ""} onChange={(e) => updateField("services", [e.target.value, ...form.services.slice(1)])} className="w-full border p-2 rounded" required>
                 <option value="">Selecione</option>
-                {services.map((service) => (<option key={service} value={service}>{service}</option>))}
+                {servicescategories.map((service: string) => (
+                  <option key={service} value={service}>
+                    {service}
+                  </option>
+                ))}
               </select>
             </div>
 

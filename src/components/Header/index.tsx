@@ -62,7 +62,7 @@ export function Header() {
   const links = [
     { href: "/", label: "Home", icon: <Home /> },
     { href: "/PlacesHome", label: "Onde Ir", icon: <MapPinHouse /> },
-    { href: "/service", label: "Serviços", icon: <GrUserWorker size={24} /> },
+    { href: "/services", label: "Serviços", icon: <GrUserWorker size={24} /> },
     // { href: "/notifications", label: "Notificações", icon: <Bell /> },
     { href: "/saved", label: "Salvos", icon: <Bookmark /> },
     { href: "/Profile", label: "Perfil", icon: <User2 /> },

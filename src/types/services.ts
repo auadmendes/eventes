@@ -3,16 +3,18 @@
 import { UserType } from "./user";
 import type { User } from "@prisma/client";
 // For database Service object
+// For database Service object
 export interface ServiceType {
   id: string;
   userId: string;
-  user?: UserType; // optional because you may not always fetch it
+  user?: UserType;
 
   city: string;
   neighborhood: string;
   title: string;
   description: string;
-  services: string[]; // array of services offered
+  services: string[];
+  mainService: string;
 
   email: string;
   phone?: string;
@@ -22,11 +24,21 @@ export interface ServiceType {
   updatedAt: Date;
 
   // Admin validation & ratings
-  validated: boolean;
-  rating: number; // average rating (e.g., 4.5)
-  reviewsCount: number; // number of reviews
+  isValidated: boolean;
+  rating: number;
+  reviewsCount: number;
+
+  // ✅ Add these
+  image?: string;
+  images?: string[];
+  instagram?: string;
+  facebook?: string;
+  website?: string;
+  whatsapp?: string;
+
   links?: UsefulLink[];
 }
+
 
 // Useful links like Instagram, Facebook, etc.
 export interface UsefulLink {
@@ -38,6 +50,7 @@ export interface UsefulLink {
 
 export interface CreateServiceInput {
   userId: string;
+   userName: string;
   city: string;
   neighborhood: string;
   title: string;
@@ -74,30 +87,38 @@ export interface UpdateServiceInput {
   validated?: boolean;
 }
 
-export type Service = {
+export interface Service {
   id: string;
   userId: string;
-  user: User;
+  user?: User; // optional include
+  userName: string;
   city: string;
   neighborhood: string;
   title: string;
   description: string;
   services: string[];
-  phone: string | null;
-  showPhone: boolean;
+  mainService: string;
+
   email: string;
-  image: string;
-  images?: string[];  // ✅ add this
-  instagram: string | null;
-  facebook: string | null;
-  website: string | null;
-  whatsapp: string | null;
-  links: UsefulLink[];
-  isValidated: boolean;
+  phone?: string | null;
+  showPhone: boolean;
+
+  image?: string;
+  images?: string[];
+  instagram?: string | null;
+  facebook?: string | null;
+  website?: string | null;
+  whatsapp?: string | null;
+
+  links?: UsefulLink[];
+
+  isValidated?: boolean;
   validatedAt?: Date | null;
   validatedBy?: string | null;
+
   ratingAvg: number;
   ratingCount: number;
+
   createdAt: Date;
   updatedAt: Date;
-};
+}

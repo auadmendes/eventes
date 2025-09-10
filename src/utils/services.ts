@@ -1,5 +1,4 @@
-export const services = [
-  "Todos", // always include this manually
+export const servicescategories = [
   "Aula de inglês",
   "Professor Substituto",
   "Aula de Reforço",
@@ -30,5 +29,6 @@ export const services = [
   "Tradutor",
   "Advogado",
   "Contador",
+  "Impressão 3D",
   "Outros",
 ];

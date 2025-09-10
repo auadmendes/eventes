@@ -238,7 +238,7 @@ export default function AdminPage() {
 
                         {/* Service Info */}
                         <div className="flex-1 space-y-1 text-sm">
-                          <p><strong>User:</strong> {s.user.name}</p>
+                          <p><strong>User:</strong> {s.user?.name}</p>
                           <p><strong>Email:</strong> {s.email}</p>
                           <p>
                             <strong>Services:</strong> {s.services.join(", ") || "—"}
