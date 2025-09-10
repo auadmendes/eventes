@@ -138,7 +138,7 @@ export default function ServiceCard({ service, onUpdate, onDelete }: ServiceCard
             )}
             {service.whatsapp && (
             <a
-                href={`https://whatsa.me/55${service.whatsapp}/?t=Olá ${service.name} estou vindo do Site Pocando`}
+                href={`https://whatsa.me/55${service.whatsapp}/?t=Olá ${service.userName} estou vindo do Site Pocando`}
                 target="_blank"
                 rel="noopener noreferrer"
             >
