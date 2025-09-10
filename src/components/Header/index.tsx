@@ -35,7 +35,7 @@ import { useState, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import Image from "next/image";
-import Logo from "../../../public/logo.png";
+import Logo from "../../../public/Pocando.png";
 
 import { Home, HandPlatter, User2, Bookmark, PlusSquare, MapPinHouse, MapPlus, Shield, Menu as MenuIcon, X } from "lucide-react";
 import { GrUserWorker } from "react-icons/gr";
@@ -95,7 +95,7 @@ export function Header() {
       {/* Logo */}
       <Link href={'/'} className="flex items-center gap-2">
         <Image src={Logo.src} width={40} height={40} alt="Logo" />
-        <span className="font-bold text-lg">EventES</span>
+        <span className="font-bold text-lg">Pocando</span>
       </Link>
 
       {/* Mobile Menu Button */}
