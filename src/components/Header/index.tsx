@@ -100,14 +100,16 @@ export function Header() {
 
       {/* Mobile Menu Button */}
       <div className="flex">
-        <button
-          className="lg:hidden p-2 rounded-md hover:bg-light-accent dark:hover:bg-dark-accent transition"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          {menuOpen ? <X size={24} /> : <MenuIcon size={24} />}
-        </button>
-        <div className="lg:hidden">
-          <LoggedUser />
+        <div className="flex justify-center items-center">
+          <button
+            className="lg:hidden p-2 rounded-md hover:bg-light-accent dark:hover:bg-dark-accent transition"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            {menuOpen ? <X size={24} /> : <MenuIcon size={24} />}
+          </button>
+          <div className="lg:hidden">
+            <LoggedUser />
+          </div>
         </div>
         {/* Desktop Menu */}
         <nav className="hidden lg:flex gap-4">
